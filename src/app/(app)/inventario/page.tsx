@@ -29,17 +29,21 @@ export default async function InventarioPage() {
           Inventario
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          Unidades físicas, atributos, categorías y compuestas (8+9, 35+36).
+          Habitaciones, departamentos, características, categorías y habitaciones comunicadas
+          (8+9, 35+36).
         </p>
       </div>
 
       <section className="panel rounded-xl p-4">
-        <h2 className="mb-3 font-semibold">Unidades compuestas</h2>
+        <h2 className="mb-3 font-semibold">Habitaciones comunicadas</h2>
         <ul className="space-y-1 text-sm">
           {composites.map((c) => (
             <li key={c.id}>
-              <strong>{c.code}</strong> — {c.name}:{" "}
-              {c.members.map((m) => m.unit.code).join(" + ")}
+              <strong>{c.code}</strong> —{" "}
+              {/compuest/i.test(c.name)
+                ? `Habitaciones comunicadas ${c.code}`
+                : c.name}
+              : {c.members.map((m) => m.unit.code).join(" + ")}
             </li>
           ))}
         </ul>
@@ -92,7 +96,7 @@ export default async function InventarioPage() {
               <th className="px-3 py-2 text-left">Cap.</th>
               <th className="px-3 py-2 text-left">Categoría</th>
               <th className="px-3 py-2 text-left">Atributos</th>
-              <th className="px-3 py-2 text-left">Compuestas</th>
+              <th className="px-3 py-2 text-left">Comunicadas</th>
             </tr>
           </thead>
           <tbody>
@@ -115,7 +119,7 @@ export default async function InventarioPage() {
       </section>
 
       <section className="panel rounded-xl p-4 space-y-3">
-        <h2 className="font-semibold">Editar / alta unidad</h2>
+        <h2 className="font-semibold">Editar / alta habitación o departamento</h2>
         <form action={upsertUnitAction} className="grid gap-2 sm:grid-cols-3">
           <input className="input" name="code" placeholder="Código" required />
           <input className="input" name="name" placeholder="Nombre" required />
@@ -134,7 +138,7 @@ export default async function InventarioPage() {
           </select>
           <input className="input" name="sortOrder" type="number" placeholder="Orden" defaultValue={0} />
           <button className="btn btn-primary sm:col-span-3" type="submit">
-            Guardar unidad
+            Guardar
           </button>
         </form>
       </section>

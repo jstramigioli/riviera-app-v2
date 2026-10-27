@@ -24,7 +24,8 @@ export default async function TarifasPage() {
           Tarifas
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          RatePlan por categoría + servicio + período. El precio acordado de la reserva se congela al confirmar.
+          Planes por categoría, servicio (desayuno / media pensión / sin desayuno) y período. El precio
+          acordado se congela al confirmar.
         </p>
       </div>
 
@@ -60,7 +61,7 @@ export default async function TarifasPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <form action={createRatePlanAction} className="panel space-y-3 rounded-xl p-4">
-          <h2 className="font-semibold">Nuevo RatePlan</h2>
+          <h2 className="font-semibold">Nuevo plan tarifario</h2>
           <input className="input" name="name" placeholder="Nombre" required />
           <select className="select" name="commercialCategoryId" required>
             {categories.map((c) => (

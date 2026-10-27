@@ -1,4 +1,4 @@
-import type { Prisma, ReservationStatus, ServiceType } from "@prisma/client";
+import type { Prisma, RequirementKind, ReservationStatus, ServiceType } from "@prisma/client";
 import { prisma } from "./db";
 import { assertAvailable, expandCompositeSegments, type SegmentInput } from "./availability";
 import { toDateOnly } from "./dates";
@@ -12,6 +12,11 @@ async function nextReservationCode(): Promise<string> {
   return `RIV-${year}-${String(count + 1).padStart(4, "0")}`;
 }
 
+export type StructuredRequirementInput = {
+  attributeId: string;
+  kind: RequirementKind;
+};
+
 export type CreateReservationInput = {
   status?: ReservationStatus;
   channel?: string;
@@ -19,6 +24,7 @@ export type CreateReservationInput = {
   requirements?: string;
   preferences?: string;
   notes?: string;
+  structuredRequirements?: StructuredRequirementInput[];
   checkInDate: string;
   checkOutDate: string;
   adults?: number;
@@ -32,6 +38,7 @@ export type CreateReservationInput = {
   groupName?: string;
   extraUnitIds?: string[];
   userId?: string;
+  allowMandatoryOverride?: boolean;
 };
 
 export async function createReservation(input: CreateReservationInput) {
@@ -56,7 +63,7 @@ export async function createReservation(input: CreateReservationInput) {
       },
     ];
   } else {
-    throw new Error("Se requiere physicalUnitId o compositeUnitId");
+    throw new Error("Elegí una habitación (o habitaciones comunicadas) disponible");
   }
 
   if (input.extraUnitIds?.length) {
@@ -67,6 +74,12 @@ export async function createReservation(input: CreateReservationInput) {
         endDate: checkOut,
       });
     }
+  }
+
+  const structured = dedupeRequirements(input.structuredRequirements ?? []);
+  const mandatoryIds = structured.filter((r) => r.kind === "MANDATORY").map((r) => r.attributeId);
+  if (mandatoryIds.length && !input.allowMandatoryOverride) {
+    await assertMandatoryAttributes(prisma, segments, mandatoryIds);
   }
 
   const status = input.status ?? "CONSULTA";
@@ -113,8 +126,16 @@ export async function createReservation(input: CreateReservationInput) {
             sortOrder: i,
           })),
         },
+        structuredReqs: structured.length
+          ? {
+              create: structured.map((r) => ({
+                attributeId: r.attributeId,
+                kind: r.kind,
+              })),
+            }
+          : undefined,
       },
-      include: { segments: true, payments: true, guests: true },
+      include: { segments: true, payments: true, guests: true, structuredReqs: true },
     });
     return reservation;
   });
@@ -237,4 +258,63 @@ export async function getReservationBalance(reservationId: string) {
     include: { payments: true },
   });
   return balanceArs(r.agreedPriceArs, r.payments);
+}
+
+function dedupeRequirements(
+  items: StructuredRequirementInput[],
+): StructuredRequirementInput[] {
+  const map = new Map<string, StructuredRequirementInput>();
+  for (const item of items) {
+    const prev = map.get(item.attributeId);
+    if (!prev || item.kind === "MANDATORY") map.set(item.attributeId, item);
+  }
+  return [...map.values()];
+}
+
+async function assertMandatoryAttributes(
+  db: typeof prisma,
+  segments: SegmentInput[],
+  mandatoryIds: string[],
+) {
+  const unitIds = [...new Set(segments.map((s) => s.physicalUnitId))];
+  const links = await db.unitAttributeLink.findMany({
+    where: { unitId: { in: unitIds } },
+    select: { unitId: true, attributeId: true },
+  });
+  const byUnit = new Map<string, Set<string>>();
+  for (const l of links) {
+    if (!byUnit.has(l.unitId)) byUnit.set(l.unitId, new Set());
+    byUnit.get(l.unitId)!.add(l.attributeId);
+  }
+
+  // For communicating rooms: require the union of member attributes to cover mandatory
+  const compositeIds = [
+    ...new Set(segments.map((s) => s.compositeUnitId).filter(Boolean) as string[]),
+  ];
+  if (compositeIds.length) {
+    for (const cid of compositeIds) {
+      const memberSegs = segments.filter((s) => s.compositeUnitId === cid);
+      const union = new Set<string>();
+      for (const s of memberSegs) {
+        for (const a of byUnit.get(s.physicalUnitId) ?? []) union.add(a);
+      }
+      const missing = mandatoryIds.filter((id) => !union.has(id));
+      if (missing.length) {
+        throw new Error(
+          "La habitación elegida no cumple características obligatorias",
+        );
+      }
+    }
+    return;
+  }
+
+  for (const uid of unitIds) {
+    const have = byUnit.get(uid) ?? new Set();
+    const missing = mandatoryIds.filter((id) => !have.has(id));
+    if (missing.length) {
+      throw new Error(
+        "La habitación elegida no cumple características obligatorias",
+      );
+    }
+  }
 }
