@@ -57,6 +57,11 @@ enum UnitKind {
   DEPARTAMENTO
 }
 
+enum RequirementKind {
+  MANDATORY
+  PREFERENCE
+}
+
 model User {
   id           String     @id @default(cuid())
   email        String     @unique
@@ -92,11 +97,12 @@ model PhysicalUnit {
 }
 
 model UnitAttribute {
-  id        String              @id @default(cuid())
-  key       String              @unique
-  label     String
-  units     UnitAttributeLink[]
-  createdAt DateTime            @default(now())
+  id             String                   @id @default(cuid())
+  key            String                   @unique
+  label          String
+  units          UnitAttributeLink[]
+  requirements   ReservationRequirement[]
+  createdAt      DateTime                 @default(now())
 }
 
 model UnitAttributeLink {
@@ -194,6 +200,7 @@ model Reservation {
   paymentStatus     PaymentStatus       @default(SIN_PAGO)
   channel           String?
   doNotMove         Boolean             @default(false)
+  /// Notas libres adicionales (no sustituyen tags estructurados)
   requirements      String?
   preferences       String?
   notes             String?
@@ -210,6 +217,7 @@ model Reservation {
   segments          AssignmentSegment[]
   guests            ReservationGuest[]
   payments          Payment[]
+  structuredReqs    ReservationRequirement[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   cancelledAt       DateTime?
@@ -217,6 +225,18 @@ model Reservation {
   @@index([checkInDate, checkOutDate])
   @@index([status])
   @@index([groupId])
+}
+
+model ReservationRequirement {
+  id            String          @id @default(cuid())
+  reservationId String
+  attributeId   String
+  kind          RequirementKind
+  reservation   Reservation     @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  attribute     UnitAttribute   @relation(fields: [attributeId], references: [id])
+
+  @@unique([reservationId, attributeId])
+  @@index([attributeId])
 }
 
 model ReservationGroup {

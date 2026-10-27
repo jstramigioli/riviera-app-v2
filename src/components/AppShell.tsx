@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { SessionUser } from "@/lib/auth";
 import { logoutAction } from "@/app/actions/auth";
+import { ROLE_LABEL } from "@/lib/labels";
 
 const NAV = [
   { href: "/calendario", label: "Calendario" },
@@ -48,7 +49,9 @@ export function AppShell({
           <div className="flex items-center gap-3 text-sm">
             <div className="text-right leading-tight">
               <div className="font-semibold">{user.name}</div>
-              <div className="text-xs text-[var(--muted)]">{user.role}</div>
+              <div className="text-xs text-[var(--muted)]">
+                {ROLE_LABEL[user.role] ?? user.role}
+              </div>
             </div>
             <form action={logoutAction}>
               <button className="btn btn-ghost" type="submit">

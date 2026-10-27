@@ -35,7 +35,7 @@ export default async function AdminPage() {
 
       <div className="grid gap-4 sm:grid-cols-4">
         {[
-          ["Unidades", counts.units],
+          ["Habitaciones", counts.units],
           ["Reservas", counts.reservations],
           ["Huéspedes", counts.guests],
           ["Pagos", counts.payments],

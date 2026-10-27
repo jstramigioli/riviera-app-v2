@@ -64,7 +64,7 @@ async function main() {
     { code: "STD", name: "Standard", sortOrder: 1 },
     { code: "SUP", name: "Superior", sortOrder: 2 },
     { code: "DEP", name: "Departamento", sortOrder: 3 },
-    { code: "COMP", name: "Compuesta", sortOrder: 4 },
+    { code: "COMP", name: "Habitaciones comunicadas", sortOrder: 4 },
   ];
   for (const c of categories) {
     await prisma.commercialCategory.upsert({
@@ -153,11 +153,13 @@ async function main() {
     return composite;
   }
 
-  await ensureComposite("8+9", "Unidad compuesta 8+9", ["8", "9"]);
-  await ensureComposite("35+36", "Unidad compuesta 35+36", ["35", "36"]);
+  await ensureComposite("8+9", "Habitaciones comunicadas 8+9", ["8", "9"]);
+  await ensureComposite("35+36", "Habitaciones comunicadas 35+36", ["35", "36"]);
+
+  const comp = await prisma.commercialCategory.findUniqueOrThrow({ where: { code: "COMP" } });
 
   // Sample rate plans
-  for (const cat of [std, sup, dep]) {
+  for (const cat of [std, sup, dep, comp]) {
     for (const service of [ServiceType.SIN_DESAYUNO, ServiceType.DESAYUNO, ServiceType.MEDIA_PENSION]) {
       const name = `${cat.code} / ${service}`;
       const existing = await prisma.ratePlan.findFirst({

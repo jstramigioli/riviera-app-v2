@@ -166,3 +166,113 @@ a {
 .fade-up {
   animation: fadeUp 0.35s ease both;
 }
+
+.help-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  padding: 0;
+}
+
+.help-tip:hover,
+.help-tip:focus-visible {
+  border-color: var(--brand);
+  color: var(--brand-deep);
+  outline: none;
+}
+
+.help-tip-panel {
+  position: absolute;
+  z-index: 50;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 260px;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.55rem;
+  border: 1px solid var(--line);
+  background: #1c2a2e;
+  color: #f8faf7;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+  animation: fadeUp 0.15s ease both;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.55rem;
+  border: 1px solid var(--line);
+  background: #fffdf9;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.tag-chip:hover {
+  transform: translateY(-1px);
+}
+
+.tag-chip-off {
+  color: var(--muted);
+}
+
+.tag-chip-preference {
+  border-color: #93c5c3;
+  background: #e8f5f4;
+  color: var(--brand-deep);
+}
+
+.tag-chip-mandatory {
+  border-color: #e8b48f;
+  background: #fcefe6;
+  color: #8a3b12;
+}
+
+.tag-chip-badge {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.avail-yes {
+  border-color: rgba(13, 148, 136, 0.35);
+  background: linear-gradient(180deg, rgba(232, 245, 244, 0.95), var(--panel));
+}
+
+.avail-no {
+  border-color: rgba(185, 28, 28, 0.25);
+  background: linear-gradient(180deg, rgba(254, 242, 242, 0.9), var(--panel));
+}
+
+.live-pulse {
+  animation: livePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}

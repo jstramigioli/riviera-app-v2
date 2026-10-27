@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { ReservationStatus, ServiceType } from "@prisma/client";
+import type { RequirementKind, ReservationStatus, ServiceType } from "@prisma/client";
 import { requireUser } from "@/lib/auth";
 import {
   createReservation,
@@ -23,7 +23,33 @@ export async function createReservationAction(formData: FormData) {
     .map((s) => s.trim())
     .filter(Boolean);
 
+  const mandatory = String(formData.get("mandatoryAttributeIds") || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const preference = String(formData.get("preferenceAttributeIds") || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const structuredRequirements = [
+    ...mandatory.map((attributeId) => ({
+      attributeId,
+      kind: "MANDATORY" as RequirementKind,
+    })),
+    ...preference
+      .filter((id) => !mandatory.includes(id))
+      .map((attributeId) => ({
+        attributeId,
+        kind: "PREFERENCE" as RequirementKind,
+      })),
+  ];
+
   try {
+    if (!physicalUnitId && !compositeUnitId) {
+      throw new Error("Elegí una habitación disponible para esas fechas");
+    }
+
     const reservation = await createReservation({
       physicalUnitId,
       compositeUnitId,
@@ -34,9 +60,8 @@ export async function createReservationAction(formData: FormData) {
       status: (String(formData.get("status") || "CONSULTA") as ReservationStatus),
       channel: String(formData.get("channel") || "") || undefined,
       doNotMove: formData.get("doNotMove") === "on",
-      requirements: String(formData.get("requirements") || "") || undefined,
-      preferences: String(formData.get("preferences") || "") || undefined,
       notes: String(formData.get("notes") || "") || undefined,
+      structuredRequirements,
       adults: Number(formData.get("adults") || 2),
       children: Number(formData.get("children") || 0),
       serviceType: (String(formData.get("serviceType") || "DESAYUNO") as ServiceType),
@@ -68,6 +93,15 @@ export async function createReservationAction(formData: FormData) {
     revalidatePath("/calendario");
     redirect(`/reservas/${reservation.id}`);
   } catch (e) {
+    if (
+      e &&
+      typeof e === "object" &&
+      "digest" in e &&
+      typeof (e as { digest: unknown }).digest === "string" &&
+      (e as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+    ) {
+      throw e;
+    }
     const msg = e instanceof Error ? e.message : "Error al crear reserva";
     redirect(`/reservas/nueva?error=${encodeURIComponent(msg)}`);
   }
@@ -107,6 +141,13 @@ export async function addSegmentAction(formData: FormData) {
   if (["CANCELADA", "FINALIZADA"].includes(reservation.status)) {
     throw new Error("No se pueden agregar tramos a esta reserva");
   }
+  if (reservation.doNotMove && user.role !== "ADMIN") {
+    redirect(
+      `/reservas/${reservationId}?error=${encodeURIComponent(
+        "Esta reserva está marcada como «no mover». Solo administración puede cambiar habitación.",
+      )}`,
+    );
+  }
 
   await assertAvailable(
     prisma,
@@ -123,6 +164,7 @@ export async function addSegmentAction(formData: FormData) {
     entityType: "Reservation",
     entityId: reservationId,
     after: { physicalUnitId, startDate, endDate },
+    meta: reservation.doNotMove ? { doNotMoveWarned: true } : undefined,
   });
   revalidatePath(`/reservas/${reservationId}`);
   revalidatePath("/calendario");

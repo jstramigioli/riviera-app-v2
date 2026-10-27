@@ -36,7 +36,7 @@ export default async function ReservasPage() {
               <th className="px-3 py-2">Código</th>
               <th className="px-3 py-2">Huésped</th>
               <th className="px-3 py-2">In–Out</th>
-              <th className="px-3 py-2">Unidades</th>
+              <th className="px-3 py-2">Habitación</th>
               <th className="px-3 py-2">Estado</th>
               <th className="px-3 py-2">Pago</th>
               <th className="px-3 py-2">Precio</th>

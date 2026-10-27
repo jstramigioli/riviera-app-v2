@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RESERVATION_STATUS_LABEL, RESERVATION_STATUS_COLOR } from "@/lib/status";
+import { HelpTooltip } from "@/components/HelpTooltip";
 import type { CalendarBlock } from "@/lib/calendar";
 
 type UnitRow = {
@@ -36,8 +37,9 @@ export function CalendarView({
           >
             Calendario
           </h1>
-          <p className="text-sm text-[var(--muted)]">
-            Filas = unidades · columnas = días. Centro operativo de recepción.
+          <p className="text-sm text-[var(--muted)] inline-flex flex-wrap items-center gap-1">
+            Habitaciones por fila · días por columna. Tocá un día libre para crear reserva.
+            <HelpTooltip text="La fecha de salida no ocupa noche (checkout exclusivo). Las consultas se ven más tenues porque no bloquean inventario." />
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -66,7 +68,7 @@ export function CalendarView({
         <div style={{ minWidth: 140 + days.length * cell }}>
           <div className="flex border-b border-[var(--line)] bg-[#fffdf8] sticky top-0 z-20">
             <div className="sticky left-0 z-30 w-[140px] shrink-0 border-r border-[var(--line)] bg-[#fffdf8] px-3 py-2 text-xs font-semibold text-[var(--muted)]">
-              Unidad
+              Habitación
             </div>
             {days.map((d) => (
               <div
@@ -90,18 +92,40 @@ export function CalendarView({
                 <div className="text-sm font-semibold leading-tight">{unit.code}</div>
                 <div className="truncate text-[10px] text-[var(--muted)]">
                   {unit.category}
-                  {unit.composites.length ? ` · ${unit.composites.join(",")}` : ""}
+                  {unit.composites.length
+                    ? ` · comunicada ${unit.composites.join(",")}`
+                    : ""}
                 </div>
               </div>
               <div className="relative flex-1">
                 <div className="absolute inset-0 flex">
-                  {days.map((d) => (
-                    <div
-                      key={d.iso}
-                      className="h-full border-r border-[var(--line)] bg-white/30"
-                      style={{ width: cell }}
-                    />
-                  ))}
+                  {days.map((d, di) => {
+                    const occupied = unit.blocks.some(
+                      (b) =>
+                        b.status !== "CONSULTA" &&
+                        di >= b.startOffset &&
+                        di < b.startOffset + b.span,
+                    );
+                    if (occupied) {
+                      return (
+                        <div
+                          key={d.iso}
+                          className="h-full border-r border-[var(--line)] bg-white/30"
+                          style={{ width: cell }}
+                        />
+                      );
+                    }
+                    const checkOut = shiftIso(d.iso, 1);
+                    return (
+                      <Link
+                        key={d.iso}
+                        href={`/reservas/nueva?unitId=${unit.id}&checkIn=${d.iso}&checkOut=${checkOut}`}
+                        className="h-full border-r border-[var(--line)] bg-white/30 hover:bg-[var(--brand)]/10"
+                        style={{ width: cell }}
+                        title={`Nueva reserva · ${unit.code} · ${d.iso}`}
+                      />
+                    );
+                  })}
                 </div>
                 {unit.blocks.map((b) => (
                   <Link
@@ -111,11 +135,12 @@ export function CalendarView({
                     title={`${b.code} · ${RESERVATION_STATUS_LABEL[b.status]}${b.doNotMove ? " · no mover" : ""}`}
                     style={{
                       left: b.startOffset * cell + 2,
-                      width: b.span * cell - 4,
+                      width: Math.max(b.span * cell - 4, 8),
                       background: b.color,
                       top: 6,
                       height: 28,
                       position: "absolute",
+                      opacity: b.status === "CONSULTA" ? 0.55 : 1,
                     }}
                   >
                     {b.doNotMove ? "🔒 " : ""}
