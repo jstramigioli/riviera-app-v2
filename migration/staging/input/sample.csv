@@ -1,0 +1,3 @@
+unit,checkIn,checkOut,guest,status,price,notes,channel
+1,2026-12-01,2026-12-05,Perez Ana,CONFIRMADA,450000,demo,WhatsApp
+8+9,2026-12-10,2026-12-15,?,PRERRESERVA,,ver nota excel,Tel

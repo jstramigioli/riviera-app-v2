@@ -1,0 +1,51 @@
+{
+  "extractedAt": "2026-10-27T20:57:21.765Z",
+  "rows": [
+    {
+      "sourceFile": "sample.csv",
+      "sourceLine": 2,
+      "unit": "1",
+      "checkIn": "2026-12-01",
+      "checkOut": "2026-12-05",
+      "guest": "Perez Ana",
+      "status": "CONFIRMADA",
+      "price": "450000",
+      "notes": "demo",
+      "channel": "WhatsApp",
+      "confidence": "high",
+      "raw": {
+        "unit": "1",
+        "checkin": "2026-12-01",
+        "checkout": "2026-12-05",
+        "guest": "Perez Ana",
+        "status": "CONFIRMADA",
+        "price": "450000",
+        "notes": "demo",
+        "channel": "WhatsApp"
+      }
+    },
+    {
+      "sourceFile": "sample.csv",
+      "sourceLine": 3,
+      "unit": "8+9",
+      "checkIn": "2026-12-10",
+      "checkOut": "2026-12-15",
+      "guest": "?",
+      "status": "PRERRESERVA",
+      "price": "",
+      "notes": "ver nota excel",
+      "channel": "Tel",
+      "confidence": "high",
+      "raw": {
+        "unit": "8+9",
+        "checkin": "2026-12-10",
+        "checkout": "2026-12-15",
+        "guest": "?",
+        "status": "PRERRESERVA",
+        "price": "",
+        "notes": "ver nota excel",
+        "channel": "Tel"
+      }
+    }
+  ]
+}

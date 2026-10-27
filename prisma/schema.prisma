@@ -1,0 +1,299 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  RECEPCION
+}
+
+enum ReservationStatus {
+  CONSULTA
+  PRERRESERVA
+  CONFIRMADA
+  CANCELADA
+  IN_HOUSE
+  FINALIZADA
+}
+
+enum PaymentStatus {
+  SIN_PAGO
+  SENIA_PARCIAL
+  PARCIAL
+  SALDADO
+  A_FAVOR
+}
+
+enum ServiceType {
+  SIN_DESAYUNO
+  DESAYUNO
+  MEDIA_PENSION
+}
+
+enum GuestRole {
+  TITULAR
+  ACOMPANANTE
+}
+
+enum PaymentType {
+  SENIA
+  PARCIAL
+  FINAL
+  DEVOLUCION
+}
+
+enum Currency {
+  ARS
+  USD
+}
+
+enum UnitKind {
+  HABITACION
+  DEPARTAMENTO
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         Role       @default(RECEPCION)
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+  payments     Payment[]  @relation("PaymentCreatedBy")
+}
+
+model PhysicalUnit {
+  id                  String                 @id @default(cuid())
+  code                String                 @unique
+  name                String
+  kind                UnitKind               @default(HABITACION)
+  floor               Int?
+  capacity            Int                    @default(2)
+  sortOrder           Int                    @default(0)
+  active              Boolean                @default(true)
+  notes               String?
+  /// Future multitenancy hook (unused in MVP)
+  tenantId            String?
+  commercialCategoryId String?
+  commercialCategory  CommercialCategory?    @relation(fields: [commercialCategoryId], references: [id])
+  attributes          UnitAttributeLink[]
+  assignmentSegments  AssignmentSegment[]
+  compositeMemberships CompositeUnitMember[]
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+}
+
+model UnitAttribute {
+  id        String              @id @default(cuid())
+  key       String              @unique
+  label     String
+  units     UnitAttributeLink[]
+  createdAt DateTime            @default(now())
+}
+
+model UnitAttributeLink {
+  unitId      String
+  attributeId String
+  unit        PhysicalUnit  @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  attribute   UnitAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  @@id([unitId, attributeId])
+}
+
+model CommercialCategory {
+  id           String         @id @default(cuid())
+  code         String         @unique
+  name         String
+  description  String?
+  sortOrder    Int            @default(0)
+  active       Boolean        @default(true)
+  units        PhysicalUnit[]
+  ratePlans    RatePlan[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model CompositeUnit {
+  id          String                @id @default(cuid())
+  code        String                @unique
+  name        String
+  active      Boolean               @default(true)
+  members     CompositeUnitMember[]
+  segments    AssignmentSegment[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+}
+
+model CompositeUnitMember {
+  compositeId String
+  unitId      String
+  composite   CompositeUnit @relation(fields: [compositeId], references: [id], onDelete: Cascade)
+  unit        PhysicalUnit  @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@id([compositeId, unitId])
+}
+
+model RatePlan {
+  id                   String             @id @default(cuid())
+  name                 String
+  commercialCategoryId String
+  serviceType          ServiceType
+  active               Boolean            @default(true)
+  commercialCategory   CommercialCategory @relation(fields: [commercialCategoryId], references: [id])
+  rates                Rate[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@index([commercialCategoryId, serviceType])
+}
+
+model Rate {
+  id         String   @id @default(cuid())
+  ratePlanId String
+  validFrom  DateTime @db.Date
+  validTo    DateTime @db.Date
+  amountArs  Decimal  @db.Decimal(12, 2)
+  notes      String?
+  ratePlan   RatePlan @relation(fields: [ratePlanId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([ratePlanId, validFrom, validTo])
+}
+
+model Guest {
+  id          String             @id @default(cuid())
+  firstName   String
+  lastName    String
+  documentType String?
+  documentNumber String?
+  email       String?
+  phone       String?
+  nationality String?
+  notes       String?
+  reservations ReservationGuest[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([lastName, firstName])
+  @@index([documentNumber])
+}
+
+model Reservation {
+  id                String              @id @default(cuid())
+  code              String              @unique
+  status            ReservationStatus   @default(CONSULTA)
+  paymentStatus     PaymentStatus       @default(SIN_PAGO)
+  channel           String?
+  doNotMove         Boolean             @default(false)
+  requirements      String?
+  preferences       String?
+  notes             String?
+  checkInDate       DateTime            @db.Date
+  checkOutDate      DateTime            @db.Date
+  adults            Int                 @default(2)
+  children          Int                 @default(0)
+  serviceType       ServiceType         @default(DESAYUNO)
+  agreedPriceArs    Decimal?            @db.Decimal(12, 2)
+  priceFrozen       Boolean             @default(false)
+  priceOverrideNote String?
+  groupId           String?
+  group             ReservationGroup?   @relation(fields: [groupId], references: [id])
+  segments          AssignmentSegment[]
+  guests            ReservationGuest[]
+  payments          Payment[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  cancelledAt       DateTime?
+
+  @@index([checkInDate, checkOutDate])
+  @@index([status])
+  @@index([groupId])
+}
+
+model ReservationGroup {
+  id           String        @id @default(cuid())
+  name         String?
+  notes        String?
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+}
+
+model AssignmentSegment {
+  id              String        @id @default(cuid())
+  reservationId   String
+  physicalUnitId  String
+  compositeUnitId String?
+  startDate       DateTime      @db.Date
+  endDate         DateTime      @db.Date
+  sortOrder       Int           @default(0)
+  reservation     Reservation   @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  physicalUnit    PhysicalUnit  @relation(fields: [physicalUnitId], references: [id])
+  compositeUnit   CompositeUnit? @relation(fields: [compositeUnitId], references: [id])
+
+  @@index([physicalUnitId, startDate, endDate])
+  @@index([reservationId])
+}
+
+model ReservationGuest {
+  id            String    @id @default(cuid())
+  reservationId String
+  guestId       String
+  role          GuestRole @default(ACOMPANANTE)
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  guest         Guest     @relation(fields: [guestId], references: [id])
+
+  @@unique([reservationId, guestId])
+}
+
+model Payment {
+  id              String      @id @default(cuid())
+  reservationId   String
+  type            PaymentType
+  currency        Currency    @default(ARS)
+  amountOriginal  Decimal     @db.Decimal(12, 2)
+  fxRateToArs     Decimal?    @db.Decimal(12, 4)
+  amountArs       Decimal     @db.Decimal(12, 2)
+  receiptNumber   String      @unique
+  notes           String?
+  voidedAt        DateTime?
+  voidReason      String?
+  createdById     String?
+  reservation     Reservation @relation(fields: [reservationId], references: [id])
+  createdBy       User?       @relation("PaymentCreatedBy", fields: [createdById], references: [id])
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([reservationId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  beforeJson Json?
+  afterJson  Json?
+  metaJson   Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
+
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  valueJson Json
+  updatedAt DateTime @updatedAt
+}
