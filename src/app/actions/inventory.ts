@@ -72,3 +72,34 @@ export async function upsertAttributeAction(formData: FormData) {
   revalidatePath("/inventario");
   redirect("/inventario");
 }
+
+export async function setUnitAttributesAction(formData: FormData) {
+  const user = await requireUser(["ADMIN"]);
+  const unitId = String(formData.get("unitId"));
+  const selected = formData.getAll("attributeIds").map(String);
+
+  const before = await prisma.unitAttributeLink.findMany({
+    where: { unitId },
+    select: { attributeId: true },
+  });
+
+  await prisma.$transaction(async (tx) => {
+    await tx.unitAttributeLink.deleteMany({ where: { unitId } });
+    if (selected.length) {
+      await tx.unitAttributeLink.createMany({
+        data: selected.map((attributeId) => ({ unitId, attributeId })),
+      });
+    }
+  });
+
+  await writeAudit({
+    userId: user.id,
+    action: "inventory.unit_attributes",
+    entityType: "PhysicalUnit",
+    entityId: unitId,
+    before: { attributeIds: before.map((b) => b.attributeId) },
+    after: { attributeIds: selected },
+  });
+  revalidatePath("/inventario");
+  redirect("/inventario");
+}
