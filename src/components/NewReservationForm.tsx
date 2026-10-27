@@ -36,11 +36,11 @@ const HELP = {
   communicating:
     "Habitaciones comunicadas (p. ej. 8+9 o 35+36): se reservan juntas y ocupan ambas.",
   doNotMove:
-    "Si está marcado, recepción no debería cambiar de habitación salvo decisión consciente.",
+    "Habitación fijada: no la mueve el optimizador ni recepción sin desbloquear. Si no está marcada, la asignación es flexible (se puede reasignar entre habitaciones que cumplan lo pedido).",
   senia:
     "Registrar una seña no confirma sola la reserva: el estado operativo se cambia aparte.",
   status:
-    "Consulta no bloquea inventario. Prerreserva y Confirmada sí reservan la habitación.",
+    "Prerreserva y Confirmada siempre tienen habitación y aparecen en el calendario. Las consultas (sin habitación) van en Consultas.",
   tramos:
     "Si el huésped cambia de habitación a mitad de estadía, la misma reserva se parte en varios tramos contiguos (se edita después en la ficha).",
   grupo:
@@ -278,7 +278,6 @@ export function NewReservationForm({ attributes, initial }: Props) {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value="CONSULTA">Consulta (no bloquea)</option>
               <option value="PRERRESERVA">Prerreserva</option>
               <option value="CONFIRMADA">Confirmada</option>
             </select>
@@ -489,7 +488,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
           <div className="flex items-end">
             <label className="flex items-center gap-2 text-sm pb-2">
               <input type="checkbox" name="doNotMove" />
-              No mover de habitación
+              Habitación fijada
               <HelpTooltip text={HELP.doNotMove} />
             </label>
           </div>
@@ -514,11 +513,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
           type="submit"
           disabled={pending || !selectionKey || Boolean(fetchError)}
         >
-          {pending
-            ? "Guardando…"
-            : status === "CONSULTA"
-              ? "Guardar consulta"
-              : "Crear reserva"}
+          {pending ? "Guardando…" : "Crear reserva"}
         </button>
       </section>
     </form>
@@ -644,6 +639,10 @@ function CandidateCard({
         {candidate.meetsAllPreferences && candidate.preferenceHits > 0 ? (
           <span className="rounded bg-[var(--brand)]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--brand-deep)]">
             Cumple preferencias
+          </span>
+        ) : !candidate.meetsMandatory ? (
+          <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-900">
+            No cumple
           </span>
         ) : null}
       </div>

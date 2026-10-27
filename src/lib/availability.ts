@@ -163,6 +163,9 @@ export type AvailabilityCandidate = {
   attributeLabels: string[];
   preferenceHits: number;
   meetsAllPreferences: boolean;
+  /** False when softMandatory and room lacks some mandatory tags. */
+  meetsMandatory: boolean;
+  missingMandatoryLabels: string[];
   capacityOk: boolean;
   commercialCategoryId: string | null;
   memberCodes?: string[];
@@ -187,6 +190,10 @@ export type LiveAvailabilityResult = {
 /**
  * List rooms / communicating pairs free for [checkIn, checkOut),
  * filtered by mandatory attributes and ranked by preferences.
+ *
+ * softMandatory: include rooms that miss mandatory tags (ranked lower,
+ * flagged with meetsMandatory=false) — used when converting a consulta
+ * so recepción can override with an explicit warning.
  */
 export async function listLiveAvailability(
   db: Db,
@@ -198,6 +205,7 @@ export async function listLiveAvailability(
     mandatoryAttributeIds?: string[];
     preferenceAttributeIds?: string[];
     excludeReservationId?: string;
+    softMandatory?: boolean;
   },
 ): Promise<LiveAvailabilityResult> {
   const checkIn = toDateOnly(input.checkInDate);
@@ -207,8 +215,10 @@ export async function listLiveAvailability(
   }
   const nights = eachNight(checkIn, checkOut).length;
   const guests = (input.adults ?? 2) + (input.children ?? 0);
-  const mandatory = new Set(input.mandatoryAttributeIds ?? []);
+  const mandatoryIds = input.mandatoryAttributeIds ?? [];
+  const mandatory = new Set(mandatoryIds);
   const preferences = input.preferenceAttributeIds ?? [];
+  const soft = Boolean(input.softMandatory);
 
   const units = await db.physicalUnit.findMany({
     where: { active: true },
@@ -218,6 +228,21 @@ export async function listLiveAvailability(
     },
     orderBy: { sortOrder: "asc" },
   });
+
+  const attrLabelById = new Map<string, string>();
+  for (const u of units) {
+    for (const a of u.attributes) {
+      attrLabelById.set(a.attributeId, a.attribute.label);
+    }
+  }
+  // Ensure we have labels even if no unit has the attr
+  if (mandatoryIds.length) {
+    const attrs = await db.unitAttribute.findMany({
+      where: { id: { in: mandatoryIds } },
+      select: { id: true, label: true },
+    });
+    for (const a of attrs) attrLabelById.set(a.id, a.label);
+  }
 
   const composites = await db.compositeUnit.findMany({
     where: { active: true },
@@ -261,7 +286,9 @@ export async function listLiveAvailability(
   for (const u of units) {
     if (!isUnitFree(u.id)) continue;
     const attributeIds = u.attributes.map((a) => a.attributeId);
-    if (![...mandatory].every((id) => attributeIds.includes(id))) continue;
+    const missingMandatory = mandatoryIds.filter((id) => !attributeIds.includes(id));
+    const meetsMandatory = missingMandatory.length === 0;
+    if (!meetsMandatory && !soft) continue;
     const preferenceHits = preferences.filter((id) => attributeIds.includes(id)).length;
     candidates.push({
       selectionKey: `unit:${u.id}`,
@@ -276,6 +303,10 @@ export async function listLiveAvailability(
       preferenceHits,
       meetsAllPreferences:
         preferences.length === 0 || preferenceHits === preferences.length,
+      meetsMandatory,
+      missingMandatoryLabels: missingMandatory.map(
+        (id) => attrLabelById.get(id) ?? id,
+      ),
       capacityOk: guests <= u.capacity,
       commercialCategoryId: u.commercialCategoryId,
     });
@@ -296,7 +327,9 @@ export async function listLiveAvailability(
       }
     }
     const attributeIds = [...attrSet];
-    if (![...mandatory].every((id) => attributeIds.includes(id))) continue;
+    const missingMandatory = mandatoryIds.filter((id) => !attributeIds.includes(id));
+    const meetsMandatory = missingMandatory.length === 0;
+    if (!meetsMandatory && !soft) continue;
     const preferenceHits = preferences.filter((id) => attributeIds.includes(id)).length;
     const firstMember = units.find((u) => u.id === c.members[0]?.unitId);
     candidates.push({
@@ -311,6 +344,10 @@ export async function listLiveAvailability(
       preferenceHits,
       meetsAllPreferences:
         preferences.length === 0 || preferenceHits === preferences.length,
+      meetsMandatory,
+      missingMandatoryLabels: missingMandatory.map(
+        (id) => attrLabelById.get(id) ?? id,
+      ),
       capacityOk: guests <= capacity,
       commercialCategoryId: compCat?.id ?? firstMember?.commercialCategoryId ?? null,
       memberCodes: c.members.map((m) => m.unit.code),
@@ -318,19 +355,21 @@ export async function listLiveAvailability(
   }
 
   candidates.sort((a, b) => {
+    if (a.meetsMandatory !== b.meetsMandatory) return a.meetsMandatory ? -1 : 1;
     if (b.preferenceHits !== a.preferenceHits) return b.preferenceHits - a.preferenceHits;
     if (a.capacityOk !== b.capacityOk) return a.capacityOk ? -1 : 1;
     return a.code.localeCompare(b.code, undefined, { numeric: true });
   });
 
+  const matchingCount = candidates.filter((c) => c.meetsMandatory).length;
   const services = await listServiceAvailability(db, checkIn, checkOut);
 
   return {
     checkInDate: input.checkInDate,
     checkOutDate: input.checkOutDate,
     nights,
-    hasAvailability: candidates.length > 0,
-    availableCount: candidates.length,
+    hasAvailability: soft ? candidates.length > 0 : matchingCount > 0,
+    availableCount: soft ? matchingCount : candidates.length,
     candidates,
     services,
   };

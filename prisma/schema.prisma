@@ -62,6 +62,13 @@ enum RequirementKind {
   PREFERENCE
 }
 
+/// Consulta = borrador de intención (sin habitación, fuera del calendario).
+enum QueryStatus {
+  OPEN
+  CONVERTED
+  ARCHIVED
+}
+
 model User {
   id           String     @id @default(cuid())
   email        String     @unique
@@ -102,6 +109,7 @@ model UnitAttribute {
   label          String
   units          UnitAttributeLink[]
   requirements   ReservationRequirement[]
+  queryRequirements QueryRequirement[]
   createdAt      DateTime                 @default(now())
 }
 
@@ -186,6 +194,7 @@ model Guest {
   nationality String?
   notes       String?
   reservations ReservationGuest[]
+  queries     Query[]
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 
@@ -193,12 +202,56 @@ model Guest {
   @@index([documentNumber])
 }
 
+/// Consulta (Query): indaga disponibilidad sin asignar habitación ni bloquear inventario.
+model Query {
+  id                  String             @id @default(cuid())
+  code                String             @unique
+  status              QueryStatus        @default(OPEN)
+  channel             String?
+  notes               String?
+  checkInDate         DateTime           @db.Date
+  checkOutDate        DateTime           @db.Date
+  adults              Int                @default(2)
+  children            Int                @default(0)
+  serviceType         ServiceType        @default(DESAYUNO)
+  guestFirstName      String?
+  guestLastName       String?
+  guestPhone          String?
+  guestEmail          String?
+  guestDocumentNumber String?
+  guestId             String?
+  guest               Guest?             @relation(fields: [guestId], references: [id])
+  convertedReservationId String?         @unique
+  convertedReservation   Reservation?    @relation("QueryConvertedTo", fields: [convertedReservationId], references: [id])
+  structuredReqs      QueryRequirement[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  @@index([status, checkInDate])
+  @@index([guestLastName, guestFirstName])
+}
+
+model QueryRequirement {
+  id          String          @id @default(cuid())
+  queryId     String
+  attributeId String
+  kind        RequirementKind
+  query       Query           @relation(fields: [queryId], references: [id], onDelete: Cascade)
+  attribute   UnitAttribute   @relation(fields: [attributeId], references: [id])
+
+  @@unique([queryId, attributeId])
+  @@index([attributeId])
+}
+
 model Reservation {
   id                String              @id @default(cuid())
   code              String              @unique
-  status            ReservationStatus   @default(CONSULTA)
+  /// CONSULTA legacy: no crear nuevas; las consultas viven en Query.
+  status            ReservationStatus   @default(PRERRESERVA)
   paymentStatus     PaymentStatus       @default(SIN_PAGO)
   channel           String?
+  /// Habitación fijada (roomLocked): no la mueve el optimizador ni recepción sin desbloquear.
+  /// false = asignación flexible (puede reasignarse entre habitaciones compatibles).
   doNotMove         Boolean             @default(false)
   /// Notas libres adicionales (no sustituyen tags estructurados)
   requirements      String?
@@ -218,6 +271,7 @@ model Reservation {
   guests            ReservationGuest[]
   payments          Payment[]
   structuredReqs    ReservationRequirement[]
+  sourceQuery       Query?              @relation("QueryConvertedTo")
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   cancelledAt       DateTime?

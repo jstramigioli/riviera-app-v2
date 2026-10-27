@@ -25,12 +25,19 @@ export const REQUIREMENT_KIND_LABEL: Record<RequirementKind, string> = {
 };
 
 export const RESERVATION_STATUS_LABEL: Record<ReservationStatus, string> = {
-  CONSULTA: "Consulta",
+  /** Legacy — no crear; usar entidad Query / sección Consultas */
+  CONSULTA: "Consulta (legado)",
   PRERRESERVA: "Prerreserva",
   CONFIRMADA: "Confirmada",
   CANCELADA: "Cancelada",
   IN_HOUSE: "En casa",
   FINALIZADA: "Finalizada",
+};
+
+export const QUERY_STATUS_LABEL: Record<string, string> = {
+  OPEN: "Abierta",
+  CONVERTED: "Convertida",
+  ARCHIVED: "Archivada",
 };
 
 export const RESERVATION_STATUS_COLOR: Record<ReservationStatus, string> = {

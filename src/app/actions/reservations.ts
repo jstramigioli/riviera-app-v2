@@ -57,7 +57,7 @@ export async function createReservationAction(formData: FormData) {
       groupName: String(formData.get("groupName") || "") || undefined,
       checkInDate: String(formData.get("checkInDate")),
       checkOutDate: String(formData.get("checkOutDate")),
-      status: (String(formData.get("status") || "CONSULTA") as ReservationStatus),
+      status: (String(formData.get("status") || "PRERRESERVA") as ReservationStatus),
       channel: String(formData.get("channel") || "") || undefined,
       doNotMove: formData.get("doNotMove") === "on",
       notes: String(formData.get("notes") || "") || undefined,

@@ -82,8 +82,13 @@ export async function createReservation(input: CreateReservationInput) {
     await assertMandatoryAttributes(prisma, segments, mandatoryIds);
   }
 
-  const status = input.status ?? "CONSULTA";
-  const blocking = status !== "CONSULTA" && status !== "CANCELADA" && status !== "FINALIZADA";
+  const status = input.status ?? "PRERRESERVA";
+  if (status === "CONSULTA") {
+    throw new Error(
+      "Las consultas van en la sección Consultas (sin habitación). Acá creá prerreserva o reserva.",
+    );
+  }
+  const blocking = status !== "CANCELADA" && status !== "FINALIZADA";
   if (blocking) {
     await assertAvailable(prisma, segments);
   }
