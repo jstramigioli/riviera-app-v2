@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: riviera
+          POSTGRES_PASSWORD: riviera
+          POSTGRES_DB: riviera_pms
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U riviera -d riviera_pms"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://riviera:riviera@localhost:5432/riviera_pms?schema=public
+      SESSION_SECRET: ci-session-secret-at-least-32-characters-long
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --legacy-peer-deps
+      - run: npx prisma migrate deploy
+      - run: npm run db:seed
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
