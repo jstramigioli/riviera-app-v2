@@ -17,6 +17,7 @@ import {
   setPriceAction,
   updateStatusAction,
 } from "@/app/actions/reservations";
+import { setRoomLockedAction } from "@/app/actions/assignment";
 import { createPaymentAction, voidPaymentAction } from "@/app/actions/payments";
 import { linkGuestAction } from "@/app/actions/guests";
 import { requireUser } from "@/lib/auth";
@@ -75,7 +76,7 @@ export default async function ReservaDetailPage({
           <p className="text-sm text-[var(--muted)]">
             {reservation.checkInDate.toISOString().slice(0, 10)} →{" "}
             {reservation.checkOutDate.toISOString().slice(0, 10)}
-            {reservation.doNotMove ? " · 🔒 no mover" : ""}
+            {reservation.doNotMove ? " · 🔒 habitación fijada" : " · asignación flexible"}
             {reservation.group ? ` · Grupo: ${reservation.group.name}` : ""}
           </p>
         </div>
@@ -108,11 +109,31 @@ export default async function ReservaDetailPage({
         </div>
       ) : null}
 
-      {reservation.doNotMove ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          Marcada como «no mover»: evitá cambiar de habitación salvo decisión consciente.
-        </div>
-      ) : null}
+          <div
+        className={`rounded-lg border px-3 py-2 text-sm flex flex-wrap items-center justify-between gap-2 ${
+          reservation.doNotMove
+            ? "border-amber-200 bg-amber-50 text-amber-950"
+            : "border-[var(--line)] bg-white/60 text-[var(--muted)]"
+        }`}
+      >
+        <span>
+          {reservation.doNotMove
+            ? "Habitación fijada: el optimizador no la mueve; cambiá solo con decisión consciente."
+            : "Asignación flexible: se puede reasignar entre habitaciones compatibles (u optimizador)."}
+          <HelpTooltip text="Fijada = inamovible salvo desbloqueo. Flexible = el sistema puede proponer otra habitación que cumpla lo pedido." />
+        </span>
+        <form action={setRoomLockedAction} className="inline">
+          <input type="hidden" name="id" value={reservation.id} />
+          <input
+            type="hidden"
+            name="roomLocked"
+            value={reservation.doNotMove ? "false" : "true"}
+          />
+          <button className="btn btn-ghost" type="submit">
+            {reservation.doNotMove ? "Desfijar (hacer flexible)" : "Fijar habitación"}
+          </button>
+        </form>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="panel rounded-xl p-4 space-y-3">
@@ -120,11 +141,13 @@ export default async function ReservaDetailPage({
           <form action={updateStatusAction} className="flex flex-wrap gap-2">
             <input type="hidden" name="id" value={reservation.id} />
             <select className="select max-w-xs" name="status" defaultValue={reservation.status}>
-              {Object.entries(RESERVATION_STATUS_LABEL).map(([k, v]) => (
-                <option key={k} value={k}>
-                  {v}
-                </option>
-              ))}
+              {Object.entries(RESERVATION_STATUS_LABEL)
+                .filter(([k]) => k !== "CONSULTA" || reservation.status === "CONSULTA")
+                .map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
             </select>
             <button className="btn btn-primary" type="submit">
               Actualizar

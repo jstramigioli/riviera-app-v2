@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
       mandatoryAttributeIds: (sp.get("mandatory") || "").split(",").filter(Boolean),
       preferenceAttributeIds: (sp.get("preference") || "").split(",").filter(Boolean),
       excludeReservationId: sp.get("excludeReservationId") || undefined,
+      softMandatory: sp.get("softMandatory") === "1" || sp.get("softMandatory") === "true",
     });
 
     const selectionKey = sp.get("selectionKey") || "";

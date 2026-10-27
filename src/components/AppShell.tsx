@@ -5,6 +5,7 @@ import { ROLE_LABEL } from "@/lib/labels";
 
 const NAV = [
   { href: "/calendario", label: "Calendario" },
+  { href: "/consultas", label: "Consultas" },
   { href: "/reservas", label: "Reservas" },
   { href: "/huespedes", label: "Huéspedes" },
   { href: "/operacion", label: "Operación" },

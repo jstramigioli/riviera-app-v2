@@ -38,12 +38,13 @@ export async function loadCalendar(startIso: string, days: number) {
     orderBy: { code: "asc" },
   });
 
+  // Solo prerreservas/reservas con habitación. Las consultas (Query) no aparecen.
   const segments = await prisma.assignmentSegment.findMany({
     where: {
       startDate: { lt: end },
       endDate: { gt: start },
       reservation: {
-        status: { in: [...BLOCKING_STATUSES, "CONSULTA"] },
+        status: { in: [...BLOCKING_STATUSES] },
       },
     },
     include: {

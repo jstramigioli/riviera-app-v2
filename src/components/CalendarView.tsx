@@ -39,7 +39,7 @@ export function CalendarView({
           </h1>
           <p className="text-sm text-[var(--muted)] inline-flex flex-wrap items-center gap-1">
             Habitaciones por fila · días por columna. Tocá un día libre para crear reserva.
-            <HelpTooltip text="La fecha de salida no ocupa noche (checkout exclusivo). Las consultas se ven más tenues porque no bloquean inventario." />
+            <HelpTooltip text="La fecha de salida no ocupa noche (checkout exclusivo). Las consultas no aparecen acá: van en la sección Consultas, sin habitación." />
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -57,6 +57,12 @@ export function CalendarView({
           </Link>
           <Link className="btn btn-ghost" href={`/calendario?start=${startIso}&days=14`}>
             14d
+          </Link>
+          <Link className="btn btn-ghost" href="/consultas/nueva">
+            Nueva consulta
+          </Link>
+          <Link className="btn btn-ghost" href="/optimizador">
+            Optimizar
           </Link>
           <Link className="btn btn-primary" href="/reservas/nueva">
             Nueva reserva
@@ -101,10 +107,7 @@ export function CalendarView({
                 <div className="absolute inset-0 flex">
                   {days.map((d, di) => {
                     const occupied = unit.blocks.some(
-                      (b) =>
-                        b.status !== "CONSULTA" &&
-                        di >= b.startOffset &&
-                        di < b.startOffset + b.span,
+                      (b) => di >= b.startOffset && di < b.startOffset + b.span,
                     );
                     if (occupied) {
                       return (
@@ -140,7 +143,6 @@ export function CalendarView({
                       top: 6,
                       height: 28,
                       position: "absolute",
-                      opacity: b.status === "CONSULTA" ? 0.55 : 1,
                     }}
                   >
                     {b.doNotMove ? "🔒 " : ""}
