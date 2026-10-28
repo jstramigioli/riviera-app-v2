@@ -47,6 +47,37 @@ a {
   text-decoration: none;
 }
 
+/* Enlaces de texto navegables (huésped, reserva, recibo, “volver a…”).
+   No usar en botones (.btn), nav ni bloques del calendario. */
+a.text-link {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease, text-decoration-thickness 0.15s ease;
+}
+
+a.text-link:hover,
+a.text-link:focus-visible {
+  color: var(--brand-deep);
+  text-decoration-thickness: 2px;
+  outline: none;
+}
+
+a.text-link-back {
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
+}
+
+a.text-link-back:hover,
+a.text-link-back:focus-visible {
+  color: var(--brand-deep);
+  outline: none;
+}
+
 .panel {
   background: var(--panel);
   border: 1px solid var(--line);
