@@ -5,6 +5,8 @@ import { toDateOnly } from "./dates";
 import { writeAudit } from "./audit";
 import { derivePaymentStatus } from "./status";
 import { balanceArs, netPaymentsArs, toDecimal } from "./money";
+import { assertStayDatesOpen } from "./hotel-calendar";
+import { loadActiveClosedPeriods } from "./hotel-closed";
 
 async function nextReservationCode(): Promise<string> {
   const year = new Date().getFullYear();
@@ -52,6 +54,9 @@ export async function createReservation(input: CreateReservationInput) {
   const checkIn = toDateOnly(input.checkInDate);
   const checkOut = toDateOnly(input.checkOutDate);
   if (!(checkIn < checkOut)) throw new Error("Checkout debe ser posterior al check-in");
+
+  const closedPeriods = await loadActiveClosedPeriods();
+  assertStayDatesOpen(checkIn, checkOut, closedPeriods);
 
   let segments: SegmentInput[] = [];
 

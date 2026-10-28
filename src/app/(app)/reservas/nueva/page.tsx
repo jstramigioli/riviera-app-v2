@@ -31,11 +31,11 @@ export default async function NuevaReservaPage({
           className="text-3xl text-[var(--brand-deep)]"
           style={{ fontFamily: "var(--font-display), serif" }}
         >
-          Nueva reserva / consulta
+          Nueva reserva
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          Elegí fechas y mirá en vivo qué habitaciones están libres, qué pensión tiene tarifa y
-          filtrá por características.
+          Alta completa en página propia. Desde el calendario también podés abrir el panel lateral
+          (Reserva o Consulta) sin perder el scroll.
         </p>
       </div>
       <NewReservationForm

@@ -18,6 +18,10 @@ export default async function AdminPage() {
     guests: await prisma.guest.count(),
     payments: await prisma.payment.count(),
   };
+  const closedPeriods = await prisma.hotelClosedPeriod.findMany({
+    where: { active: true },
+    orderBy: { closedFrom: "asc" },
+  });
 
   return (
     <div className="space-y-5 fade-up">
@@ -57,6 +61,29 @@ export default async function AdminPage() {
         </button>
         <div className="text-sm text-[var(--muted)]">Actual: 1 USD = {formatArs(blue)}</div>
       </form>
+
+      <section className="panel rounded-xl p-4 space-y-2">
+        <h2 className="font-semibold">Hotel cerrado (períodos)</h2>
+        <p className="text-xs text-[var(--muted)]">
+          Rangos en base de datos (como tarifas). Mientras Julián define el modelo final, usamos
+          períodos cerrados: no se puede crear consulta/reserva en noches cubiertas.
+        </p>
+        {closedPeriods.length === 0 ? (
+          <p className="text-sm text-[var(--muted)]">Sin cierres activos (hotel siempre abierto).</p>
+        ) : (
+          <ul className="space-y-1 text-sm">
+            {closedPeriods.map((p) => (
+              <li key={p.id} className="flex flex-wrap gap-2 border-b border-[var(--line)] py-1.5">
+                <span className="font-semibold">{p.name}</span>
+                <span className="text-[var(--muted)]">
+                  {p.closedFrom.toISOString().slice(0, 10)} → {p.closedTo.toISOString().slice(0, 10)}
+                </span>
+                {p.notes ? <span className="text-xs text-[var(--muted)]">· {p.notes}</span> : null}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="panel rounded-xl p-4 space-y-2">
         <h2 className="font-semibold">Export</h2>

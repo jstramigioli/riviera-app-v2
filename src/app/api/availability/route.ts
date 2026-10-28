@@ -4,6 +4,9 @@ import { prisma } from "@/lib/db";
 import { listLiveAvailability } from "@/lib/availability";
 import { suggestPriceArs, suggestPriceBreakdown } from "@/lib/rates";
 import type { ServiceType } from "@prisma/client";
+import { loadActiveClosedPeriods } from "@/lib/hotel-closed";
+import { assertStayDatesOpen, closedNightsInStay } from "@/lib/hotel-calendar";
+import { isoDate } from "@/lib/dates";
 
 export async function GET(req: NextRequest) {
   const session = await getSession();
@@ -22,6 +25,26 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const closedPeriods = await loadActiveClosedPeriods();
+    try {
+      assertStayDatesOpen(checkInDate, checkOutDate, closedPeriods);
+    } catch (closedErr) {
+      const nights = closedNightsInStay(checkInDate, checkOutDate, closedPeriods).map(
+        isoDate,
+      );
+      return NextResponse.json(
+        {
+          error:
+            closedErr instanceof Error
+              ? closedErr.message
+              : "Hotel cerrado en esas fechas",
+          hotelClosed: true,
+          closedNights: nights,
+        },
+        { status: 400 },
+      );
+    }
+
     const desired = [
       ...new Set(
         [

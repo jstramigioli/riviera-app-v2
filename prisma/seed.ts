@@ -222,6 +222,30 @@ async function main() {
     create: { key: "usd_blue_rate", valueJson: { rate: 1400 } },
   });
 
+  // Cierres de hotel (rangos en DB — no hardcode en lógica). Demo: invierno próximo.
+  const year = new Date().getFullYear();
+  const winterFrom = new Date(Date.UTC(year + 1, 5, 1)); // 1 jun próximo año
+  const winterTo = new Date(Date.UTC(year + 1, 7, 31)); // 31 ago
+  const existingClose = await prisma.hotelClosedPeriod.findFirst({
+    where: { name: "Cierre invierno (demo)" },
+  });
+  if (!existingClose) {
+    await prisma.hotelClosedPeriod.create({
+      data: {
+        name: "Cierre invierno (demo)",
+        closedFrom: winterFrom,
+        closedTo: winterTo,
+        active: true,
+        notes: "Período de ejemplo; editable en Admin. Bloquea consulta/reserva en esas noches.",
+      },
+    });
+  } else {
+    await prisma.hotelClosedPeriod.update({
+      where: { id: existingClose.id },
+      data: { closedFrom: winterFrom, closedTo: winterTo, active: true },
+    });
+  }
+
   // Demo reservation for calendar (unit 1, next week) if none
   const demoCount = await prisma.reservation.count();
   if (demoCount === 0) {
@@ -280,7 +304,7 @@ async function main() {
   }
 
   console.log(
-    "Seed OK: users, inventory, comunicadas, período Temporada base, rates, demo reservation",
+    "Seed OK: users, inventory, comunicadas, tarifas, cierres de hotel, demo reservation",
   );
 }
 

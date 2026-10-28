@@ -6,6 +6,8 @@ import {
   createReservation,
   type StructuredRequirementInput,
 } from "./reservations";
+import { assertStayDatesOpen } from "./hotel-calendar";
+import { loadActiveClosedPeriods } from "./hotel-closed";
 
 export type QueryRequirementInput = StructuredRequirementInput;
 
@@ -51,6 +53,9 @@ export async function upsertQueryDraft(input: UpsertQueryInput) {
   if (!(checkIn < checkOut)) {
     throw new Error("La fecha de salida debe ser posterior a la de llegada");
   }
+
+  const closedPeriods = await loadActiveClosedPeriods();
+  assertStayDatesOpen(checkIn, checkOut, closedPeriods);
 
   const structured = dedupeRequirements(input.structuredRequirements ?? []);
   const data = {
