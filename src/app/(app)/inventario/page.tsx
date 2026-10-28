@@ -1,9 +1,15 @@
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
-import { upsertUnitAction, upsertCategoryAction, upsertAttributeAction } from "@/app/actions/inventory";
+import {
+  upsertUnitAction,
+  upsertCategoryAction,
+  upsertAttributeAction,
+} from "@/app/actions/inventory";
+import { UnitAttributesForm } from "@/components/UnitAttributesForm";
 
 export default async function InventarioPage() {
-  await requireUser(["ADMIN", "RECEPCION"]);
+  const user = await requireUser(["ADMIN", "RECEPCION"]);
+  const isAdmin = user.role === "ADMIN";
   const units = await prisma.physicalUnit.findMany({
     orderBy: { sortOrder: "asc" },
     include: {
@@ -29,17 +35,21 @@ export default async function InventarioPage() {
           Inventario
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          Unidades físicas, atributos, categorías y compuestas (8+9, 35+36).
+          Habitaciones, departamentos, características, categorías y habitaciones comunicadas
+          (8+9, 35+36).
         </p>
       </div>
 
       <section className="panel rounded-xl p-4">
-        <h2 className="mb-3 font-semibold">Unidades compuestas</h2>
+        <h2 className="mb-3 font-semibold">Habitaciones comunicadas</h2>
         <ul className="space-y-1 text-sm">
           {composites.map((c) => (
             <li key={c.id}>
-              <strong>{c.code}</strong> — {c.name}:{" "}
-              {c.members.map((m) => m.unit.code).join(" + ")}
+              <strong>{c.code}</strong> —{" "}
+              {/compuest/i.test(c.name)
+                ? `Habitaciones comunicadas ${c.code}`
+                : c.name}
+              : {c.members.map((m) => m.unit.code).join(" + ")}
             </li>
           ))}
         </ul>
@@ -55,31 +65,36 @@ export default async function InventarioPage() {
               </li>
             ))}
           </ul>
-          <form action={upsertCategoryAction} className="grid gap-2 sm:grid-cols-2">
-            <input className="input" name="code" placeholder="Código" required />
-            <input className="input" name="name" placeholder="Nombre" required />
-            <button className="btn btn-ghost sm:col-span-2" type="submit">
-              Alta / update categoría
-            </button>
-          </form>
+          {isAdmin ? (
+            <form action={upsertCategoryAction} className="grid gap-2 sm:grid-cols-2">
+              <input className="input" name="code" placeholder="Código" required />
+              <input className="input" name="name" placeholder="Nombre" required />
+              <button className="btn btn-ghost sm:col-span-2" type="submit">
+                Alta / actualizar categoría
+              </button>
+            </form>
+          ) : null}
         </section>
 
         <section className="panel rounded-xl p-4 space-y-3">
-          <h2 className="font-semibold">Atributos</h2>
+          <h2 className="font-semibold">Características</h2>
           <ul className="text-sm space-y-1">
             {attributes.map((a) => (
               <li key={a.id}>
-                {a.key} · {a.label}
+                {a.label}
+                <span className="text-[var(--muted)]"> · {a.key}</span>
               </li>
             ))}
           </ul>
-          <form action={upsertAttributeAction} className="grid gap-2 sm:grid-cols-2">
-            <input className="input" name="key" placeholder="key" required />
-            <input className="input" name="label" placeholder="Etiqueta" required />
-            <button className="btn btn-ghost sm:col-span-2" type="submit">
-              Alta / update atributo
-            </button>
-          </form>
+          {isAdmin ? (
+            <form action={upsertAttributeAction} className="grid gap-2 sm:grid-cols-2">
+              <input className="input" name="key" placeholder="clave (ej. balcon)" required />
+              <input className="input" name="label" placeholder="Etiqueta visible" required />
+              <button className="btn btn-ghost sm:col-span-2" type="submit">
+                Alta / actualizar característica
+              </button>
+            </form>
+          ) : null}
         </section>
       </div>
 
@@ -91,8 +106,8 @@ export default async function InventarioPage() {
               <th className="px-3 py-2 text-left">Nombre</th>
               <th className="px-3 py-2 text-left">Cap.</th>
               <th className="px-3 py-2 text-left">Categoría</th>
-              <th className="px-3 py-2 text-left">Atributos</th>
-              <th className="px-3 py-2 text-left">Compuestas</th>
+              <th className="px-3 py-2 text-left">Características</th>
+              <th className="px-3 py-2 text-left">Comunicadas</th>
             </tr>
           </thead>
           <tbody>
@@ -114,30 +129,57 @@ export default async function InventarioPage() {
         </table>
       </section>
 
-      <section className="panel rounded-xl p-4 space-y-3">
-        <h2 className="font-semibold">Editar / alta unidad</h2>
-        <form action={upsertUnitAction} className="grid gap-2 sm:grid-cols-3">
-          <input className="input" name="code" placeholder="Código" required />
-          <input className="input" name="name" placeholder="Nombre" required />
-          <input className="input" name="capacity" type="number" placeholder="Capacidad" defaultValue={2} />
-          <select className="select" name="kind" defaultValue="HABITACION">
-            <option value="HABITACION">Habitación</option>
-            <option value="DEPARTAMENTO">Departamento</option>
-          </select>
-          <select className="select" name="commercialCategoryId" defaultValue="">
-            <option value="">Sin categoría</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.code}
-              </option>
-            ))}
-          </select>
-          <input className="input" name="sortOrder" type="number" placeholder="Orden" defaultValue={0} />
-          <button className="btn btn-primary sm:col-span-3" type="submit">
-            Guardar unidad
-          </button>
-        </form>
-      </section>
+      {isAdmin ? (
+        <section className="panel rounded-xl p-4 space-y-3">
+          <h2 className="font-semibold">Asignar características a una habitación</h2>
+          <p className="text-sm text-[var(--muted)]">
+            Marcá las características que tiene la habitación o departamento. Se usan al filtrar
+            reservas (obligatorio / preferencia).
+          </p>
+          <UnitAttributesForm
+            attributes={attributes.map((a) => ({ id: a.id, label: a.label }))}
+            units={units.map((u) => ({
+              id: u.id,
+              code: u.code,
+              name: u.name,
+              attributeIds: u.attributes.map((a) => a.attributeId),
+            }))}
+          />
+        </section>
+      ) : null}
+
+      {isAdmin ? (
+        <section className="panel rounded-xl p-4 space-y-3">
+          <h2 className="font-semibold">Editar / alta habitación o departamento</h2>
+          <form action={upsertUnitAction} className="grid gap-2 sm:grid-cols-3">
+            <input className="input" name="code" placeholder="Código" required />
+            <input className="input" name="name" placeholder="Nombre" required />
+            <input
+              className="input"
+              name="capacity"
+              type="number"
+              placeholder="Capacidad"
+              defaultValue={2}
+            />
+            <select className="select" name="kind" defaultValue="HABITACION">
+              <option value="HABITACION">Habitación</option>
+              <option value="DEPARTAMENTO">Departamento</option>
+            </select>
+            <select className="select" name="commercialCategoryId" defaultValue="">
+              <option value="">Sin categoría</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.code}
+                </option>
+              ))}
+            </select>
+            <input className="input" name="sortOrder" type="number" placeholder="Orden" defaultValue={0} />
+            <button className="btn btn-primary sm:col-span-3" type="submit">
+              Guardar
+            </button>
+          </form>
+        </section>
+      ) : null}
     </div>
   );
 }

@@ -1,5 +1,7 @@
-import type { PrismaClient, ReservationStatus } from "@prisma/client";
-import { rangesOverlap, toDateOnly } from "./dates";
+import type { PrismaClient, ReservationStatus, ServiceType, UnitKind } from "@prisma/client";
+import { eachNight, rangesOverlap, toDateOnly } from "./dates";
+import { communicatingRoomsLabel, roomDisplayName } from "./labels";
+import { pickMostSpecificRate } from "./rates";
 
 const BLOCKING_STATUSES: ReservationStatus[] = [
   "PRERRESERVA",
@@ -89,7 +91,7 @@ export async function findConflicts(
           conflictingReservationId: ex.reservationId,
           startDate: ex.startDate,
           endDate: ex.endDate,
-          reason: `Overlap with ${ex.reservation.code} (${ex.reservation.status}) on unit ${ex.physicalUnitId}`,
+          reason: `Solapa con ${ex.reservation.code} (${ex.reservation.status})`,
         });
       }
     }
@@ -115,7 +117,7 @@ export async function assertAvailable(
   const conflicts = await findConflicts(db, segments, options);
   if (conflicts.length > 0) {
     const msg = conflicts.map((c) => c.reason).join("; ");
-    const err = new Error(`Availability conflict: ${msg}`);
+    const err = new Error(`Habitación no disponible: ${msg}`);
     (err as Error & { conflicts: Conflict[] }).conflicts = conflicts;
     throw err;
   }
@@ -149,3 +151,289 @@ export async function expandCompositeSegments(
 }
 
 export { BLOCKING_STATUSES };
+
+export type AvailabilityCandidate = {
+  selectionKey: string;
+  kind: "unit" | "communicating";
+  id: string;
+  code: string;
+  label: string;
+  capacity: number;
+  unitKind?: UnitKind;
+  attributeIds: string[];
+  attributeLabels: string[];
+  /** How many desired tags this room hits (D-02). */
+  desiredHits: number;
+  meetsAllDesired: boolean;
+  missingDesiredLabels: string[];
+  /** @deprecated alias of meetsAllDesired — kept for gradual UI migration */
+  meetsMandatory: boolean;
+  /** @deprecated alias of missingDesiredLabels */
+  missingMandatoryLabels: string[];
+  /** @deprecated alias of desiredHits */
+  preferenceHits: number;
+  /** @deprecated alias of meetsAllDesired */
+  meetsAllPreferences: boolean;
+  capacityOk: boolean;
+  commercialCategoryId: string | null;
+  memberCodes?: string[];
+};
+
+export type ServiceAvailability = {
+  serviceType: ServiceType;
+  available: boolean;
+  suggestedNightlyArs: number | null;
+};
+
+export type LiveAvailabilityResult = {
+  checkInDate: string;
+  checkOutDate: string;
+  nights: number;
+  hasAvailability: boolean;
+  availableCount: number;
+  candidates: AvailabilityCandidate[];
+  services: ServiceAvailability[];
+};
+
+/**
+ * List rooms / communicating pairs free for [checkIn, checkOut).
+ * Tags are **desired only** (D-02): they rank / highlight, never hard-filter.
+ * Rooms missing desired tags are included and flagged so recepción can override with warning.
+ *
+ * Legacy params `mandatoryAttributeIds` / `preferenceAttributeIds` / `softMandatory`
+ * are merged into the desired set for backward-compatible callers/tests.
+ */
+export async function listLiveAvailability(
+  db: Db,
+  input: {
+    checkInDate: string;
+    checkOutDate: string;
+    adults?: number;
+    children?: number;
+    desiredAttributeIds?: string[];
+    /** @deprecated merged into desired */
+    mandatoryAttributeIds?: string[];
+    /** @deprecated merged into desired */
+    preferenceAttributeIds?: string[];
+    excludeReservationId?: string;
+    /** @deprecated ignored — desired tags never hard-filter */
+    softMandatory?: boolean;
+  },
+): Promise<LiveAvailabilityResult> {
+  const checkIn = toDateOnly(input.checkInDate);
+  const checkOut = toDateOnly(input.checkOutDate);
+  if (!(checkIn < checkOut)) {
+    throw new Error("La fecha de salida debe ser posterior a la de llegada");
+  }
+  const nights = eachNight(checkIn, checkOut).length;
+  const guests = (input.adults ?? 2) + (input.children ?? 0);
+  const desiredIds = [
+    ...new Set([
+      ...(input.desiredAttributeIds ?? []),
+      ...(input.mandatoryAttributeIds ?? []),
+      ...(input.preferenceAttributeIds ?? []),
+    ]),
+  ];
+
+  const units = await db.physicalUnit.findMany({
+    where: { active: true },
+    include: {
+      attributes: { include: { attribute: true } },
+      commercialCategory: true,
+    },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const attrLabelById = new Map<string, string>();
+  for (const u of units) {
+    for (const a of u.attributes) {
+      attrLabelById.set(a.attributeId, a.attribute.label);
+    }
+  }
+  if (desiredIds.length) {
+    const attrs = await db.unitAttribute.findMany({
+      where: { id: { in: desiredIds } },
+      select: { id: true, label: true },
+    });
+    for (const a of attrs) attrLabelById.set(a.id, a.label);
+  }
+
+  const composites = await db.compositeUnit.findMany({
+    where: { active: true },
+    include: {
+      members: {
+        include: {
+          unit: {
+            include: { attributes: { include: { attribute: true } } },
+          },
+        },
+      },
+    },
+    orderBy: { code: "asc" },
+  });
+
+  // Category for communicating rooms comes from DB catalog (seed), never hardcoded amounts.
+  const communicatingCat = await db.commercialCategory.findFirst({
+    where: { active: true, OR: [{ code: "COMP" }, { name: { contains: "comunicad", mode: "insensitive" } }] },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const busySegments = await db.assignmentSegment.findMany({
+    where: {
+      reservation: {
+        status: { in: BLOCKING_STATUSES },
+        ...(input.excludeReservationId
+          ? { id: { not: input.excludeReservationId } }
+          : {}),
+      },
+    },
+    select: { physicalUnitId: true, startDate: true, endDate: true },
+  });
+
+  const isUnitFree = (unitId: string) =>
+    !busySegments.some(
+      (s) =>
+        s.physicalUnitId === unitId &&
+        rangesOverlap(checkIn, checkOut, s.startDate, s.endDate),
+    );
+
+  function scoreCandidate(attributeIds: string[]) {
+    const missing = desiredIds.filter((id) => !attributeIds.includes(id));
+    const desiredHits = desiredIds.filter((id) => attributeIds.includes(id)).length;
+    const meetsAllDesired = missing.length === 0;
+    const missingLabels = missing.map((id) => attrLabelById.get(id) ?? id);
+    return {
+      desiredHits,
+      meetsAllDesired,
+      missingDesiredLabels: missingLabels,
+      // legacy aliases
+      preferenceHits: desiredHits,
+      meetsAllPreferences: meetsAllDesired,
+      meetsMandatory: meetsAllDesired,
+      missingMandatoryLabels: missingLabels,
+    };
+  }
+
+  const candidates: AvailabilityCandidate[] = [];
+
+  for (const u of units) {
+    if (!isUnitFree(u.id)) continue;
+    const attributeIds = u.attributes.map((a) => a.attributeId);
+    const scored = scoreCandidate(attributeIds);
+    candidates.push({
+      selectionKey: `unit:${u.id}`,
+      kind: "unit",
+      id: u.id,
+      code: u.code,
+      label: roomDisplayName(u.code, u.name, u.kind),
+      capacity: u.capacity,
+      unitKind: u.kind,
+      attributeIds,
+      attributeLabels: u.attributes.map((a) => a.attribute.label),
+      ...scored,
+      capacityOk: guests <= u.capacity,
+      commercialCategoryId: u.commercialCategoryId,
+    });
+  }
+
+  for (const c of composites) {
+    const memberIds = c.members.map((m) => m.unitId);
+    if (memberIds.length < 2) continue;
+    if (!memberIds.every(isUnitFree)) continue;
+    const attrSet = new Set<string>();
+    const attrLabels = new Set<string>();
+    let capacity = 0;
+    for (const m of c.members) {
+      capacity += m.unit.capacity;
+      for (const a of m.unit.attributes) {
+        attrSet.add(a.attributeId);
+        attrLabels.add(a.attribute.label);
+      }
+    }
+    const attributeIds = [...attrSet];
+    const scored = scoreCandidate(attributeIds);
+    const firstMember = units.find((u) => u.id === c.members[0]?.unitId);
+    candidates.push({
+      selectionKey: `communicating:${c.id}`,
+      kind: "communicating",
+      id: c.id,
+      code: c.code,
+      label: communicatingRoomsLabel(c.code, c.name),
+      capacity,
+      attributeIds,
+      attributeLabels: [...attrLabels],
+      ...scored,
+      capacityOk: guests <= capacity,
+      commercialCategoryId:
+        communicatingCat?.id ?? firstMember?.commercialCategoryId ?? null,
+      memberCodes: c.members.map((m) => m.unit.code),
+    });
+  }
+
+  candidates.sort((a, b) => {
+    if (a.meetsAllDesired !== b.meetsAllDesired) return a.meetsAllDesired ? -1 : 1;
+    if (b.desiredHits !== a.desiredHits) return b.desiredHits - a.desiredHits;
+    if (a.capacityOk !== b.capacityOk) return a.capacityOk ? -1 : 1;
+    return a.code.localeCompare(b.code, undefined, { numeric: true });
+  });
+
+  const services = await listServiceAvailability(db, checkIn, checkOut);
+
+  return {
+    checkInDate: input.checkInDate,
+    checkOutDate: input.checkOutDate,
+    nights,
+    hasAvailability: candidates.length > 0,
+    availableCount: candidates.length,
+    candidates,
+    services,
+  };
+}
+
+/** A service type is “available” if there is rate coverage for every night (any category). */
+export async function listServiceAvailability(
+  db: Db,
+  checkIn: Date,
+  checkOut: Date,
+): Promise<ServiceAvailability[]> {
+  const nights = eachNight(checkIn, checkOut);
+  const serviceTypes: ServiceType[] = ["SIN_DESAYUNO", "DESAYUNO", "MEDIA_PENSION"];
+  const plans = await db.ratePlan.findMany({
+    where: { active: true },
+    include: {
+      rates: { include: { period: { select: { id: true, name: true, active: true } } } },
+    },
+  });
+
+  return serviceTypes.map((serviceType) => {
+    const matching = plans.filter((p) => p.serviceType === serviceType);
+    let available = nights.length > 0;
+    let suggestedNightlyArs: number | null = null;
+    for (const night of nights) {
+      const covering = matching.flatMap((p) =>
+        p.rates
+          .filter((r) => (!r.period || r.period.active) && r.validFrom <= night && night <= r.validTo)
+          .map((r) => ({
+            amountArs: Number(r.amountArs),
+            validFrom: r.validFrom,
+            validTo: r.validTo,
+            updatedAt: r.updatedAt,
+            periodId: r.periodId,
+            periodName: r.period?.name ?? null,
+          })),
+      );
+      if (covering.length === 0) {
+        available = false;
+        break;
+      }
+      const picked = pickMostSpecificRate(covering);
+      const amount = picked?.amountArs ?? Math.min(...covering.map((c) => c.amountArs));
+      suggestedNightlyArs =
+        suggestedNightlyArs == null ? amount : Math.min(suggestedNightlyArs, amount);
+    }
+    if (!available) suggestedNightlyArs = null;
+    return { serviceType, available, suggestedNightlyArs };
+  });
+}
+
+export { suggestPriceArs, suggestPriceBreakdown } from "./rates";

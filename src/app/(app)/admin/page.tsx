@@ -2,7 +2,12 @@ import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { getUsdBlueRate } from "@/lib/payments";
 import { setBlueRateAction } from "@/app/actions/payments";
+import {
+  createOpenPeriodAction,
+  deactivateOpenPeriodAction,
+} from "@/app/actions/hotel-open";
 import { formatArs } from "@/lib/money";
+import { HelpTooltip } from "@/components/HelpTooltip";
 
 export default async function AdminPage() {
   const user = await requireUser(["ADMIN"]);
@@ -18,6 +23,10 @@ export default async function AdminPage() {
     guests: await prisma.guest.count(),
     payments: await prisma.payment.count(),
   };
+  const openPeriods = await prisma.hotelOpenPeriod.findMany({
+    where: { active: true },
+    orderBy: { openFrom: "asc" },
+  });
 
   return (
     <div className="space-y-5 fade-up">
@@ -35,7 +44,7 @@ export default async function AdminPage() {
 
       <div className="grid gap-4 sm:grid-cols-4">
         {[
-          ["Unidades", counts.units],
+          ["Habitaciones", counts.units],
           ["Reservas", counts.reservations],
           ["Huéspedes", counts.guests],
           ["Pagos", counts.payments],
@@ -57,6 +66,69 @@ export default async function AdminPage() {
         </button>
         <div className="text-sm text-[var(--muted)]">Actual: 1 USD = {formatArs(blue)}</div>
       </form>
+
+      <section className="panel rounded-xl p-4 space-y-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="font-semibold">Temporadas abiertas</h2>
+          <HelpTooltip text="El hotel solo opera dentro de estos rangos (pueden ser varios al año, o un fin de semana largo). Fuera = cerrado: no se crea consulta ni reserva." />
+        </div>
+        <p className="text-xs text-[var(--muted)]">
+          Lista de ventanas from–to en la base. Fuera de todas las temporadas activas el calendario
+          muestra cerrado y bloquea altas.
+        </p>
+        {openPeriods.length === 0 ? (
+          <p className="text-sm text-[var(--danger)]">
+            No hay temporadas abiertas: el hotel figura cerrado todos los días.
+          </p>
+        ) : (
+          <ul className="space-y-1 text-sm">
+            {openPeriods.map((p) => (
+              <li
+                key={p.id}
+                className="flex flex-wrap items-center gap-2 border-b border-[var(--line)] py-1.5"
+              >
+                <span className="font-semibold">{p.name}</span>
+                <span className="text-[var(--muted)]">
+                  {p.openFrom.toISOString().slice(0, 10)} → {p.openTo.toISOString().slice(0, 10)}
+                </span>
+                {p.notes ? <span className="text-xs text-[var(--muted)]">· {p.notes}</span> : null}
+                <form action={deactivateOpenPeriodAction} className="ml-auto">
+                  <input type="hidden" name="id" value={p.id} />
+                  <button type="submit" className="btn btn-ghost text-xs">
+                    Desactivar
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+        <form
+          action={createOpenPeriodAction}
+          className="grid gap-2 border-t border-[var(--line)] pt-3 sm:grid-cols-4"
+        >
+          <div className="sm:col-span-2">
+            <label className="label">Nombre</label>
+            <input className="input" name="name" required placeholder="Temporada / puente…" />
+          </div>
+          <div>
+            <label className="label">Desde</label>
+            <input className="input" type="date" name="openFrom" required />
+          </div>
+          <div>
+            <label className="label">Hasta</label>
+            <input className="input" type="date" name="openTo" required />
+          </div>
+          <div className="sm:col-span-3">
+            <label className="label">Notas</label>
+            <input className="input" name="notes" placeholder="Opcional" />
+          </div>
+          <div className="flex items-end">
+            <button className="btn btn-primary w-full" type="submit">
+              Agregar temporada
+            </button>
+          </div>
+        </form>
+      </section>
 
       <section className="panel rounded-xl p-4 space-y-2">
         <h2 className="font-semibold">Export</h2>

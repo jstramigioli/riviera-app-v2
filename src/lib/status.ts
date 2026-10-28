@@ -1,30 +1,10 @@
-import type { PaymentStatus, ReservationStatus } from "@prisma/client";
+import type { PaymentStatus } from "@prisma/client";
 
-export const RESERVATION_STATUS_LABEL: Record<ReservationStatus, string> = {
-  CONSULTA: "Consulta",
-  PRERRESERVA: "Prerreserva",
-  CONFIRMADA: "Confirmada",
-  CANCELADA: "Cancelada",
-  IN_HOUSE: "In-house",
-  FINALIZADA: "Finalizada",
-};
-
-export const RESERVATION_STATUS_COLOR: Record<ReservationStatus, string> = {
-  CONSULTA: "#94a3b8",
-  PRERRESERVA: "#f59e0b",
-  CONFIRMADA: "#0d9488",
-  CANCELADA: "#64748b",
-  IN_HOUSE: "#2563eb",
-  FINALIZADA: "#475569",
-};
-
-export const PAYMENT_STATUS_LABEL: Record<PaymentStatus, string> = {
-  SIN_PAGO: "Sin pago",
-  SENIA_PARCIAL: "Seña parcial",
-  PARCIAL: "Parcial",
-  SALDADO: "Saldado",
-  A_FAVOR: "A favor",
-};
+export {
+  RESERVATION_STATUS_LABEL,
+  RESERVATION_STATUS_COLOR,
+  PAYMENT_STATUS_LABEL,
+} from "./labels";
 
 export function derivePaymentStatus(
   agreedPriceArs: number | null,

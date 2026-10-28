@@ -23,7 +23,50 @@ export async function createReservationAction(formData: FormData) {
     .map((s) => s.trim())
     .filter(Boolean);
 
+  const desired = [
+    ...new Set(
+      [
+        ...String(formData.get("desiredAttributeIds") || "").split(","),
+        ...String(formData.get("mandatoryAttributeIds") || "").split(","),
+        ...String(formData.get("preferenceAttributeIds") || "").split(","),
+      ]
+        .map((s) => s.trim())
+        .filter(Boolean),
+    ),
+  ];
+
+  const structuredRequirements = desired.map((attributeId) => ({
+    attributeId,
+    kind: "DESIRED" as const,
+  }));
+
+  const allowOverride =
+    formData.get("allowDesiredOverride") === "on" ||
+    formData.get("allowDesiredOverride") === "true" ||
+    formData.get("allowDesiredOverride") === "1" ||
+    formData.get("allowMandatoryOverride") === "on";
+  const overrideNote = String(formData.get("overrideNote") || "").trim();
+
   try {
+    if (!physicalUnitId && !compositeUnitId) {
+      throw new Error("Elegí una habitación disponible para esas fechas");
+    }
+    if (allowOverride && !overrideNote) {
+      throw new Error(
+        "Para asignar una habitación que no cumple lo pedido, indicá el motivo",
+      );
+    }
+
+    const baseNotes = String(formData.get("notes") || "") || undefined;
+    const notes = [
+      baseNotes,
+      allowOverride && overrideNote
+        ? `Override características deseadas: ${overrideNote}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n") || undefined;
+
     const reservation = await createReservation({
       physicalUnitId,
       compositeUnitId,
@@ -31,12 +74,11 @@ export async function createReservationAction(formData: FormData) {
       groupName: String(formData.get("groupName") || "") || undefined,
       checkInDate: String(formData.get("checkInDate")),
       checkOutDate: String(formData.get("checkOutDate")),
-      status: (String(formData.get("status") || "CONSULTA") as ReservationStatus),
+      status: (String(formData.get("status") || "PRERRESERVA") as ReservationStatus),
       channel: String(formData.get("channel") || "") || undefined,
       doNotMove: formData.get("doNotMove") === "on",
-      requirements: String(formData.get("requirements") || "") || undefined,
-      preferences: String(formData.get("preferences") || "") || undefined,
-      notes: String(formData.get("notes") || "") || undefined,
+      notes,
+      structuredRequirements,
       adults: Number(formData.get("adults") || 2),
       children: Number(formData.get("children") || 0),
       serviceType: (String(formData.get("serviceType") || "DESAYUNO") as ServiceType),
@@ -44,6 +86,7 @@ export async function createReservationAction(formData: FormData) {
         ? Number(formData.get("agreedPriceArs"))
         : null,
       freezePrice: formData.get("freezePrice") === "on",
+      allowDesiredOverride: allowOverride,
       userId: user.id,
     });
 
@@ -68,6 +111,15 @@ export async function createReservationAction(formData: FormData) {
     revalidatePath("/calendario");
     redirect(`/reservas/${reservation.id}`);
   } catch (e) {
+    if (
+      e &&
+      typeof e === "object" &&
+      "digest" in e &&
+      typeof (e as { digest: unknown }).digest === "string" &&
+      (e as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+    ) {
+      throw e;
+    }
     const msg = e instanceof Error ? e.message : "Error al crear reserva";
     redirect(`/reservas/nueva?error=${encodeURIComponent(msg)}`);
   }
@@ -107,6 +159,13 @@ export async function addSegmentAction(formData: FormData) {
   if (["CANCELADA", "FINALIZADA"].includes(reservation.status)) {
     throw new Error("No se pueden agregar tramos a esta reserva");
   }
+  if (reservation.doNotMove && user.role !== "ADMIN") {
+    redirect(
+      `/reservas/${reservationId}?error=${encodeURIComponent(
+        "Esta reserva está marcada como «no mover». Solo administración puede cambiar habitación.",
+      )}`,
+    );
+  }
 
   await assertAvailable(
     prisma,
@@ -123,6 +182,7 @@ export async function addSegmentAction(formData: FormData) {
     entityType: "Reservation",
     entityId: reservationId,
     after: { physicalUnitId, startDate, endDate },
+    meta: reservation.doNotMove ? { doNotMoveWarned: true } : undefined,
   });
   revalidatePath(`/reservas/${reservationId}`);
   revalidatePath("/calendario");

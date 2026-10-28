@@ -64,7 +64,7 @@ async function main() {
     { code: "STD", name: "Standard", sortOrder: 1 },
     { code: "SUP", name: "Superior", sortOrder: 2 },
     { code: "DEP", name: "Departamento", sortOrder: 3 },
-    { code: "COMP", name: "Compuesta", sortOrder: 4 },
+    { code: "COMP", name: "Habitaciones comunicadas", sortOrder: 4 },
   ];
   for (const c of categories) {
     await prisma.commercialCategory.upsert({
@@ -153,15 +153,38 @@ async function main() {
     return composite;
   }
 
-  await ensureComposite("8+9", "Unidad compuesta 8+9", ["8", "9"]);
-  await ensureComposite("35+36", "Unidad compuesta 35+36", ["35", "36"]);
+  await ensureComposite("8+9", "Habitaciones comunicadas 8+9", ["8", "9"]);
+  await ensureComposite("35+36", "Habitaciones comunicadas 35+36", ["35", "36"]);
 
-  // Sample rate plans
-  for (const cat of [std, sup, dep]) {
+  const comp = await prisma.commercialCategory.findUniqueOrThrow({ where: { code: "COMP" } });
+
+  // Temporada base (plan tarifario) — montos solo vía seed/DB, no hardcode en UI
+  const from = startOfDay(new Date());
+  const to = addDays(from, 365);
+  let basePeriod = await prisma.ratePeriod.findFirst({
+    where: { name: "Temporada base" },
+  });
+  if (!basePeriod) {
+    basePeriod = await prisma.ratePeriod.create({
+      data: {
+        name: "Temporada base",
+        validFrom: from,
+        validTo: to,
+        active: true,
+      },
+    });
+  } else {
+    basePeriod = await prisma.ratePeriod.update({
+      where: { id: basePeriod.id },
+      data: { validFrom: from, validTo: to, active: true },
+    });
+  }
+
+  for (const cat of [std, sup, dep, comp]) {
     for (const service of [ServiceType.SIN_DESAYUNO, ServiceType.DESAYUNO, ServiceType.MEDIA_PENSION]) {
       const name = `${cat.code} / ${service}`;
       const existing = await prisma.ratePlan.findFirst({
-        where: { commercialCategoryId: cat.id, serviceType: service, name },
+        where: { commercialCategoryId: cat.id, serviceType: service },
       });
       const plan =
         existing ??
@@ -173,16 +196,17 @@ async function main() {
           },
         }));
       const base =
-        cat.code === "DEP" ? 180000 : cat.code === "SUP" ? 140000 : 110000;
+        cat.code === "DEP" ? 180000 : cat.code === "SUP" ? 140000 : cat.code === "COMP" ? 200000 : 110000;
       const bump =
         service === ServiceType.MEDIA_PENSION ? 40000 : service === ServiceType.DESAYUNO ? 20000 : 0;
-      const from = startOfDay(new Date());
-      const to = addDays(from, 365);
-      const rateCount = await prisma.rate.count({ where: { ratePlanId: plan.id } });
-      if (rateCount === 0) {
+      const existingRate = await prisma.rate.findFirst({
+        where: { ratePlanId: plan.id, periodId: basePeriod.id },
+      });
+      if (!existingRate) {
         await prisma.rate.create({
           data: {
             ratePlanId: plan.id,
+            periodId: basePeriod.id,
             validFrom: from,
             validTo: to,
             amountArs: base + bump,
@@ -197,6 +221,54 @@ async function main() {
     update: { valueJson: { rate: 1400 } },
     create: { key: "usd_blue_rate", valueJson: { rate: 1400 } },
   });
+
+  // Temporadas abiertas (hotel abierto SOLO dentro de estos rangos). Varias por año OK.
+  const year = new Date().getFullYear();
+  const openWindows = [
+    {
+      name: "Temporada alta",
+      openFrom: new Date(Date.UTC(year, 0, 1)), // 1 ene
+      openTo: new Date(Date.UTC(year, 3, 30)), // 30 abr
+      notes: "Apertura principal (demo seed).",
+    },
+    {
+      name: "Puente mayo (demo)",
+      openFrom: new Date(Date.UTC(year, 4, 23)), // ej. fin de semana largo
+      openTo: new Date(Date.UTC(year, 4, 26)),
+      notes: "Ejemplo de apertura corta (largo fin de semana).",
+    },
+    {
+      name: "Temporada primavera-verano",
+      openFrom: new Date(Date.UTC(year, 9, 1)), // 1 oct
+      openTo: new Date(Date.UTC(year + 1, 3, 30)), // 30 abr año+1
+      notes: "Cubre el resto del año operativo demo.",
+    },
+    // Ventana amplia para demos/tests futuros (huecos de invierno quedan cerrados vía otras ventanas).
+    {
+      name: "Cobertura demo extendida",
+      openFrom: new Date(Date.UTC(year + 1, 9, 1)),
+      openTo: new Date(Date.UTC(year + 3, 3, 30)),
+      notes: "Temporada larga para demos y fixtures; editable/desactivable en Admin.",
+    },
+  ];
+  for (const w of openWindows) {
+    const existing = await prisma.hotelOpenPeriod.findFirst({ where: { name: w.name } });
+    if (!existing) {
+      await prisma.hotelOpenPeriod.create({
+        data: { ...w, active: true },
+      });
+    } else {
+      await prisma.hotelOpenPeriod.update({
+        where: { id: existing.id },
+        data: {
+          openFrom: w.openFrom,
+          openTo: w.openTo,
+          notes: w.notes,
+          active: true,
+        },
+      });
+    }
+  }
 
   // Demo reservation for calendar (unit 1, next week) if none
   const demoCount = await prisma.reservation.count();
@@ -255,7 +327,9 @@ async function main() {
     });
   }
 
-  console.log("Seed OK: users, inventory 1–36 (sin 4/20), deptos, 8+9, 35+36, rates, demo reservation");
+  console.log(
+    "Seed OK: users, inventory, comunicadas, tarifas, temporadas abiertas, demo reservation",
+  );
 }
 
 main()

@@ -4,6 +4,7 @@ import {
   assertAvailable,
   expandCompositeSegments,
   findConflicts,
+  listLiveAvailability,
 } from "../src/lib/availability";
 import { toDateOnly } from "../src/lib/dates";
 
@@ -97,7 +98,7 @@ describe("availability engine", () => {
       assertAvailable(prisma, [
         { physicalUnitId: unit8, startDate: "2027-07-02", endDate: "2027-07-05" },
       ]),
-    ).rejects.toThrow(/Availability conflict/);
+    ).rejects.toThrow(/Habitación no disponible/);
   });
 
   it("HAB-07 component blocks composite", async () => {
@@ -127,5 +128,61 @@ describe("availability engine", () => {
     });
     const conflicts = await findConflicts(prisma, compositeSegs);
     expect(conflicts.some((c) => c.physicalUnitId === unit9)).toBe(true);
+  });
+
+  it("HAB-08 lists only free rooms for the requested range", async () => {
+    const start = toDateOnly("2027-09-01");
+    const end = toDateOnly("2027-09-04");
+    const res = await prisma.reservation.create({
+      data: {
+        code: `TEST-LIVE-${Date.now()}`,
+        status: "CONFIRMADA",
+        checkInDate: start,
+        checkOutDate: end,
+        segments: {
+          create: [{ physicalUnitId: unit8, startDate: start, endDate: end }],
+        },
+      },
+    });
+    if (reservationId) {
+      await prisma.assignmentSegment.deleteMany({ where: { reservationId } });
+      await prisma.reservation.delete({ where: { id: reservationId } });
+    }
+    reservationId = res.id;
+
+    const live = await listLiveAvailability(prisma, {
+      checkInDate: "2027-09-01",
+      checkOutDate: "2027-09-03",
+    });
+    expect(live.candidates.some((c) => c.id === unit8 && c.kind === "unit")).toBe(false);
+    expect(live.candidates.some((c) => c.id === composite89 && c.kind === "communicating")).toBe(
+      false,
+    );
+    expect(live.hasAvailability).toBe(true);
+  });
+
+  it("D-02 desired tags rank candidates; never hard-filter", async () => {
+    const balcon = await prisma.unitAttribute.findUniqueOrThrow({ where: { key: "balcon" } });
+    const liveAll = await listLiveAvailability(prisma, {
+      checkInDate: "2027-10-01",
+      checkOutDate: "2027-10-03",
+    });
+    const liveDesired = await listLiveAvailability(prisma, {
+      checkInDate: "2027-10-01",
+      checkOutDate: "2027-10-03",
+      desiredAttributeIds: [balcon.id],
+    });
+    expect(liveDesired.candidates.length).toBe(liveAll.candidates.length);
+    expect(liveDesired.candidates[0]?.meetsAllDesired).toBe(true);
+    expect(liveDesired.candidates[0]?.desiredHits).toBeGreaterThanOrEqual(
+      liveDesired.candidates.at(-1)?.desiredHits ?? 0,
+    );
+    // legacy param still merges into desired
+    const liveLegacy = await listLiveAvailability(prisma, {
+      checkInDate: "2027-10-01",
+      checkOutDate: "2027-10-03",
+      mandatoryAttributeIds: [balcon.id],
+    });
+    expect(liveLegacy.candidates.length).toBe(liveAll.candidates.length);
   });
 });

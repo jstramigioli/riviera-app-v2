@@ -5,6 +5,10 @@ import {
   PAYMENT_STATUS_LABEL,
   RESERVATION_STATUS_LABEL,
 } from "@/lib/status";
+import {
+  SERVICE_TYPE_LABEL,
+  communicatingRoomsLabel,
+} from "@/lib/labels";
 import { balanceArs, formatArs, netPaymentsArs } from "@/lib/money";
 import { getUsdBlueRate } from "@/lib/payments";
 import {
@@ -12,9 +16,11 @@ import {
   setPriceAction,
   updateStatusAction,
 } from "@/app/actions/reservations";
+import { setRoomLockedAction } from "@/app/actions/assignment";
 import { createPaymentAction, voidPaymentAction } from "@/app/actions/payments";
 import { linkGuestAction } from "@/app/actions/guests";
 import { requireUser } from "@/lib/auth";
+import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
 
 export default async function ReservaDetailPage({
   params,
@@ -36,6 +42,7 @@ export default async function ReservaDetailPage({
       guests: { include: { guest: true } },
       payments: { orderBy: { createdAt: "desc" } },
       group: true,
+      structuredReqs: { include: { attribute: true } },
     },
   });
   if (!reservation) notFound();
@@ -68,16 +75,17 @@ export default async function ReservaDetailPage({
           <p className="text-sm text-[var(--muted)]">
             {reservation.checkInDate.toISOString().slice(0, 10)} →{" "}
             {reservation.checkOutDate.toISOString().slice(0, 10)}
-            {reservation.doNotMove ? " · 🔒 no mover" : ""}
+            {reservation.doNotMove ? " · 🔒 habitación fijada" : " · asignación flexible"}
             {reservation.group ? ` · Grupo: ${reservation.group.name}` : ""}
           </p>
         </div>
         <div className="panel rounded-xl px-4 py-3 text-sm">
           <div>
-            Operativo: <strong>{RESERVATION_STATUS_LABEL[reservation.status]}</strong>
+            Estado: <strong>{RESERVATION_STATUS_LABEL[reservation.status]}</strong>
           </div>
           <div>
-            Pago: <strong>{PAYMENT_STATUS_LABEL[reservation.paymentStatus]}</strong>
+            Pago: <strong>{PAYMENT_STATUS_LABEL[reservation.paymentStatus]}</strong>{" "}
+            <HelpTooltip text="El estado de pago es independiente: una seña no confirma sola la reserva." />
           </div>
           <div>
             Precio:{" "}
@@ -100,33 +108,79 @@ export default async function ReservaDetailPage({
         </div>
       ) : null}
 
+          <div
+        className={`rounded-lg border px-3 py-2 text-sm flex flex-wrap items-center justify-between gap-2 ${
+          reservation.doNotMove
+            ? "border-amber-200 bg-amber-50 text-amber-950"
+            : "border-[var(--line)] bg-white/60 text-[var(--muted)]"
+        }`}
+      >
+        <span>
+          {reservation.doNotMove
+            ? "Habitación fijada: el optimizador no la mueve; cambiá solo con decisión consciente."
+            : "Asignación flexible: se puede reasignar entre habitaciones compatibles (u optimizador)."}
+          <HelpTooltip text="Fijada = inamovible salvo desbloqueo. Flexible = el sistema puede proponer otra habitación que cumpla lo pedido." />
+        </span>
+        <form action={setRoomLockedAction} className="inline">
+          <input type="hidden" name="id" value={reservation.id} />
+          <input
+            type="hidden"
+            name="roomLocked"
+            value={reservation.doNotMove ? "false" : "true"}
+          />
+          <button className="btn btn-ghost" type="submit">
+            {reservation.doNotMove ? "Desfijar (hacer flexible)" : "Fijar habitación"}
+          </button>
+        </form>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="panel rounded-xl p-4 space-y-3">
-          <h2 className="font-semibold">Estado operativo</h2>
+          <h2 className="font-semibold">Estado de la reserva</h2>
           <form action={updateStatusAction} className="flex flex-wrap gap-2">
             <input type="hidden" name="id" value={reservation.id} />
             <select className="select max-w-xs" name="status" defaultValue={reservation.status}>
-              {Object.entries(RESERVATION_STATUS_LABEL).map(([k, v]) => (
-                <option key={k} value={k}>
-                  {v}
-                </option>
-              ))}
+              {Object.entries(RESERVATION_STATUS_LABEL)
+                .filter(([k]) => k !== "CONSULTA" || reservation.status === "CONSULTA")
+                .map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
+                ))}
             </select>
             <button className="btn btn-primary" type="submit">
               Actualizar
             </button>
           </form>
           <p className="text-xs text-[var(--muted)]">
-            Canal: {reservation.channel || "—"} · Servicio: {reservation.serviceType}
+            Canal: {reservation.channel || "—"} · Servicio:{" "}
+            {SERVICE_TYPE_LABEL[reservation.serviceType]}
           </p>
-          {reservation.requirements ? (
+          {reservation.structuredReqs.length ? (
+            <div className="text-sm space-y-1">
+              <div className="font-semibold inline-flex items-center gap-1">
+                Características deseadas
+                <HelpTooltip text="Sugieren habitaciones; recepción puede asignar otra con advertencia." />
+              </div>
+              <ul className="flex flex-wrap gap-1.5">
+                {reservation.structuredReqs.map((r) => (
+                  <li key={r.id} className="tag-chip tag-chip-desired">
+                    {r.attribute.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {reservation.notes ? (
             <p className="text-sm">
-              <strong>Requisitos:</strong> {reservation.requirements}
+              <strong>Notas:</strong> {reservation.notes}
             </p>
           ) : null}
-          {reservation.preferences ? (
-            <p className="text-sm">
-              <strong>Preferencias:</strong> {reservation.preferences}
+          {(reservation.requirements || reservation.preferences) &&
+          !reservation.structuredReqs.length ? (
+            <p className="text-sm text-[var(--muted)]">
+              {reservation.requirements ? `Requisitos (legado): ${reservation.requirements}. ` : ""}
+              {reservation.preferences ? `Preferencias (legado): ${reservation.preferences}` : ""}
             </p>
           ) : null}
         </section>
@@ -136,7 +190,7 @@ export default async function ReservaDetailPage({
           <form action={setPriceAction} className="grid gap-2 sm:grid-cols-2">
             <input type="hidden" name="id" value={reservation.id} />
             <div>
-              <label className="label">Monto ARS</label>
+              <FieldLabel>Monto ARS</FieldLabel>
               <input
                 className="input"
                 name="agreedPriceArs"
@@ -150,7 +204,9 @@ export default async function ReservaDetailPage({
               />
             </div>
             <div>
-              <label className="label">Nota override</label>
+              <FieldLabel help="Obligatorio si cambiás un precio ya congelado.">
+                Nota del cambio
+              </FieldLabel>
               <input
                 className="input"
                 name="priceOverrideNote"
@@ -158,36 +214,50 @@ export default async function ReservaDetailPage({
               />
             </div>
             <button className="btn btn-primary sm:col-span-2" type="submit">
-              Guardar precio (auditado)
+              Guardar precio
             </button>
           </form>
         </section>
 
         <section className="panel rounded-xl p-4 space-y-3">
-          <h2 className="font-semibold">Tramos (AssignmentSegment)</h2>
+          <h2 className="font-semibold inline-flex items-center gap-1.5">
+            Tramos de estadía
+            <HelpTooltip text="Si el huésped cambia de habitación a mitad de estadía, la misma reserva se parte en varios tramos contiguos (sin noches huérfanas)." />
+          </h2>
           <ul className="space-y-1 text-sm">
             {reservation.segments.map((s) => (
               <li key={s.id}>
-                <strong>{s.physicalUnit.code}</strong>
-                {s.compositeUnit ? ` via ${s.compositeUnit.code}` : ""} ·{" "}
-                {s.startDate.toISOString().slice(0, 10)} →{" "}
+                <strong>
+                  {s.physicalUnit.kind === "DEPARTAMENTO"
+                    ? s.physicalUnit.name
+                    : `Habitación ${s.physicalUnit.code}`}
+                </strong>
+                {s.compositeUnit
+                  ? ` · ${communicatingRoomsLabel(s.compositeUnit.code, s.compositeUnit.name)}`
+                  : ""}{" "}
+                · {s.startDate.toISOString().slice(0, 10)} →{" "}
                 {s.endDate.toISOString().slice(0, 10)}
               </li>
             ))}
           </ul>
           <form action={addSegmentAction} className="grid gap-2 sm:grid-cols-3">
             <input type="hidden" name="reservationId" value={reservation.id} />
+            <div className="sm:col-span-3">
+              <FieldLabel help="Solo habitaciones del inventario. La disponibilidad se valida al guardar.">
+                Cambio de habitación (nuevo tramo)
+              </FieldLabel>
+            </div>
             <select className="select" name="physicalUnitId" required>
               {units.map((u) => (
                 <option key={u.id} value={u.id}>
-                  {u.code}
+                  {u.code} · {u.name}
                 </option>
               ))}
             </select>
             <input className="input" type="date" name="startDate" required />
             <input className="input" type="date" name="endDate" required />
             <button className="btn btn-ghost sm:col-span-3" type="submit">
-              Agregar tramo (cambio mid-stay)
+              Agregar tramo
             </button>
           </form>
         </section>
@@ -200,7 +270,7 @@ export default async function ReservaDetailPage({
                 <Link href={`/huespedes/${rg.guestId}`} className="text-[var(--brand)]">
                   {rg.guest.lastName}, {rg.guest.firstName}
                 </Link>{" "}
-                · {rg.role}
+                · {rg.role === "TITULAR" ? "Titular" : "Acompañante"}
               </li>
             ))}
           </ul>
@@ -225,7 +295,10 @@ export default async function ReservaDetailPage({
 
         <section className="panel rounded-xl p-4 space-y-3 lg:col-span-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-semibold">Pagos</h2>
+            <h2 className="font-semibold inline-flex items-center gap-1.5">
+              Pagos
+              <HelpTooltip text="Registrar una seña actualiza el estado de pago, no el estado operativo de la reserva." />
+            </h2>
             <div className="text-sm text-[var(--muted)]">
               Neto cobrado {formatArs(net)} · Blue ref. {blue}
             </div>
@@ -249,7 +322,15 @@ export default async function ReservaDetailPage({
                       {p.receiptNumber}
                     </Link>
                   </td>
-                  <td className="py-1">{p.type}</td>
+                  <td className="py-1">
+                    {p.type === "SENIA"
+                      ? "Seña"
+                      : p.type === "PARCIAL"
+                        ? "Parcial"
+                        : p.type === "FINAL"
+                          ? "Final"
+                          : "Devolución"}
+                  </td>
                   <td className="py-1">
                     {p.currency} {Number(p.amountOriginal)}
                     {p.fxRateToArs ? ` @ ${Number(p.fxRateToArs)}` : ""}
@@ -301,7 +382,7 @@ export default async function ReservaDetailPage({
               name="fxRateToArs"
               type="number"
               step="0.01"
-              placeholder={`FX blue (${blue})`}
+              placeholder={`Cotización blue (${blue})`}
               defaultValue={blue}
             />
             <button className="btn btn-primary" type="submit">
