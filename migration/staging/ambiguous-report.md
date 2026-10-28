@@ -1,6 +1,6 @@
 # Informe de datos ambiguos (no importar en silencio)
 
-Generado: 2026-10-28T17:46:24.668681Z
+Generado: 2026-10-28T18:05:23.327230Z
 Fuente: `Reservas_2026_2027.xlsx`
 SHA-256: `5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b`
 

@@ -1,5 +1,5 @@
 {
-  "extractedAt": "2026-10-28T17:46:24.668681Z",
+  "extractedAt": "2026-10-28T18:05:23.327230Z",
   "sourceFile": "Reservas_2026_2027.xlsx",
   "sourceSha256": "5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b",
   "counts": {
@@ -19,7 +19,10 @@
     "withAgreedPrice": 116,
     "withPayments": 86,
     "paymentsExtracted": 86,
-    "reservasEnrichedFromLibro": 60
+    "reservasEnrichedFromLibro": 60,
+    "withPhone": 94,
+    "withEmail": 98,
+    "withGuestCount": 138
   },
   "julianCorrections": "2026-10-28",
   "rows": [
@@ -38,6 +41,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -69,7 +73,9 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "email": "joa@marval.com"
     },
     {
       "source": "Libro de reservas",
@@ -86,6 +92,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -117,7 +124,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "03416 15542312",
+      "email": "ro.ro.zas23@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -159,6 +169,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -188,7 +199,9 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "email": "coricampos@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -205,6 +218,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -236,7 +250,9 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "email": "fatimadepaulapires@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -253,6 +269,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 3,
+      "children": 1,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -276,7 +293,10 @@
       "moneyHints": [
         "senia_blank_amount"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "011 15 54941713",
+      "email": "spinellilaura@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -293,6 +313,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -322,7 +343,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "011 15 31739973",
+      "email": "marcelabianchicui@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -339,6 +363,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -360,7 +385,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 3
     },
     {
       "source": "Libro de reservas",
@@ -377,6 +403,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -408,7 +435,8 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -425,6 +453,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -446,7 +475,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 22683007",
+      "email": "gbaruzzi@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -463,6 +495,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -492,7 +525,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "03416 15101714",
+      "email": "ana.lia.grosso@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -509,6 +545,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -532,7 +569,8 @@
       "moneyHints": [
         "senia_text_only:Abonó total con hab"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 3
     },
     {
       "source": "Libro de reservas",
@@ -576,6 +614,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -607,7 +646,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 36966565",
+      "email": "teromauri@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -624,6 +666,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -655,7 +698,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 1536991767",
+      "email": "candyroy2007@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -672,6 +718,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -695,7 +742,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4
     },
     {
       "source": "Libro de reservas",
@@ -712,6 +760,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -743,7 +792,9 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "email": "panchi9564@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -760,6 +811,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -781,7 +833,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 3,
+      "phone": "03413 15059092",
+      "email": "silvina29@msn.com"
     },
     {
       "source": "Libro de reservas",
@@ -798,6 +853,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -821,7 +877,10 @@
       "moneyHints": [
         "senia_text_only:Seña en hotel"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 62184118",
+      "email": "claudioomardrago@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -838,6 +897,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -859,7 +919,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 68797320",
+      "email": "mariadelosangelesdelavega@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -876,6 +939,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -907,7 +971,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 50942005",
+      "email": "romi.anna@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -924,6 +991,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -960,7 +1028,10 @@
       ],
       "moneyWarnings": [
         "usd_total_without_ars_fx"
-      ]
+      ],
+      "guestCount": 2,
+      "phone": "011 15 50102103",
+      "email": "jorgegabrielcozzi@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -977,6 +1048,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1008,7 +1080,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 3,
+      "phone": "02964 15621770",
+      "email": "alejandrocanals13@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1025,6 +1100,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1056,7 +1132,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 1569418130",
+      "email": "rraulrossini@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1073,6 +1152,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1104,7 +1184,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "0223 155333608",
+      "email": "sagoc2009@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1121,6 +1204,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1142,7 +1226,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4
     },
     {
       "source": "Libro de reservas",
@@ -1159,6 +1244,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1190,7 +1276,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "0228415535000",
+      "email": "titocatani@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1207,6 +1296,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1238,7 +1328,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "02342457027",
+      "email": "nelisenga-7@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1255,6 +1348,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1286,7 +1380,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 1540946543",
+      "email": "carlossegreti@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1303,6 +1400,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1326,7 +1424,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1343,6 +1442,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1374,7 +1474,8 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1391,6 +1492,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1412,7 +1514,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 50634187",
+      "email": "eleonorafalcon@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1429,6 +1534,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1450,7 +1556,10 @@
       "moneyHints": [
         "senia_blank_amount"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 36575182",
+      "email": "valeriaverdino@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1467,6 +1576,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1498,7 +1608,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 58258682",
+      "email": "dominicumma@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1515,6 +1628,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1546,7 +1660,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 3,
+      "phone": "011 15 28983012",
+      "email": "oscarjgonzalezg@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1563,6 +1680,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1586,7 +1704,8 @@
       "moneyHints": [
         "senia_text_only:Abonó total de hab"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1603,6 +1722,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1624,7 +1744,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1641,6 +1762,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1662,7 +1784,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1679,6 +1802,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1710,7 +1834,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "0341 15 3400771",
+      "email": "murciann@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1727,6 +1854,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1758,7 +1886,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 57827433",
+      "email": "lilitavidoni@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -1775,6 +1906,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1806,7 +1938,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 1541411008",
+      "email": "josepodestamail@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1823,6 +1958,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1842,7 +1978,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -1859,6 +1996,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1888,7 +2026,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 69091866",
+      "email": "hlewin51@live.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -1905,6 +2046,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1924,7 +2066,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4
     },
     {
       "source": "Libro de reservas",
@@ -1941,6 +2084,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -1972,7 +2116,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 1534370007",
+      "email": "ed.ale.hansen@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -1989,6 +2136,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2010,7 +2158,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4
     },
     {
       "source": "Libro de reservas",
@@ -2027,6 +2176,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2058,7 +2208,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 55075241",
+      "email": "podestacecilia@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2075,6 +2228,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2106,7 +2260,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 1541592228",
+      "email": "nelidatorrillo@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2123,6 +2280,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2154,7 +2312,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 51652529",
+      "email": "graciela_castiglione@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -2171,6 +2332,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2202,7 +2364,8 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1
     },
     {
       "source": "Libro de reservas",
@@ -2219,6 +2382,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2250,7 +2414,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 50495509",
+      "email": "silvioliuzzi@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2267,6 +2434,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2286,7 +2454,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "03413 15035664",
+      "email": "marianasotelovalenzuela@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2353,6 +2524,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2389,6 +2561,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2418,7 +2591,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "03413 15035664",
+      "email": "marianasotelovalenzuela@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2435,6 +2611,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2466,7 +2643,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "02645 15010186",
+      "email": "belenalbar@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -2483,6 +2663,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2514,7 +2695,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "03415 15208582",
+      "email": "corradovanina@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2531,6 +2715,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2550,7 +2735,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -2567,6 +2753,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2598,7 +2785,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "phone": "011 15 56920595",
+      "email": "marianabonilauri@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2615,6 +2805,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2646,7 +2837,9 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1,
+      "email": "iudrizard@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2663,6 +2856,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2684,7 +2878,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "02614 15682070",
+      "email": "gracielaherrera213@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2701,6 +2898,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2732,7 +2930,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "011 1561845590",
+      "email": "titania713@hotmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2749,6 +2950,7 @@
       "channel": "Booking",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2770,7 +2972,8 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 53877880"
     },
     {
       "source": "Libro de reservas",
@@ -2787,6 +2990,7 @@
       "channel": "Booking",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2808,7 +3012,9 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "011 15 53378071"
     },
     {
       "source": "Libro de reservas",
@@ -2825,6 +3031,7 @@
       "channel": "Booking",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2849,7 +3056,9 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "011 15 57009688"
     },
     {
       "source": "Libro de reservas",
@@ -2866,6 +3075,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2897,7 +3107,8 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -2914,6 +3125,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2943,7 +3155,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "11 64352234",
+      "email": "vanidelgado55@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2960,6 +3175,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -2981,7 +3197,10 @@
       "creditArs": null,
       "payments": [],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2,
+      "phone": "11 53781078",
+      "email": "laurapereyra957@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -2998,6 +3217,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3027,7 +3247,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "0346415563792",
+      "email": "atiberi@outlook.es"
     },
     {
       "source": "Libro de reservas",
@@ -3044,6 +3267,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3067,7 +3291,8 @@
       "moneyHints": [
         "senia_text_only:Seña junto a"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 1
     },
     {
       "source": "Libro de reservas",
@@ -3084,6 +3309,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3115,7 +3341,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "02604 15557121",
+      "email": "agarciaromin@gmail.com"
     },
     {
       "source": "Libro de reservas",
@@ -3132,6 +3361,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3155,7 +3385,8 @@
       "moneyHints": [
         "senia_text_only:Abonó total de hab"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 2
     },
     {
       "source": "Libro de reservas",
@@ -3171,7 +3402,8 @@
       "notes": "28/9\nIn: 23/12/26 Out: 26/12/26\nReserva a cargo de pedro + diferencia de cena buffet. Resto de extras deben cargarse y cobrarse a cada habitación.\n1 hab. sgl x 3 d: $ 414.000.-\n1 hab. Dbl x 3 d: $ 654.000.-\n1 hab. tpl x 3 d: $ 819.000.-\n2 depto. x 4 x 3 d: $ 1.980.000.-\nTotal: $ 3.867.000.-\nSeña a Luli: $ 3.000.000.- 20/10/26\nTel: 011 15 44264925\nCorreo: pedro11pam@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": false,
-      "adults": 1,
+      "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3203,7 +3435,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 4,
+      "phone": "011 15 44264925",
+      "email": "pedro11pam@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -3220,6 +3455,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 5,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3249,7 +3485,10 @@
         }
       ],
       "moneyHints": [],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "guestCount": 5,
+      "phone": "011 1569078768",
+      "email": "dantemereles@yahoo.com.ar"
     },
     {
       "source": "Libro de reservas",
@@ -3266,6 +3505,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3332,6 +3572,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3341,8 +3582,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CC41:CI41 score=10"
+        "money_enriched_from:CC41:CI41 score=10",
+        "pax_contact_enriched_from:CC41:CI41"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -3367,7 +3610,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03413 15035664",
+      "email": "marianasotelovalenzuela@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3389,6 +3634,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3398,8 +3644,10 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BP27:BX27 score=10"
+        "money_enriched_from:BP27:BX27 score=10",
+        "pax_contact_enriched_from:BP27:BX27"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -3416,7 +3664,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "11 53781078",
+      "email": "laurapereyra957@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3438,6 +3688,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3447,8 +3698,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AY27:BJ27 score=10"
+        "money_enriched_from:AY27:BJ27 score=10",
+        "pax_contact_enriched_from:AY27:BJ27"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -3475,7 +3728,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1536991767",
+      "email": "candyroy2007@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -3497,6 +3752,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3506,8 +3762,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:AR34:BH34 score=9"
+        "money_enriched_from:AR34:BH34 score=9",
+        "pax_contact_enriched_from:AR34:BH34"
       ],
       "nightlyRateArs": 109000,
       "nightlyRatesArs": [
@@ -3534,7 +3792,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 36966565",
+      "email": "teromauri@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3556,6 +3816,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3565,8 +3826,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BF8:BN8 score=8"
+        "money_enriched_from:BF8:BN8 score=8",
+        "pax_contact_enriched_from:BF8:BN8"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -3593,7 +3856,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1541411008",
+      "email": "josepodestamail@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3614,7 +3879,8 @@
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
-      "adults": null,
+      "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3625,7 +3891,8 @@
         "pax": "3 + bebe"
       },
       "parseNotes": [
-        "money_enriched_from:BT36:BX36 score=10"
+        "money_enriched_from:BT36:BX36 score=10",
+        "pax_contact_enriched_from:BT36:BX36"
       ],
       "nightlyRateArs": 338000,
       "nightlyRatesArs": [
@@ -3652,7 +3919,10 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "02964 15621770",
+      "email": "alejandrocanals13@gmail.com",
+      "guestCount": 3
     },
     {
       "source": "Reservas",
@@ -3674,6 +3944,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3683,8 +3954,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BT37:BX37 score=10"
+        "money_enriched_from:BT37:BX37 score=10",
+        "pax_contact_enriched_from:BT37:BX37"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -3733,6 +4006,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3742,8 +4016,10 @@
         "estado": "Sin seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AZ36:BM36 score=10"
+        "money_enriched_from:AZ36:BM36 score=10",
+        "pax_contact_enriched_from:AZ36:BM36"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -3760,7 +4036,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "02614 15682070",
+      "email": "gracielaherrera213@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3782,6 +4060,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3791,8 +4070,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CW27:DD27 score=10"
+        "money_enriched_from:CW27:DD27 score=10",
+        "pax_contact_enriched_from:CW27:DD27"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -3819,7 +4100,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1540946543",
+      "email": "carlossegreti@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -3841,6 +4124,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3850,8 +4134,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AY8:BE8 score=10"
+        "money_enriched_from:AY8:BE8 score=10",
+        "pax_contact_enriched_from:AY8:BE8"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -3878,7 +4164,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 51652529",
+      "email": "graciela_castiglione@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -3900,6 +4188,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3909,8 +4198,10 @@
         "estado": "Con Seña",
         "pax": 3.0
       },
+      "guestCount": 3,
       "parseNotes": [
-        "money_enriched_from:CG31:CK31 score=10"
+        "money_enriched_from:CG31:CK31 score=10",
+        "pax_contact_enriched_from:CG31:CK31"
       ],
       "nightlyRateArs": 338000,
       "nightlyRatesArs": [
@@ -3937,7 +4228,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 28983012",
+      "email": "oscarjgonzalezg@gmail.com"
     },
     {
       "source": "Reservas",
@@ -3959,6 +4252,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -3968,8 +4262,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:AV7:BG7 score=10"
+        "money_enriched_from:AV7:BG7 score=10",
+        "pax_contact_enriched_from:AV7:BG7"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -4009,6 +4305,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4018,8 +4315,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:AV12:BG13 score=8"
+        "money_enriched_from:AV12:BG13 score=8",
+        "pax_contact_enriched_from:AV12:BG13"
       ],
       "nightlyRateArs": 355000,
       "nightlyRatesArs": [
@@ -4046,7 +4345,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1561845590",
+      "email": "titania713@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -4068,6 +4369,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4077,8 +4379,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:BA28:BG28 score=10"
+        "money_enriched_from:BA28:BG28 score=10",
+        "pax_contact_enriched_from:BA28:BG28"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -4105,7 +4409,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 58258682",
+      "email": "dominicumma@gmail.com"
     },
     {
       "source": "Reservas",
@@ -4127,6 +4433,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4136,8 +4443,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:BT43:CB43 score=10"
+        "money_enriched_from:BT43:CB43 score=10",
+        "pax_contact_enriched_from:BT43:CB43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -4162,7 +4471,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03416 15101714",
+      "email": "ana.lia.grosso@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -4184,6 +4495,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4193,8 +4505,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CF32:CO32 score=10"
+        "money_enriched_from:CF32:CO32 score=10",
+        "pax_contact_enriched_from:CF32:CO32"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -4221,7 +4535,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "0341 15 3400771",
+      "email": "murciann@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -4243,6 +4559,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4252,9 +4569,11 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 4,
       "parseNotes": [
         "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
-        "money_enriched_from:AO28:AQ28 score=9"
+        "money_enriched_from:AO28:AQ28 score=9",
+        "pax_contact_enriched_from:AO28:AQ28"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -4279,7 +4598,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 44264925",
+      "email": "pedro11pam@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -4301,6 +4622,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4310,8 +4632,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
+        "pax_contact_enriched_from:AO24:AQ24"
       ]
     },
     {
@@ -4334,6 +4658,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4343,8 +4668,10 @@
         "estado": "Con Seña",
         "pax": 3.0
       },
+      "guestCount": 3,
       "parseNotes": [
-        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
+        "pax_contact_enriched_from:AO21:AQ21"
       ]
     },
     {
@@ -4367,6 +4694,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4376,8 +4704,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
+        "pax_contact_enriched_from:AO22:AQ22"
       ]
     },
     {
@@ -4400,6 +4730,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4409,8 +4740,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
+        "pax_contact_enriched_from:AO12:AQ13"
       ]
     },
     {
@@ -4433,6 +4766,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4442,8 +4776,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:BF30:BN30 score=10"
+        "money_enriched_from:BF30:BN30 score=10",
+        "pax_contact_enriched_from:BF30:BN30"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -4470,7 +4806,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 55075241",
+      "email": "podestacecilia@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -4492,6 +4830,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4501,8 +4840,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:AS10:AW10 score=10"
+        "money_enriched_from:AS10:AW10 score=10",
+        "pax_contact_enriched_from:AS10:AW10"
       ],
       "nightlyRateArs": 355000,
       "nightlyRatesArs": [
@@ -4529,7 +4870,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "0223 155333608",
+      "email": "sagoc2009@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -4550,7 +4893,8 @@
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
-      "adults": null,
+      "adults": 3,
+      "children": 1,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4561,7 +4905,8 @@
         "pax": "3 + bb"
       },
       "parseNotes": [
-        "money_enriched_from:AS6:BF6 score=10"
+        "money_enriched_from:AS6:BF6 score=10",
+        "pax_contact_enriched_from:AS6:BF6"
       ],
       "nightlyRateArs": 294000,
       "nightlyRatesArs": [
@@ -4579,7 +4924,10 @@
         "senia_blank_amount",
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 54941713",
+      "email": "spinellilaura@yahoo.com.ar",
+      "guestCount": 4
     },
     {
       "source": "Reservas",
@@ -4601,6 +4949,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4610,8 +4959,10 @@
         "estado": null,
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:AU38:BB39 score=8"
+        "money_enriched_from:AU38:BB39 score=8",
+        "pax_contact_enriched_from:AU38:BB39"
       ],
       "nightlyRateArs": 355000,
       "nightlyRatesArs": [
@@ -4638,7 +4989,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "02604 15557121",
+      "email": "agarciaromin@gmail.com"
     },
     {
       "source": "Reservas",
@@ -4660,6 +5013,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4669,8 +5023,10 @@
         "estado": null,
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:CN23:CZ23 score=10"
+        "money_enriched_from:CN23:CZ23 score=10",
+        "pax_contact_enriched_from:CN23:CZ23"
       ],
       "nightlyRateArs": 170000,
       "nightlyRatesArs": [
@@ -4697,7 +5053,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1569418130",
+      "email": "rraulrossini@gmail.com"
     },
     {
       "source": "Reservas",
@@ -4719,6 +5077,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4728,8 +5087,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AY31:BE31 score=10"
+        "money_enriched_from:AY31:BE31 score=10",
+        "pax_contact_enriched_from:AY31:BE31"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -4756,7 +5117,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 57827433",
+      "email": "lilitavidoni@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -4778,6 +5141,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4787,8 +5151,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:AY30:BE30 score=10"
+        "money_enriched_from:AY30:BE30 score=10",
+        "pax_contact_enriched_from:AY30:BE30"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -4815,7 +5181,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "email": "iudrizard@gmail.com"
     },
     {
       "source": "Reservas",
@@ -4837,6 +5204,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4846,8 +5214,10 @@
         "estado": null,
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BH25:BN25 score=11"
+        "money_enriched_from:BH25:BN25 score=11",
+        "pax_contact_enriched_from:BH25:BN25"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -4864,7 +5234,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 53378071"
     },
     {
       "source": "Reservas",
@@ -4886,6 +5257,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4895,8 +5267,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:AT9:BF9 score=11"
+        "money_enriched_from:AT9:BF9 score=11",
+        "pax_contact_enriched_from:AT9:BF9"
       ],
       "nightlyRateArs": 355000,
       "nightlyRatesArs": [
@@ -4923,7 +5297,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "02645 15010186",
+      "email": "belenalbar@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -4945,6 +5321,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -4954,8 +5331,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BB33:BF33 score=10"
+        "money_enriched_from:BB33:BF33 score=10",
+        "pax_contact_enriched_from:BB33:BF33"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -4982,7 +5361,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03416 15542312",
+      "email": "ro.ro.zas23@gmail.com"
     },
     {
       "source": "Reservas",
@@ -5004,6 +5385,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5013,8 +5395,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AU24:BD24 score=10"
+        "money_enriched_from:AU24:BD24 score=10",
+        "pax_contact_enriched_from:AU24:BD24"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5041,7 +5425,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 50495509",
+      "email": "silvioliuzzi@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -5063,6 +5449,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5072,8 +5459,10 @@
         "estado": null,
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AV25:BB25 score=10"
+        "money_enriched_from:AV25:BB25 score=10",
+        "pax_contact_enriched_from:AV25:BB25"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5090,7 +5479,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 53877880"
     },
     {
       "source": "Reservas",
@@ -5112,6 +5502,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5121,8 +5512,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AS11:AW11 score=9"
+        "money_enriched_from:AS11:AW11 score=9",
+        "pax_contact_enriched_from:AS11:AW11"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5149,7 +5542,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1541592228",
+      "email": "nelidatorrillo@gmail.com"
     },
     {
       "source": "Reservas",
@@ -5171,6 +5566,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5180,8 +5576,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:AY43:BE43 score=10"
+        "money_enriched_from:AY43:BE43 score=10",
+        "pax_contact_enriched_from:AY43:BE43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -5206,7 +5604,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "0346415563792",
+      "email": "atiberi@outlook.es"
     },
     {
       "source": "Reservas",
@@ -5228,6 +5628,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5237,8 +5638,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CC11:CG11 score=10"
+        "money_enriched_from:CC11:CG11 score=10",
+        "pax_contact_enriched_from:CC11:CG11"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -5265,7 +5668,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "02342457027",
+      "email": "nelisenga-7@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -5287,6 +5692,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5296,8 +5702,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CC43:CI43 score=10"
+        "money_enriched_from:CC43:CI43 score=10",
+        "pax_contact_enriched_from:CC43:CI43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -5322,7 +5730,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "email": "coricampos@gmail.com"
     },
     {
       "source": "Reservas",
@@ -5344,6 +5753,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5353,9 +5763,11 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
         "julian: out 2026-03-02→2027-03-02",
-        "money_enriched_from:DA34:DE34 score=10"
+        "money_enriched_from:DA34:DE34 score=10",
+        "pax_contact_enriched_from:DA34:DE34"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -5382,7 +5794,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "0228415535000",
+      "email": "titocatani@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -5404,6 +5818,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5413,8 +5828,10 @@
         "estado": null,
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AV20:AZ20 score=10"
+        "money_enriched_from:AV20:AZ20 score=10",
+        "pax_contact_enriched_from:AV20:AZ20"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5432,7 +5849,9 @@
         "senia_text_only:Seña en hotel",
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 62184118",
+      "email": "claudioomardrago@gmail.com"
     },
     {
       "source": "Reservas",
@@ -5454,6 +5873,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5463,8 +5883,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CA24:CE24 score=10"
+        "money_enriched_from:CA24:CE24 score=10",
+        "pax_contact_enriched_from:CA24:CE24"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -5491,7 +5913,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 50942005",
+      "email": "romi.anna@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -5513,6 +5937,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5522,7 +5947,10 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "guestCount": 2,
+      "parseNotes": [
+        "pax_contact_enriched_from:AN32:BO32"
+      ]
     },
     {
       "source": "Reservas",
@@ -5544,6 +5972,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5553,7 +5982,10 @@
         "estado": null,
         "pax": 4.0
       },
-      "parseNotes": []
+      "guestCount": 4,
+      "parseNotes": [
+        "pax_contact_enriched_from:BA22:BB22"
+      ]
     },
     {
       "source": "Reservas",
@@ -5575,6 +6007,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5584,7 +6017,10 @@
         "estado": null,
         "pax": 4.0
       },
-      "parseNotes": []
+      "guestCount": 4,
+      "parseNotes": [
+        "pax_contact_enriched_from:BC38:BO39"
+      ]
     },
     {
       "source": "Reservas",
@@ -5606,6 +6042,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5615,8 +6052,10 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BB11:BI11 score=10"
+        "money_enriched_from:BB11:BI11 score=10",
+        "pax_contact_enriched_from:BB11:BI11"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5647,7 +6086,9 @@
       ],
       "moneyWarnings": [
         "usd_total_without_ars_fx"
-      ]
+      ],
+      "phone": "011 15 50102103",
+      "email": "jorgegabrielcozzi@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -5669,6 +6110,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5678,8 +6120,10 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BE14:BG14 score=9"
+        "money_enriched_from:BE14:BG14 score=9",
+        "pax_contact_enriched_from:BE14:BG14"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5719,6 +6163,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5728,8 +6173,10 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BE24:BG24 score=9"
+        "money_enriched_from:BE24:BG24 score=9",
+        "pax_contact_enriched_from:BE24:BG24"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5769,6 +6216,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 5,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5778,8 +6226,10 @@
         "estado": "Con Seña",
         "pax": 5.0
       },
+      "guestCount": 5,
       "parseNotes": [
-        "money_enriched_from:AX41:CB41 score=10"
+        "money_enriched_from:AX41:CB41 score=10",
+        "pax_contact_enriched_from:AX41:CB41"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -5804,7 +6254,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1569078768",
+      "email": "dantemereles@yahoo.com.ar"
     },
     {
       "source": "Reservas",
@@ -5826,6 +6278,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5835,8 +6288,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:DJ43:DX43 score=10"
+        "money_enriched_from:DJ43:DX43 score=10",
+        "pax_contact_enriched_from:DJ43:DX43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -5861,7 +6316,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 69091866",
+      "email": "hlewin51@live.com.ar"
     },
     {
       "source": "Reservas",
@@ -5883,6 +6340,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -5916,6 +6374,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5925,8 +6384,10 @@
         "estado": null,
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CC40:CI40 score=10"
+        "money_enriched_from:CC40:CI40 score=10",
+        "pax_contact_enriched_from:CC40:CI40"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -5941,7 +6402,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03413 15035664",
+      "email": "marianasotelovalenzuela@gmail.com"
     },
     {
       "source": "Reservas",
@@ -5963,6 +6426,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -5972,8 +6436,10 @@
         "estado": null,
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AU29:BJ29 score=10"
+        "money_enriched_from:AU29:BJ29 score=10",
+        "pax_contact_enriched_from:AU29:BJ29"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -5990,7 +6456,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 22683007",
+      "email": "gbaruzzi@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6012,6 +6480,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6021,8 +6490,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CQ43:CW43 score=10"
+        "money_enriched_from:CQ43:CW43 score=10",
+        "pax_contact_enriched_from:CQ43:CW43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -6047,7 +6518,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 31739973",
+      "email": "marcelabianchicui@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6069,6 +6542,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6078,8 +6552,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:CN28:DD28 score=10"
+        "money_enriched_from:CN28:DD28 score=10",
+        "pax_contact_enriched_from:CN28:DD28"
       ],
       "nightlyRateArs": 170000,
       "nightlyRatesArs": [
@@ -6128,6 +6604,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6137,8 +6614,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CQ32:CW32 score=10"
+        "money_enriched_from:CQ32:CW32 score=10",
+        "pax_contact_enriched_from:CQ32:CW32"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -6187,6 +6666,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6196,7 +6676,12 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "guestCount": 2,
+      "parseNotes": [
+        "pax_contact_enriched_from:AX40:CB40"
+      ],
+      "phone": "011 15 36575182",
+      "email": "valeriaverdino@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -6218,6 +6703,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6227,8 +6713,10 @@
         "estado": null,
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:BA35:BO35 score=10"
+        "money_enriched_from:BA35:BO35 score=10",
+        "pax_contact_enriched_from:BA35:BO35"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -6245,7 +6733,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 50634187",
+      "email": "eleonorafalcon@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -6267,6 +6757,7 @@
       "channel": "Excel",
       "doNotMove": true,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6276,8 +6767,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:CQ16:DB16 score=11"
+        "money_enriched_from:CQ16:DB16 score=11",
+        "pax_contact_enriched_from:CQ16:DB16"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -6304,7 +6797,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "email": "panchi9564@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6326,6 +6820,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6335,8 +6830,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AP31:AX31 score=10"
+        "money_enriched_from:AP31:AX31 score=10",
+        "pax_contact_enriched_from:AP31:AX31"
       ],
       "nightlyRateArs": 218000,
       "nightlyRatesArs": [
@@ -6363,7 +6860,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "email": "joa@marval.com"
     },
     {
       "source": "Reservas",
@@ -6385,6 +6883,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6394,8 +6893,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AR27:AX27 score=10"
+        "money_enriched_from:AR27:AX27 score=10",
+        "pax_contact_enriched_from:AR27:AX27"
       ],
       "nightlyRateArs": 218000,
       "nightlyRatesArs": [
@@ -6444,6 +6945,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6453,8 +6955,10 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:AI35:AK35 score=9"
+        "money_enriched_from:AI35:AK35 score=9",
+        "pax_contact_enriched_from:AI35:AK35"
       ],
       "nightlyRateArs": 82000,
       "nightlyRatesArs": [
@@ -6481,7 +6985,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 56920595",
+      "email": "marianabonilauri@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6503,6 +7009,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6512,8 +7019,10 @@
         "estado": "Pago Total",
         "pax": 3.0
       },
+      "guestCount": 3,
       "parseNotes": [
-        "money_enriched_from:BE21:BI21 score=10"
+        "money_enriched_from:BE21:BI21 score=10",
+        "pax_contact_enriched_from:BE21:BI21"
       ],
       "nightlyRateArs": 294000,
       "nightlyRatesArs": [
@@ -6553,6 +7062,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6562,8 +7072,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CJ43:CP43 score=9"
+        "money_enriched_from:CJ43:CP43 score=9",
+        "pax_contact_enriched_from:CJ43:CP43"
       ],
       "nightlyRateArs": null,
       "nightlyRatesArs": [],
@@ -6588,7 +7100,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "11 64352234",
+      "email": "vanidelgado55@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6610,6 +7124,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6619,8 +7134,10 @@
         "estado": null,
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:BA23:BF23 score=10"
+        "money_enriched_from:BA23:BF23 score=10",
+        "pax_contact_enriched_from:BA23:BF23"
       ],
       "nightlyRateArs": 149000,
       "nightlyRatesArs": [
@@ -6637,7 +7154,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 68797320",
+      "email": "mariadelosangelesdelavega@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6659,6 +7178,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6668,8 +7188,10 @@
         "estado": null,
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:BG23:BJ23 score=7"
+        "money_enriched_from:BG23:BJ23 score=7",
+        "pax_contact_enriched_from:BG23:BJ23"
       ],
       "nightlyRateArs": 270000,
       "nightlyRatesArs": [
@@ -6708,6 +7230,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6717,7 +7240,10 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "guestCount": 2,
+      "parseNotes": [
+        "pax_contact_enriched_from:BK27:BO27"
+      ]
     },
     {
       "source": "Reservas",
@@ -6739,6 +7265,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6748,8 +7275,10 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
+      "guestCount": 2,
       "parseNotes": [
-        "money_enriched_from:AV23:AZ23 score=10"
+        "money_enriched_from:AV23:AZ23 score=10",
+        "pax_contact_enriched_from:AV23:AZ23"
       ],
       "nightlyRateArs": 235000,
       "nightlyRatesArs": [
@@ -6776,7 +7305,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 1534370007",
+      "email": "ed.ale.hansen@hotmail.com"
     },
     {
       "source": "Reservas",
@@ -6798,6 +7329,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6807,8 +7339,10 @@
         "estado": null,
         "pax": 1.0
       },
+      "guestCount": 1,
       "parseNotes": [
-        "money_enriched_from:BN34:BR34 score=10"
+        "money_enriched_from:BN34:BR34 score=10",
+        "pax_contact_enriched_from:BN34:BR34"
       ],
       "nightlyRateArs": 176000,
       "nightlyRatesArs": [
@@ -6835,7 +7369,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "email": "fatimadepaulapires@gmail.com"
     },
     {
       "source": "Reservas",
@@ -6857,6 +7392,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6866,8 +7402,10 @@
         "estado": null,
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CC12:CI13 score=8"
+        "money_enriched_from:CC12:CI13 score=8",
+        "pax_contact_enriched_from:CC12:CI13"
       ],
       "nightlyRateArs": 421000,
       "nightlyRatesArs": [
@@ -6884,7 +7422,8 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "011 15 57009688"
     },
     {
       "source": "Reservas",
@@ -6906,6 +7445,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6915,8 +7455,10 @@
         "estado": null,
         "pax": 3.0
       },
+      "guestCount": 3,
       "parseNotes": [
-        "money_enriched_from:CC21:CJ21 score=10"
+        "money_enriched_from:CC21:CJ21 score=10",
+        "pax_contact_enriched_from:CC21:CJ21"
       ],
       "nightlyRateArs": 338000,
       "nightlyRatesArs": [
@@ -6933,7 +7475,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03413 15059092",
+      "email": "silvina29@msn.com"
     },
     {
       "source": "Reservas",
@@ -6955,6 +7499,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 4,
+      "children": 0,
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
@@ -6964,8 +7509,10 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
+      "guestCount": 4,
       "parseNotes": [
-        "money_enriched_from:CC22:CI22 score=10"
+        "money_enriched_from:CC22:CI22 score=10",
+        "pax_contact_enriched_from:CC22:CI22"
       ],
       "nightlyRateArs": 408000,
       "nightlyRatesArs": [
@@ -6992,7 +7539,9 @@
       "moneyHints": [
         "enriched_from_libro"
       ],
-      "moneyWarnings": []
+      "moneyWarnings": [],
+      "phone": "03415 15208582",
+      "email": "corradovanina@gmail.com"
     },
     {
       "source": "Reservas",
@@ -7014,6 +7563,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7047,6 +7597,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7080,6 +7631,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7113,6 +7665,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7146,6 +7699,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7179,6 +7733,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7212,6 +7767,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7245,6 +7801,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7278,6 +7835,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7311,6 +7869,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7344,6 +7903,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7377,6 +7937,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7410,6 +7971,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7443,6 +8005,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7476,6 +8039,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7509,6 +8073,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7542,6 +8107,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7575,6 +8141,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7608,6 +8175,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7641,6 +8209,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7674,6 +8243,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7707,6 +8277,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7740,6 +8311,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7773,6 +8345,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7806,6 +8379,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7839,6 +8413,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7872,6 +8447,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7905,6 +8481,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [
@@ -7938,6 +8515,7 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": null,
+      "children": 0,
       "confidence": "low",
       "classification": "noise",
       "issues": [

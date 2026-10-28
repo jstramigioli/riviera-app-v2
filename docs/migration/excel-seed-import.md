@@ -60,7 +60,8 @@ Comments on Libro merges carry tarifas / totales / señas. Extract parses them i
 | Parsed payments (seña/total) | **0** structured | **86** |
 | Reservas enriched from Libro | 0 | **60** |
 
-Seed creates `Payment` (SENIA/FINAL) when amounts parse; skips blank seña and USD without ARS/FX.
+Seed creates `Payment` (SENIA/FINAL) when amounts parse; skips blank seña and USD without ARS/FX.  
+Also sets `adults`/`children`, creates **N guest slots**, and copies Tel/Correo/DNI onto the titular `Guest`.
 
 ## Pipeline
 

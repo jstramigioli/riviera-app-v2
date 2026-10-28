@@ -75,6 +75,12 @@ export default async function ReservaDetailPage({
           <p className="text-sm text-[var(--muted)]">
             {reservation.checkInDate.toISOString().slice(0, 10)} →{" "}
             {reservation.checkOutDate.toISOString().slice(0, 10)}
+            {" · "}
+            {reservation.adults + reservation.children} persona
+            {reservation.adults + reservation.children === 1 ? "" : "s"}
+            {reservation.children > 0
+              ? ` (${reservation.adults} + ${reservation.children} niño${reservation.children === 1 ? "" : "s"})`
+              : ""}
             {reservation.doNotMove ? " · 🔒 habitación fijada" : " · asignación flexible"}
             {reservation.group ? ` · Grupo: ${reservation.group.name}` : ""}
           </p>
@@ -263,7 +269,12 @@ export default async function ReservaDetailPage({
         </section>
 
         <section className="panel rounded-xl p-4 space-y-3">
-          <h2 className="font-semibold">Huéspedes</h2>
+          <h2 className="font-semibold">
+            Huéspedes{" "}
+            <span className="font-normal text-[var(--muted)]">
+              ({reservation.guests.length}/{reservation.adults + reservation.children})
+            </span>
+          </h2>
           <ul className="space-y-1 text-sm">
             {reservation.guests.map((rg) => (
               <li key={rg.id}>
@@ -271,6 +282,12 @@ export default async function ReservaDetailPage({
                   {rg.guest.lastName}, {rg.guest.firstName}
                 </Link>{" "}
                 · {rg.role === "TITULAR" ? "Titular" : "Acompañante"}
+                {rg.role === "TITULAR" && (rg.guest.phone || rg.guest.email) ? (
+                  <span className="text-[var(--muted)]">
+                    {" "}
+                    · {[rg.guest.phone, rg.guest.email].filter(Boolean).join(" · ")}
+                  </span>
+                ) : null}
               </li>
             ))}
           </ul>

@@ -71,6 +71,9 @@ export default async function ReservasPage() {
                   </td>
                   <td className="px-3 py-2">
                     {g ? `${g.lastName}, ${g.firstName}` : "—"}
+                    <span className="ml-1 text-xs text-[var(--muted)]">
+                      · {r.adults + r.children} pax
+                    </span>
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {r.checkInDate.toISOString().slice(0, 10)} →{" "}

@@ -323,6 +323,89 @@ def apply_money_fields(row: dict, money: dict) -> None:
         row.setdefault("price", "")
 
 
+TEL_RE = re.compile(
+    r"Tel\s*:?\s*(?!Correo|Email)([0-9+\s\-/.()]{6,})",
+    re.I,
+)
+MAIL_RE = re.compile(
+    r"(?:Correo|Email|E-?mail)\s*:?\s*([A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,})",
+    re.I,
+)
+DNI_RE = re.compile(r"\bDNI\s*:?\s*([\d.\s]+)", re.I)
+# Guest count: "Name x 2", "x 3 + bebe", "x 4 camas" — NOT "Total x 7 d" / "Tarifa x 9 d"
+PAX_FULL_RE = re.compile(
+    r"(?<![A-Za-z])x\s*(\d+)(?!\s*d\b)(?:\s*\+\s*(beb[eé]|bebe|niñ[oa]s?))?(?:\s*(?:camas?|pasajeros?|personas?))?",
+    re.I,
+)
+PERSONAS_RE = re.compile(r"(\d+)\s*(?:personas?|pasajeros?|pax)\b", re.I)
+
+
+def parse_pax_and_contact(
+    *texts: str | None,
+    existing_adults: int | None = None,
+) -> dict:
+    """Parse guestCount / children / phone / email / DNI from cell + comment text."""
+    blob = "\n".join(t for t in texts if t)
+    adults = existing_adults
+    children = 0
+    for m in PAX_FULL_RE.finditer(blob):
+        n = int(m.group(1))
+        if adults is None or n > adults:
+            adults = n
+        if m.group(2):
+            children = max(children, 1)
+    if adults is None:
+        pm = PERSONAS_RE.search(blob)
+        if pm:
+            adults = int(pm.group(1))
+
+    phone = None
+    tm = TEL_RE.search(blob)
+    if tm:
+        phone = re.sub(r"\s+", " ", tm.group(1)).strip().strip(".-")
+        if not phone or phone in ("$", "—", "-"):
+            phone = None
+
+    email = None
+    em = MAIL_RE.search(blob)
+    if em:
+        email = em.group(1).strip().strip(".-")
+        if "@" not in email:
+            email = None
+
+    document_number = None
+    dm = DNI_RE.search(blob)
+    if dm:
+        document_number = re.sub(r"\D", "", dm.group(1)) or None
+
+    guest_count = (adults or 0) + children
+    return {
+        "adults": adults,
+        "children": children,
+        "guestCount": guest_count if guest_count > 0 else None,
+        "phone": phone,
+        "email": email,
+        "documentType": "DNI" if document_number else None,
+        "documentNumber": document_number,
+    }
+
+
+def apply_pax_contact(row: dict, info: dict) -> None:
+    if info.get("adults") is not None:
+        row["adults"] = info["adults"]
+    if info.get("children"):
+        row["children"] = info["children"]
+    else:
+        row.setdefault("children", 0)
+    if info.get("guestCount") is not None:
+        row["guestCount"] = info["guestCount"]
+    elif row.get("adults") is not None:
+        row["guestCount"] = int(row["adults"]) + int(row.get("children") or 0)
+    for k in ("phone", "email", "documentType", "documentNumber"):
+        if info.get(k) and not row.get(k):
+            row[k] = info[k]
+
+
 def guest_tokens(text: str) -> set[str]:
     return {
         t
@@ -331,8 +414,35 @@ def guest_tokens(text: str) -> set[str]:
     }
 
 
+def find_libro_match(res: dict, libro: list[dict]) -> tuple[dict | None, int]:
+    res_tokens = guest_tokens(
+        f"{res.get('guest','')} {res.get('firstName','')} {res.get('lastName','')}"
+    )
+    best = None
+    best_score = 0
+    for m in libro:
+        score = 0
+        if res.get("checkIn") and res["checkIn"] == m.get("checkIn"):
+            score += 3
+        if res.get("checkOut") and res["checkOut"] == m.get("checkOut"):
+            score += 2
+        if res.get("unit") and res["unit"] == m.get("unit"):
+            score += 2
+        if res.get("unit") and m.get("unit") and (
+            res["unit"].startswith(m["unit"])
+            or m["unit"] in (res["unit"].split("+") if "+" in res["unit"] else [])
+        ):
+            score += 1
+        overlap = res_tokens & guest_tokens(m.get("guest") or "")
+        score += min(3, len(overlap))
+        if score > best_score and (overlap or res.get("unit") == m.get("unit")):
+            best_score = score
+            best = m
+    return best, best_score
+
+
 def enrich_reservas_with_libro_money(rows: list[dict]) -> None:
-    """Copy comment money from Libro merges onto matching Reservas rows (seed prefers Reservas)."""
+    """Copy comment money + contact/pax from Libro merges onto matching Reservas rows."""
     libro = [
         r
         for r in rows
@@ -341,33 +451,13 @@ def enrich_reservas_with_libro_money(rows: list[dict]) -> None:
     for res in rows:
         if res.get("source") != "Reservas" or res.get("classification") != "recoverable":
             continue
-        if res.get("agreedPriceArs") or res.get("payments"):
+        best, best_score = find_libro_match(res, libro)
+        if not best or best_score < 4:
             continue
-        res_tokens = guest_tokens(
-            f"{res.get('guest','')} {res.get('firstName','')} {res.get('lastName','')}"
-        )
-        best = None
-        best_score = 0
-        for m in libro:
-            score = 0
-            if res.get("checkIn") and res["checkIn"] == m.get("checkIn"):
-                score += 3
-            if res.get("checkOut") and res["checkOut"] == m.get("checkOut"):
-                score += 2
-            if res.get("unit") and res["unit"] == m.get("unit"):
-                score += 2
-            # composite 8+9 vs physical 8/9
-            if res.get("unit") and m.get("unit") and (
-                res["unit"].startswith(m["unit"])
-                or m["unit"] in (res["unit"].split("+") if "+" in res["unit"] else [])
-            ):
-                score += 1
-            overlap = res_tokens & guest_tokens(m.get("guest") or "")
-            score += min(3, len(overlap))
-            if score > best_score and (overlap or res.get("unit") == m.get("unit")):
-                best_score = score
-                best = m
-        if best and best_score >= 4 and (best.get("agreedPriceArs") or best.get("payments")):
+
+        if not (res.get("agreedPriceArs") or res.get("payments")) and (
+            best.get("agreedPriceArs") or best.get("payments")
+        ):
             apply_money_fields(
                 res,
                 {
@@ -387,6 +477,27 @@ def enrich_reservas_with_libro_money(rows: list[dict]) -> None:
             )
             res.setdefault("parseNotes", []).append(
                 f"money_enriched_from:{best.get('sourceRef')} score={best_score}"
+            )
+
+        # Contact + guest count from comment when Reservas sheet lacks them
+        if not res.get("phone") and best.get("phone"):
+            res["phone"] = best["phone"]
+        if not res.get("email") and best.get("email"):
+            res["email"] = best["email"]
+        if not res.get("documentNumber") and best.get("documentNumber"):
+            res["documentType"] = best.get("documentType") or "DNI"
+            res["documentNumber"] = best["documentNumber"]
+        if not res.get("adults") and best.get("adults"):
+            res["adults"] = best["adults"]
+        if not res.get("children") and best.get("children"):
+            res["children"] = best["children"]
+        if best.get("guestCount") and (
+            not res.get("guestCount") or res["guestCount"] < best["guestCount"]
+        ):
+            res["guestCount"] = best["guestCount"]
+        if best.get("phone") or best.get("email") or best.get("adults"):
+            res.setdefault("parseNotes", []).append(
+                f"pax_contact_enriched_from:{best.get('sourceRef')}"
             )
 
 
@@ -548,17 +659,12 @@ def extract_merges(ws) -> list[dict]:
         elif check_in >= check_out:
             issues.append("out_before_in")
 
-        adults = None
-        if guest:
-            pm = PAX_RE.search(guest)
-            if pm:
-                adults = int(pm.group(1))
-
         do_not_move = bool(
             (comment and NO_MOVER_RE.search(comment))
             or (isinstance(val, str) and NO_MOVER_RE.search(val))
         )
         channel = "Booking" if (comment and BOOKING_RE.search(comment)) else "Excel"
+        pax_contact = parse_pax_and_contact(guest, comment)
 
         confidence = "recoverable" if not issues else "ambiguous"
         row = {
@@ -575,7 +681,8 @@ def extract_merges(ws) -> list[dict]:
             "notes": (comment or "")[:2000],
             "channel": channel,
             "doNotMove": do_not_move,
-            "adults": adults,
+            "adults": pax_contact.get("adults"),
+            "children": pax_contact.get("children") or 0,
             "confidence": "high" if confidence == "recoverable" else "low",
             "classification": confidence,
             "issues": issues,
@@ -583,6 +690,7 @@ def extract_merges(ws) -> list[dict]:
             "raw": {"cellValue": val, "comment": comment},
         }
         apply_money_fields(row, money)
+        apply_pax_contact(row, pax_contact)
         rows.append(row)
 
     # Emit unit_header for named dept rows whose label isn't an A:B merge (e.g. A42 Romerito).
@@ -668,50 +776,57 @@ def extract_reservas(ws) -> list[dict]:
             classification = "recoverable"
 
         guest = f"{first_s} {last_s}".strip()
-        adults = None
+        existing_adults = None
         if isinstance(pax, (int, float)):
-            adults = int(pax)
+            existing_adults = int(pax)
         elif isinstance(pax, str) and pax.strip():
             pm = PAX_RE.search(pax)
-            adults = int(pm.group(1)) if pm else None
+            existing_adults = int(pm.group(1)) if pm else None
 
         obs_s = str(obs).strip() if obs else ""
         do_not_move = bool(obs_s and NO_MOVER_RE.search(obs_s))
         service = PLAN_MAP.get(str(plan).strip() if plan else "", None)
         status = ESTADO_MAP.get(str(estado).strip() if estado else "", "PRERRESERVA")
-
-        rows.append(
-            {
-                "source": "Reservas",
-                "sourceRef": f"row:{r}",
-                "sourceLine": r,
-                "excelId": rid,
-                "unit": unit or "",
-                "roomRaw": room_s,
-                "checkIn": cin_d.isoformat() if cin_d else "",
-                "checkOut": cout_d.isoformat() if cout_d else "",
-                "guest": guest,
-                "firstName": first_s,
-                "lastName": last_s,
-                "status": status,
-                "paymentHint": str(estado).strip() if estado else "",
-                "serviceType": service,
-                "price": "",
-                "notes": obs_s,
-                "channel": "Excel",
-                "doNotMove": do_not_move,
-                "adults": adults,
-                "confidence": "high" if classification == "recoverable" else "low",
-                "classification": classification,
-                "issues": issues,
-                "raw": {
-                    "habitacion": room_s,
-                    "plan": plan,
-                    "estado": estado,
-                    "pax": pax,
-                },
-            }
+        pax_contact = parse_pax_and_contact(
+            guest,
+            str(pax) if pax is not None else "",
+            obs_s,
+            existing_adults=existing_adults,
         )
+
+        row = {
+            "source": "Reservas",
+            "sourceRef": f"row:{r}",
+            "sourceLine": r,
+            "excelId": rid,
+            "unit": unit or "",
+            "roomRaw": room_s,
+            "checkIn": cin_d.isoformat() if cin_d else "",
+            "checkOut": cout_d.isoformat() if cout_d else "",
+            "guest": guest,
+            "firstName": first_s,
+            "lastName": last_s,
+            "status": status,
+            "paymentHint": str(estado).strip() if estado else "",
+            "serviceType": service,
+            "price": "",
+            "notes": obs_s,
+            "channel": "Excel",
+            "doNotMove": do_not_move,
+            "adults": pax_contact.get("adults"),
+            "children": pax_contact.get("children") or 0,
+            "confidence": "high" if classification == "recoverable" else "low",
+            "classification": classification,
+            "issues": issues,
+            "raw": {
+                "habitacion": room_s,
+                "plan": plan,
+                "estado": estado,
+                "pax": pax,
+            },
+        }
+        apply_pax_contact(row, pax_contact)
+        rows.append(row)
     return rows
 
 
@@ -1034,6 +1149,9 @@ def main() -> None:
             if r.get("classification") == "recoverable"
             and any("enriched_from_libro" in h for h in (r.get("moneyHints") or []))
         ),
+        "withPhone": sum(1 for r in recoverable if r.get("phone")),
+        "withEmail": sum(1 for r in recoverable if r.get("email")),
+        "withGuestCount": sum(1 for r in recoverable if r.get("guestCount")),
     }
 
     payload = {

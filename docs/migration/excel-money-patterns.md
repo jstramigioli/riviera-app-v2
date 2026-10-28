@@ -44,4 +44,21 @@
 
 ## Coverage (after parse, this workbook)
 
-See `migration/staging/extracted.json` → `counts.withAgreedPrice` / `withPayments` / `reservasEnrichedFromLibro`.
+See `migration/staging/extracted.json` → `counts.withAgreedPrice` / `withPayments` / `reservasEnrichedFromLibro` / `withPhone` / `withEmail` / `withGuestCount`.
+
+## Guest count + contact (also from comments)
+
+| Pattern | Field |
+|---------|-------|
+| `Name x 2` / `x 4 camas` / `x 3 + bebe` | `adults` / `children` / `guestCount` (not `Total x N d`) |
+| `Tel: 011 …` | `phone` on titular Guest |
+| `Correo: a@b.com` | `email` on titular Guest |
+| `DNI: …` | `documentNumber` |
+
+Seed creates **N guest slots** (1 TITULAR + acompañantes sin nombre) and persists `agreedPriceArs` + `Payment`.
+
+## What was wrong before (Julián report)
+
+1. Seed only created **1** guest (titular) → UI looked like “solo nombre”.
+2. Tel/email stayed buried in reservation notes → guest profile empty.
+3. Money lived in `extracted.json` but Reservas-first import often lacked payments until enrichment; seed also didn’t create companion slots / contact fields.
