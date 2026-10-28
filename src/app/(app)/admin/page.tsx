@@ -2,12 +2,10 @@ import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
 import { getUsdBlueRate } from "@/lib/payments";
 import { setBlueRateAction } from "@/app/actions/payments";
-import {
-  createOpenPeriodAction,
-  deactivateOpenPeriodAction,
-} from "@/app/actions/hotel-open";
 import { formatArs } from "@/lib/money";
-import { HelpTooltip } from "@/components/HelpTooltip";
+import { formatDateTimeUi, formatDateUi } from "@/lib/dates";
+import { auditActionLabel, auditEntityLabel } from "@/lib/labels";
+import Link from "next/link";
 
 export default async function AdminPage() {
   const user = await requireUser(["ADMIN"]);
@@ -23,9 +21,10 @@ export default async function AdminPage() {
     guests: await prisma.guest.count(),
     payments: await prisma.payment.count(),
   };
-  const openPeriods = await prisma.hotelOpenPeriod.findMany({
+  const seasons = await prisma.ratePeriod.findMany({
     where: { active: true },
-    orderBy: { openFrom: "asc" },
+    orderBy: { validFrom: "asc" },
+    select: { id: true, name: true, validFrom: true, validTo: true },
   });
 
   return (
@@ -38,7 +37,7 @@ export default async function AdminPage() {
           Admin
         </h1>
         <p className="text-sm text-[var(--muted)]">
-          Permisos, auditoría, cotización blue, export y backups. Sesión: {user.email}
+          Permisos, historial, cotización blue, export y backups. Sesión: {user.email}
         </p>
       </div>
 
@@ -67,67 +66,40 @@ export default async function AdminPage() {
         <div className="text-sm text-[var(--muted)]">Actual: 1 USD = {formatArs(blue)}</div>
       </form>
 
-      <section className="panel rounded-xl p-4 space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <h2 className="font-semibold">Temporadas abiertas</h2>
-          <HelpTooltip text="El hotel solo opera dentro de estos rangos (pueden ser varios al año, o un fin de semana largo). Fuera = cerrado: no se crea consulta ni reserva." />
+      <section className="panel rounded-xl p-4 space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-semibold">Temporadas (apertura + tarifas)</h2>
+          <Link href="/tarifas" className="btn btn-ghost text-sm">
+            Ir a Tarifas
+          </Link>
         </div>
         <p className="text-xs text-[var(--muted)]">
-          Lista de ventanas from–to en la base. Fuera de todas las temporadas activas el calendario
-          muestra cerrado y bloquea altas.
+          Una sola lista: cada temporada activa abre el hotel en esas fechas y guarda los precios.
+          Fuera de toda temporada activa el hotel figura cerrado. Se administran en{" "}
+          <Link href="/tarifas" className="underline">
+            Tarifas
+          </Link>
+          .
         </p>
-        {openPeriods.length === 0 ? (
+        {seasons.length === 0 ? (
           <p className="text-sm text-[var(--danger)]">
-            No hay temporadas abiertas: el hotel figura cerrado todos los días.
+            No hay temporadas activas: el hotel figura cerrado todos los días.
           </p>
         ) : (
           <ul className="space-y-1 text-sm">
-            {openPeriods.map((p) => (
+            {seasons.map((p) => (
               <li
                 key={p.id}
                 className="flex flex-wrap items-center gap-2 border-b border-[var(--line)] py-1.5"
               >
                 <span className="font-semibold">{p.name}</span>
                 <span className="text-[var(--muted)]">
-                  {p.openFrom.toISOString().slice(0, 10)} → {p.openTo.toISOString().slice(0, 10)}
+                  {formatDateUiRange(p.validFrom, p.validTo)}
                 </span>
-                {p.notes ? <span className="text-xs text-[var(--muted)]">· {p.notes}</span> : null}
-                <form action={deactivateOpenPeriodAction} className="ml-auto">
-                  <input type="hidden" name="id" value={p.id} />
-                  <button type="submit" className="btn btn-ghost text-xs">
-                    Desactivar
-                  </button>
-                </form>
               </li>
             ))}
           </ul>
         )}
-        <form
-          action={createOpenPeriodAction}
-          className="grid gap-2 border-t border-[var(--line)] pt-3 sm:grid-cols-4"
-        >
-          <div className="sm:col-span-2">
-            <label className="label">Nombre</label>
-            <input className="input" name="name" required placeholder="Temporada / puente…" />
-          </div>
-          <div>
-            <label className="label">Desde</label>
-            <input className="input" type="date" name="openFrom" required />
-          </div>
-          <div>
-            <label className="label">Hasta</label>
-            <input className="input" type="date" name="openTo" required />
-          </div>
-          <div className="sm:col-span-3">
-            <label className="label">Notas</label>
-            <input className="input" name="notes" placeholder="Opcional" />
-          </div>
-          <div className="flex items-end">
-            <button className="btn btn-primary w-full" type="submit">
-              Agregar temporada
-            </button>
-          </div>
-        </form>
       </section>
 
       <section className="panel rounded-xl p-4 space-y-2">
@@ -152,26 +124,31 @@ export default async function AdminPage() {
       </section>
 
       <section className="panel overflow-auto rounded-xl">
-        <h2 className="border-b border-[var(--line)] px-4 py-3 font-semibold">Audit log</h2>
+        <h2 className="border-b border-[var(--line)] px-4 py-3 font-semibold">
+          Historial de cambios
+        </h2>
         <table className="w-full min-w-[700px] text-sm">
           <thead className="text-xs uppercase text-[var(--muted)]">
             <tr>
               <th className="px-3 py-2 text-left">Cuando</th>
               <th className="px-3 py-2 text-left">Quién</th>
-              <th className="px-3 py-2 text-left">Acción</th>
-              <th className="px-3 py-2 text-left">Entidad</th>
+              <th className="px-3 py-2 text-left">Qué hizo</th>
+              <th className="px-3 py-2 text-left">Sobre</th>
             </tr>
           </thead>
           <tbody>
             {audits.map((a) => (
               <tr key={a.id} className="border-t border-[var(--line)]">
                 <td className="px-3 py-2 whitespace-nowrap">
-                  {a.createdAt.toISOString().replace("T", " ").slice(0, 19)}
+                  {formatDateTimeUi(a.createdAt)}
                 </td>
                 <td className="px-3 py-2">{a.user?.email || "—"}</td>
-                <td className="px-3 py-2">{a.action}</td>
-                <td className="px-3 py-2">
-                  {a.entityType} {a.entityId ? `· ${a.entityId.slice(0, 8)}` : ""}
+                <td className="px-3 py-2" title={a.action}>
+                  {auditActionLabel(a.action)}
+                </td>
+                <td className="px-3 py-2" title={a.entityType}>
+                  {auditEntityLabel(a.entityType)}
+                  {a.entityId ? ` · ${a.entityId.slice(0, 8)}` : ""}
                 </td>
               </tr>
             ))}
@@ -180,4 +157,8 @@ export default async function AdminPage() {
       </section>
     </div>
   );
+}
+
+function formatDateUiRange(from: Date, to: Date) {
+  return `${formatDateUi(from)} → ${formatDateUi(to)}`;
 }

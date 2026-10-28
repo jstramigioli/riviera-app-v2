@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { RESERVATION_STATUS_LABEL, PAYMENT_STATUS_LABEL } from "@/lib/status";
 import { formatArs } from "@/lib/money";
+import { formatDateUi } from "@/lib/dates";
 
 export default async function ReservasPage() {
   const reservations = await prisma.reservation.findMany({
@@ -73,8 +74,7 @@ export default async function ReservasPage() {
                     {g ? `${g.lastName}, ${g.firstName}` : "—"}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {r.checkInDate.toISOString().slice(0, 10)} →{" "}
-                    {r.checkOutDate.toISOString().slice(0, 10)}
+                    {formatDateUi(r.checkInDate)} → {formatDateUi(r.checkOutDate)}
                   </td>
                   <td className="px-3 py-2">
                     {[...new Set(r.segments.map((s) => s.physicalUnit.code))].join(", ")}
