@@ -22,7 +22,7 @@ export default async function HuespedDetailPage({
 
   return (
     <div className="space-y-4 fade-up">
-      <Link href="/huespedes" className="text-xs text-[var(--muted)]">
+      <Link href="/huespedes" className="text-link-back text-xs">
         ← Huéspedes
       </Link>
       <h1
@@ -43,7 +43,7 @@ export default async function HuespedDetailPage({
         <ul className="space-y-1 text-sm">
           {guest.reservations.map((rg) => (
             <li key={rg.id}>
-              <Link href={`/reservas/${rg.reservationId}`} className="text-[var(--brand)]">
+              <Link href={`/reservas/${rg.reservationId}`} className="text-link font-semibold">
                 {rg.reservation.code}
               </Link>{" "}
               · {rg.role} · {RESERVATION_STATUS_LABEL[rg.reservation.status]}

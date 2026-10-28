@@ -12,7 +12,7 @@ export default async function NuevaConsultaPage() {
   return (
     <div className="space-y-4 fade-up max-w-4xl">
       <div>
-        <Link href="/consultas" className="text-xs text-[var(--muted)]">
+        <Link href="/consultas" className="text-link-back text-xs">
           ← Consultas
         </Link>
         <h1

@@ -47,7 +47,7 @@ export default async function HuespedesPage() {
             {guests.map((g) => (
               <tr key={g.id} className="border-b border-[var(--line)]">
                 <td className="px-3 py-2">
-                  <Link className="font-semibold text-[var(--brand)]" href={`/huespedes/${g.id}`}>
+                  <Link className="text-link font-semibold" href={`/huespedes/${g.id}`}>
                     {g.lastName}, {g.firstName}
                   </Link>
                 </td>

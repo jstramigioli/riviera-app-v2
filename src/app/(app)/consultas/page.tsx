@@ -89,7 +89,7 @@ function QueryTable({
             <tr>
               <td colSpan={6} className="px-3 py-6 text-[var(--muted)]">
                 No hay consultas acá.{" "}
-                <Link className="text-[var(--brand)]" href="/consultas/nueva">
+                <Link className="text-link" href="/consultas/nueva">
                   Crear una
                 </Link>
               </td>
@@ -104,7 +104,7 @@ function QueryTable({
                 <tr key={q.id} className="border-b border-[var(--line)] hover:bg-white/50">
                   <td className="px-3 py-2">
                     <Link
-                      className="font-semibold text-[var(--brand)]"
+                      className="text-link font-semibold"
                       href={`/consultas/${q.id}`}
                     >
                       {q.code}
@@ -132,7 +132,7 @@ function QueryTable({
                     {q.convertedReservation ? (
                       <div className="text-xs">
                         <Link
-                          className="text-[var(--brand)]"
+                          className="text-link"
                           href={`/reservas/${q.convertedReservation.id}`}
                         >
                           {q.convertedReservation.code}

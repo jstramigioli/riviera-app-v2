@@ -117,11 +117,18 @@ function List({
                 className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] py-2 text-sm"
               >
                 <div>
-                  <Link href={`/reservas/${r.id}`} className="font-semibold text-[var(--brand)]">
+                  <Link href={`/reservas/${r.id}`} className="text-link font-semibold">
                     {r.code}
                   </Link>{" "}
-                  · {g ? `${g.lastName}, ${g.firstName}` : "Sin titular"} ·{" "}
-                  {units || "sin habitación"}
+                  ·{" "}
+                  {g ? (
+                    <Link href={`/huespedes/${g.id}`} className="text-link">
+                      {g.lastName}, {g.firstName}
+                    </Link>
+                  ) : (
+                    "Sin titular"
+                  )}{" "}
+                  · {units || "sin habitación"}
                 </div>
                 {action && actionLabel ? (
                   <form action={action}>
