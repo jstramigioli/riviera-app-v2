@@ -98,12 +98,7 @@ export default async function ConsultaDetailPage({
           guestPhone: query.guestPhone,
           guestEmail: query.guestEmail,
           guestDocumentNumber: query.guestDocumentNumber,
-          mandatoryIds: query.structuredReqs
-            .filter((r) => r.kind === "MANDATORY")
-            .map((r) => r.attributeId),
-          preferenceIds: query.structuredReqs
-            .filter((r) => r.kind === "PREFERENCE")
-            .map((r) => r.attributeId),
+          desiredIds: query.structuredReqs.map((r) => r.attributeId),
         }}
       />
     </div>

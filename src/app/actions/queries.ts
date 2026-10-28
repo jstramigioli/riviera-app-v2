@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { RequirementKind, ServiceType } from "@prisma/client";
+import type { ServiceType } from "@prisma/client";
 import { requireUser } from "@/lib/auth";
 import {
   convertQueryToReservation,
@@ -10,7 +10,13 @@ import {
   upsertQueryDraft,
 } from "@/lib/queries";
 
-function parseRequirements(formData: FormData) {
+function parseDesiredIds(formData: FormData): string[] {
+  const fromDesired = String(formData.get("desiredAttributeIds") || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (fromDesired.length) return [...new Set(fromDesired)];
+  // Legacy fields from older forms
   const mandatory = String(formData.get("mandatoryAttributeIds") || "")
     .split(",")
     .map((s) => s.trim())
@@ -19,24 +25,14 @@ function parseRequirements(formData: FormData) {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  return [
-    ...mandatory.map((attributeId) => ({
-      attributeId,
-      kind: "MANDATORY" as RequirementKind,
-    })),
-    ...preference
-      .filter((id) => !mandatory.includes(id))
-      .map((attributeId) => ({
-        attributeId,
-        kind: "PREFERENCE" as RequirementKind,
-      })),
-  ];
+  return [...new Set([...mandatory, ...preference])];
 }
 
 export async function upsertQueryAction(formData: FormData) {
   const user = await requireUser();
   const id = String(formData.get("id") || "") || undefined;
   try {
+    const desired = parseDesiredIds(formData);
     const query = await upsertQueryDraft({
       id,
       checkInDate: String(formData.get("checkInDate")),
@@ -51,7 +47,10 @@ export async function upsertQueryAction(formData: FormData) {
       guestPhone: String(formData.get("guestPhone") || "") || null,
       guestEmail: String(formData.get("guestEmail") || "") || null,
       guestDocumentNumber: String(formData.get("guestDocumentNumber") || "") || null,
-      structuredRequirements: parseRequirements(formData),
+      structuredRequirements: desired.map((attributeId) => ({
+        attributeId,
+        kind: "DESIRED" as const,
+      })),
       userId: user.id,
     });
     revalidatePath("/consultas");
@@ -63,7 +62,7 @@ export async function upsertQueryAction(formData: FormData) {
   }
 }
 
-/** Client autosave: JSON body via FormData fields. */
+/** Client autosave. */
 export async function autosaveQueryAction(payload: {
   id?: string;
   checkInDate: string;
@@ -78,7 +77,10 @@ export async function autosaveQueryAction(payload: {
   guestPhone?: string | null;
   guestEmail?: string | null;
   guestDocumentNumber?: string | null;
+  desiredAttributeIds?: string[];
+  /** @deprecated merged into desired */
   mandatoryAttributeIds?: string[];
+  /** @deprecated merged into desired */
   preferenceAttributeIds?: string[];
 }) {
   const user = await requireUser();
@@ -88,9 +90,13 @@ export async function autosaveQueryAction(payload: {
   if (payload.checkInDate >= payload.checkOutDate) {
     return { ok: false as const, error: "Salida debe ser posterior a llegada" };
   }
-  // Autosave minimum: dates; guest name optional but preferred
-  const mandatory = payload.mandatoryAttributeIds ?? [];
-  const preference = payload.preferenceAttributeIds ?? [];
+  const desired = [
+    ...new Set([
+      ...(payload.desiredAttributeIds ?? []),
+      ...(payload.mandatoryAttributeIds ?? []),
+      ...(payload.preferenceAttributeIds ?? []),
+    ]),
+  ];
   try {
     const query = await upsertQueryDraft({
       id: payload.id,
@@ -106,18 +112,10 @@ export async function autosaveQueryAction(payload: {
       guestPhone: payload.guestPhone,
       guestEmail: payload.guestEmail,
       guestDocumentNumber: payload.guestDocumentNumber,
-      structuredRequirements: [
-        ...mandatory.map((attributeId) => ({
-          attributeId,
-          kind: "MANDATORY" as RequirementKind,
-        })),
-        ...preference
-          .filter((id) => !mandatory.includes(id))
-          .map((attributeId) => ({
-            attributeId,
-            kind: "PREFERENCE" as RequirementKind,
-          })),
-      ],
+      structuredRequirements: desired.map((attributeId) => ({
+        attributeId,
+        kind: "DESIRED" as const,
+      })),
       userId: user.id,
     });
     revalidatePath("/consultas");
@@ -141,14 +139,22 @@ export async function convertQueryAction(formData: FormData) {
   const queryId = String(formData.get("queryId"));
   const physicalUnitId = String(formData.get("physicalUnitId") || "") || undefined;
   const compositeUnitId = String(formData.get("compositeUnitId") || "") || undefined;
-  const allowOverride = formData.get("allowMandatoryOverride") === "on" ||
+  const allowOverride =
+    formData.get("allowDesiredOverride") === "on" ||
+    formData.get("allowDesiredOverride") === "true" ||
+    formData.get("allowDesiredOverride") === "1" ||
+    formData.get("allowMandatoryOverride") === "on" ||
     formData.get("allowMandatoryOverride") === "true" ||
     formData.get("allowMandatoryOverride") === "1";
   const overrideNote = String(formData.get("overrideNote") || "") || undefined;
   const roomLocked = formData.get("roomLocked") === "on";
   const statusRaw = String(formData.get("status") || "PRERRESERVA");
   const status =
-    statusRaw === "CONFIRMADA" ? ("CONFIRMADA" as const) : ("PRERRESERVA" as const);
+    statusRaw === "IN_HOUSE"
+      ? ("IN_HOUSE" as const)
+      : statusRaw === "CONFIRMADA"
+        ? ("CONFIRMADA" as const)
+        : ("PRERRESERVA" as const);
 
   try {
     const reservation = await convertQueryToReservation({
@@ -160,7 +166,7 @@ export async function convertQueryAction(formData: FormData) {
         ? Number(formData.get("agreedPriceArs"))
         : null,
       roomLocked,
-      allowMandatoryOverride: allowOverride,
+      allowDesiredOverride: allowOverride,
       overrideNote,
       userId: user.id,
     });

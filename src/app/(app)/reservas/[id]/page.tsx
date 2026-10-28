@@ -6,7 +6,6 @@ import {
   RESERVATION_STATUS_LABEL,
 } from "@/lib/status";
 import {
-  REQUIREMENT_KIND_LABEL,
   SERVICE_TYPE_LABEL,
   communicatingRoomsLabel,
 } from "@/lib/labels";
@@ -160,19 +159,13 @@ export default async function ReservaDetailPage({
           {reservation.structuredReqs.length ? (
             <div className="text-sm space-y-1">
               <div className="font-semibold inline-flex items-center gap-1">
-                Características pedidas
-                <HelpTooltip text="Obligatorio filtró candidatos; preferencia solo priorizó." />
+                Características deseadas
+                <HelpTooltip text="Sugieren habitaciones; recepción puede asignar otra con advertencia." />
               </div>
               <ul className="flex flex-wrap gap-1.5">
                 {reservation.structuredReqs.map((r) => (
-                  <li
-                    key={r.id}
-                    className={`tag-chip ${
-                      r.kind === "MANDATORY" ? "tag-chip-mandatory" : "tag-chip-preference"
-                    }`}
-                  >
+                  <li key={r.id} className="tag-chip tag-chip-desired">
                     {r.attribute.label}
-                    <span className="tag-chip-badge">{REQUIREMENT_KIND_LABEL[r.kind]}</span>
                   </li>
                 ))}
               </ul>

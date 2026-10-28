@@ -14,23 +14,29 @@ export const SERVICE_TYPE_LABEL: Record<ServiceType, string> = {
   MEDIA_PENSION: "Media pensión",
 };
 
+export const SERVICE_TYPES: ServiceType[] = [
+  "SIN_DESAYUNO",
+  "DESAYUNO",
+  "MEDIA_PENSION",
+];
+
 export const UNIT_KIND_LABEL: Record<UnitKind, string> = {
   HABITACION: "Habitación",
   DEPARTAMENTO: "Departamento",
 };
 
 export const REQUIREMENT_KIND_LABEL: Record<RequirementKind, string> = {
-  MANDATORY: "Obligatorio",
-  PREFERENCE: "Preferencia",
+  DESIRED: "Deseada",
 };
 
 export const RESERVATION_STATUS_LABEL: Record<ReservationStatus, string> = {
   /** Legacy — no crear; usar entidad Query / sección Consultas */
   CONSULTA: "Consulta (legado)",
+  /** Copy: pendiente ≡ prerreserva (D-03) */
   PRERRESERVA: "Prerreserva",
   CONFIRMADA: "Confirmada",
   CANCELADA: "Cancelada",
-  IN_HOUSE: "En casa",
+  IN_HOUSE: "Ingresada",
   FINALIZADA: "Finalizada",
 };
 
@@ -67,8 +73,12 @@ export function roomDisplayName(code: string, name: string, kind: UnitKind): str
   return name || `Habitación ${code}`;
 }
 
-/** Communicating rooms (8+9, 35+36) — never “compuesta” in UI. */
+/** Communicating rooms — never “compuesta” in UI. Codes come from DB. */
 export function communicatingRoomsLabel(code: string, name?: string | null): string {
   if (name && !/compuest/i.test(name) && !/composite/i.test(name)) return name;
   return `Habitaciones comunicadas ${code}`;
+}
+
+export function formatArsPlain(n: number): string {
+  return Math.round(n).toLocaleString("es-AR");
 }

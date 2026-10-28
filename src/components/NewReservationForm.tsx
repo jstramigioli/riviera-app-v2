@@ -7,7 +7,6 @@ import { SERVICE_TYPE_LABEL } from "@/lib/labels";
 import type { LiveAvailabilityResult, AvailabilityCandidate } from "@/lib/availability";
 
 type AttributeOpt = { id: string; key: string; label: string };
-type TagMode = "off" | "preference" | "mandatory";
 
 type Props = {
   attributes: AttributeOpt[];
@@ -27,31 +26,23 @@ type AvailabilityPayload = LiveAvailabilityResult & {
 const HELP = {
   checkout:
     "La fecha de salida no ocupa noche: si llega el 10 y se va el 12, duerme el 10 y el 11.",
-  tagsMandatory:
-    "Obligatorio: solo se listan habitaciones libres que tengan esta característica.",
-  tagsPreference:
-    "Preferencia: se muestran todas las libres; las que cumplen aparecen primero.",
   tags:
-    "Tocá una vez para preferencia, dos para obligatorio, tres para quitar. Filtra las habitaciones libres.",
+    "Características deseadas: sugieren y ordenan. Podés asignar otra habitación con advertencia y motivo.",
   communicating:
-    "Habitaciones comunicadas (p. ej. 8+9 o 35+36): se reservan juntas y ocupan ambas.",
+    "Habitaciones comunicadas: se reservan juntas y ocupan ambas (códigos desde inventario).",
   doNotMove:
-    "Habitación fijada: no la mueve el optimizador ni recepción sin desbloquear. Si no está marcada, la asignación es flexible (se puede reasignar entre habitaciones que cumplan lo pedido).",
+    "Habitación fijada: no la mueve el optimizador ni recepción sin desbloquear. Si no está marcada, la asignación es flexible.",
   senia:
     "Registrar una seña no confirma sola la reserva: el estado operativo se cambia aparte.",
   status:
-    "Prerreserva y Confirmada siempre tienen habitación y aparecen en el calendario. Las consultas (sin habitación) van en Consultas.",
+    "Prerreserva, Confirmada e Ingresada siempre tienen habitación y aparecen en el calendario. Las consultas (sin habitación) van en Consultas.",
   tramos:
     "Si el huésped cambia de habitación a mitad de estadía, la misma reserva se parte en varios tramos contiguos (se edita después en la ficha).",
   grupo:
     "Podés sumar otra habitación libre para el mismo período (familia en dos habitaciones).",
+  override:
+    "La habitación no cumple todas las características deseadas. Confirmá con un motivo para continuar.",
 };
-
-function cycleMode(m: TagMode): TagMode {
-  if (m === "off") return "preference";
-  if (m === "preference") return "mandatory";
-  return "off";
-}
 
 export function NewReservationForm({ attributes, initial }: Props) {
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
@@ -63,24 +54,17 @@ export function NewReservationForm({ attributes, initial }: Props) {
   const [children, setChildren] = useState(0);
   const [serviceType, setServiceType] = useState("DESAYUNO");
   const [status, setStatus] = useState("PRERRESERVA");
-  const [tagModes, setTagModes] = useState<Record<string, TagMode>>({});
+  const [desiredIds, setDesiredIds] = useState<string[]>([]);
   const [selectionKey, setSelectionKey] = useState<string>("");
   const [extraKeys, setExtraKeys] = useState<string[]>([]);
   const [agreedPrice, setAgreedPrice] = useState<string>("");
   const [priceTouched, setPriceTouched] = useState(false);
+  const [overrideAck, setOverrideAck] = useState(false);
+  const [overrideNote, setOverrideNote] = useState("");
   const [data, setData] = useState<AvailabilityPayload | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-
-  const mandatoryIds = useMemo(
-    () => Object.entries(tagModes).filter(([, m]) => m === "mandatory").map(([id]) => id),
-    [tagModes],
-  );
-  const preferenceIds = useMemo(
-    () => Object.entries(tagModes).filter(([, m]) => m === "preference").map(([id]) => id),
-    [tagModes],
-  );
 
   useEffect(() => {
     if (!checkInDate || !checkOutDate || checkInDate >= checkOutDate) {
@@ -104,8 +88,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
           adults: String(adults),
           children: String(children),
           serviceType,
-          mandatory: mandatoryIds.join(","),
-          preference: preferenceIds.join(","),
+          desired: desiredIds.join(","),
         });
         if (selectionKey) qs.set("selectionKey", selectionKey);
         const res = await fetch(`/api/availability?${qs}`, { signal: ctrl.signal });
@@ -156,21 +139,28 @@ export function NewReservationForm({ attributes, initial }: Props) {
     adults,
     children,
     serviceType,
-    mandatoryIds,
-    preferenceIds,
+    desiredIds,
     selectionKey,
     priceTouched,
     initial?.physicalUnitId,
   ]);
 
   const selected = data?.candidates.find((c) => c.selectionKey === selectionKey) ?? null;
+  const needsOverride = Boolean(selected && !selected.meetsAllDesired);
   const roomCandidates = (data?.candidates ?? []).filter((c) => c.kind === "unit");
   const communicating = (data?.candidates ?? []).filter((c) => c.kind === "communicating");
 
   function onSubmit(formData: FormData) {
+    if (needsOverride && (!overrideAck || !overrideNote.trim())) return;
     startTransition(() => {
       createReservationAction(formData);
     });
+  }
+
+  function toggleDesired(id: string) {
+    setDesiredIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
   }
 
   const physicalUnitId =
@@ -280,6 +270,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
             >
               <option value="PRERRESERVA">Prerreserva</option>
               <option value="CONFIRMADA">Confirmada</option>
+              <option value="IN_HOUSE">Ingresada</option>
             </select>
           </div>
           <div>
@@ -299,33 +290,21 @@ export function NewReservationForm({ attributes, initial }: Props) {
       <section className="panel space-y-3 rounded-xl p-5">
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="text-lg font-semibold text-[var(--brand-deep)]">
-            Características de la habitación
+            Características deseadas
           </h2>
           <HelpTooltip text={HELP.tags} />
         </div>
-        <p className="text-xs text-[var(--muted)]">
-          Preferencia ordena · Obligatorio filtra.{" "}
-          <HelpTooltip text={HELP.tagsMandatory} label="Ayuda obligatorio" />{" "}
-          <HelpTooltip text={HELP.tagsPreference} label="Ayuda preferencia" />
-        </p>
         <div className="flex flex-wrap gap-2">
           {attributes.map((a) => {
-            const mode = tagModes[a.id] || "off";
+            const on = desiredIds.includes(a.id);
             return (
               <button
                 key={a.id}
                 type="button"
-                className={`tag-chip tag-chip-${mode}`}
-                onClick={() =>
-                  setTagModes((prev) => ({ ...prev, [a.id]: cycleMode(mode) }))
-                }
+                className={`tag-chip ${on ? "tag-chip-desired" : "tag-chip-off"}`}
+                onClick={() => toggleDesired(a.id)}
               >
                 {a.label}
-                {mode !== "off" ? (
-                  <span className="tag-chip-badge">
-                    {mode === "mandatory" ? "Oblig." : "Pref."}
-                  </span>
-                ) : null}
               </button>
             );
           })}
@@ -359,6 +338,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
                     setSelectionKey(c.selectionKey);
                     setExtraKeys([]);
                     setPriceTouched(false);
+                    setOverrideAck(false);
                   }}
                 />
               ))}
@@ -376,9 +356,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
           ) : roomCandidates.length === 0 ? (
             <p className="rounded-lg border border-dashed border-[var(--line)] px-3 py-4 text-sm text-[var(--muted)]">
               {data?.hasAvailability === false
-                ? mandatoryIds.length
-                  ? "No hay habitaciones libres que cumplan los requisitos obligatorios."
-                  : "No hay habitaciones libres en esas fechas."
+                ? "No hay habitaciones libres en esas fechas."
                 : "Elegí fechas para ver disponibilidad."}
             </p>
           ) : (
@@ -392,6 +370,7 @@ export function NewReservationForm({ attributes, initial }: Props) {
                     setSelectionKey(c.selectionKey);
                     setExtraKeys((prev) => prev.filter((k) => k !== c.selectionKey));
                     setPriceTouched(false);
+                    setOverrideAck(false);
                   }}
                 />
               ))}
@@ -437,8 +416,45 @@ export function NewReservationForm({ attributes, initial }: Props) {
         <input type="hidden" name="physicalUnitId" value={physicalUnitId} />
         <input type="hidden" name="compositeUnitId" value={compositeUnitId} />
         <input type="hidden" name="extraUnitIds" value={extraUnitIds} />
-        <input type="hidden" name="mandatoryAttributeIds" value={mandatoryIds.join(",")} />
-        <input type="hidden" name="preferenceAttributeIds" value={preferenceIds.join(",")} />
+        <input type="hidden" name="desiredAttributeIds" value={desiredIds.join(",")} />
+        <input
+          type="hidden"
+          name="allowDesiredOverride"
+          value={needsOverride ? "1" : ""}
+        />
+        <input type="hidden" name="overrideNote" value={overrideNote} />
+
+        {needsOverride ? (
+          <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-sm text-amber-950 space-y-2">
+            <p className="font-semibold inline-flex items-center gap-1">
+              Esta habitación no cumple lo deseado
+              <HelpTooltip text={HELP.override} />
+            </p>
+            <p>
+              Falta:{" "}
+              {selected?.missingDesiredLabels.join(", ") || "características deseadas"}
+            </p>
+            <label className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                checked={overrideAck}
+                onChange={(e) => setOverrideAck(e.target.checked)}
+                className="mt-1"
+              />
+              <span>Entiendo y quiero asignarla igual</span>
+            </label>
+            <div>
+              <FieldLabel>Motivo del override</FieldLabel>
+              <input
+                className="input"
+                value={overrideNote}
+                onChange={(e) => setOverrideNote(e.target.value)}
+                placeholder="Ej. cliente acepta sin balcón"
+                disabled={!overrideAck}
+              />
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="panel space-y-4 rounded-xl p-5">
@@ -511,7 +527,12 @@ export function NewReservationForm({ attributes, initial }: Props) {
         <button
           className="btn btn-primary"
           type="submit"
-          disabled={pending || !selectionKey || Boolean(fetchError)}
+          disabled={
+            pending ||
+            !selectionKey ||
+            Boolean(fetchError) ||
+            (needsOverride && (!overrideAck || !overrideNote.trim()))
+          }
         >
           {pending ? "Guardando…" : "Crear reserva"}
         </button>
@@ -636,13 +657,13 @@ function CandidateCard({
             {!candidate.capacityOk ? " · supera capacidad" : ""}
           </div>
         </div>
-        {candidate.meetsAllPreferences && candidate.preferenceHits > 0 ? (
+        {candidate.meetsAllDesired && candidate.desiredHits > 0 ? (
           <span className="rounded bg-[var(--brand)]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--brand-deep)]">
-            Cumple preferencias
+            Cumple deseadas
           </span>
-        ) : !candidate.meetsMandatory ? (
+        ) : !candidate.meetsAllDesired ? (
           <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-900">
-            No cumple
+            Parcial
           </span>
         ) : null}
       </div>

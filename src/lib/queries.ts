@@ -1,4 +1,4 @@
-import type { QueryStatus, RequirementKind, ReservationStatus, ServiceType } from "@prisma/client";
+import type { QueryStatus, ReservationStatus, ServiceType } from "@prisma/client";
 import { prisma } from "./db";
 import { toDateOnly } from "./dates";
 import { writeAudit } from "./audit";
@@ -39,8 +39,7 @@ function dedupeRequirements(
 ): QueryRequirementInput[] {
   const map = new Map<string, QueryRequirementInput>();
   for (const item of items) {
-    const prev = map.get(item.attributeId);
-    if (!prev || item.kind === "MANDATORY") map.set(item.attributeId, item);
+    map.set(item.attributeId, { attributeId: item.attributeId, kind: "DESIRED" });
   }
   return [...map.values()];
 }
@@ -85,7 +84,7 @@ export async function upsertQueryDraft(input: UpsertQueryInput) {
             ? {
                 create: structured.map((r) => ({
                   attributeId: r.attributeId,
-                  kind: r.kind,
+                  kind: "DESIRED" as const,
                 })),
               }
             : undefined,
@@ -106,7 +105,7 @@ export async function upsertQueryDraft(input: UpsertQueryInput) {
         ? {
             create: structured.map((r) => ({
               attributeId: r.attributeId,
-              kind: r.kind,
+              kind: "DESIRED" as const,
             })),
           }
         : undefined,
@@ -182,16 +181,19 @@ export type ConvertQueryInput = {
   queryId: string;
   physicalUnitId?: string;
   compositeUnitId?: string;
-  status?: Extract<ReservationStatus, "PRERRESERVA" | "CONFIRMADA">;
+  /** D-01: prerreserva | confirmada | ingresada */
+  status?: Extract<ReservationStatus, "PRERRESERVA" | "CONFIRMADA" | "IN_HOUSE">;
   agreedPriceArs?: number | null;
   roomLocked?: boolean;
+  allowDesiredOverride?: boolean;
+  /** @deprecated alias */
   allowMandatoryOverride?: boolean;
   overrideNote?: string;
   userId?: string;
 };
 
 /**
- * Convert consulta → prerreserva/reserva with a concrete room.
+ * Convert consulta → prerreserva / confirmada / ingresada with a concrete room.
  * Never leaves the resulting reservation without AssignmentSegment.
  */
 export async function convertQueryToReservation(input: ConvertQueryInput) {
@@ -208,10 +210,13 @@ export async function convertQueryToReservation(input: ConvertQueryInput) {
 
   const structured: StructuredRequirementInput[] = query.structuredReqs.map((r) => ({
     attributeId: r.attributeId,
-    kind: r.kind as RequirementKind,
+    kind: "DESIRED" as const,
   }));
 
-  if (input.allowMandatoryOverride && !input.overrideNote?.trim()) {
+  const allowOverride =
+    Boolean(input.allowDesiredOverride) || Boolean(input.allowMandatoryOverride);
+
+  if (allowOverride && !input.overrideNote?.trim()) {
     throw new Error(
       "Para asignar una habitación que no cumple lo pedido, indicá el motivo",
     );
@@ -231,8 +236,8 @@ export async function convertQueryToReservation(input: ConvertQueryInput) {
     channel: query.channel ?? undefined,
     notes: [
       query.notes,
-      input.allowMandatoryOverride && input.overrideNote
-        ? `Override características: ${input.overrideNote}`
+      allowOverride && input.overrideNote
+        ? `Override características deseadas: ${input.overrideNote}`
         : null,
     ]
       .filter(Boolean)
@@ -243,7 +248,7 @@ export async function convertQueryToReservation(input: ConvertQueryInput) {
     serviceType: query.serviceType,
     agreedPriceArs: input.agreedPriceArs ?? null,
     doNotMove: input.roomLocked ?? false,
-    allowMandatoryOverride: input.allowMandatoryOverride,
+    allowDesiredOverride: allowOverride,
     userId: input.userId,
   });
 
@@ -283,7 +288,8 @@ export async function convertQueryToReservation(input: ConvertQueryInput) {
     after: {
       reservationId: reservation.id,
       reservationCode: reservation.code,
-      allowMandatoryOverride: Boolean(input.allowMandatoryOverride),
+      status: reservation.status,
+      allowDesiredOverride: allowOverride,
     },
   });
 

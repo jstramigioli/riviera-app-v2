@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { autosaveQueryAction, convertQueryAction } from "@/app/actions/queries";
 import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
-import { SERVICE_TYPE_LABEL } from "@/lib/labels";
+import { SERVICE_TYPE_LABEL, formatArsPlain } from "@/lib/labels";
 import type { AvailabilityCandidate, LiveAvailabilityResult } from "@/lib/availability";
+import type { PriceBreakdown } from "@/lib/rates";
 
 type AttributeOpt = { id: string; key: string; label: string };
-type TagMode = "off" | "preference" | "mandatory";
 
 type InitialQuery = {
   id: string;
@@ -25,8 +25,7 @@ type InitialQuery = {
   guestPhone?: string | null;
   guestEmail?: string | null;
   guestDocumentNumber?: string | null;
-  mandatoryIds: string[];
-  preferenceIds: string[];
+  desiredIds: string[];
 };
 
 type Props = {
@@ -37,6 +36,7 @@ type Props = {
 
 type AvailabilityPayload = LiveAvailabilityResult & {
   suggestedTotalArs?: number | null;
+  priceBreakdown?: PriceBreakdown | null;
   error?: string;
 };
 
@@ -46,18 +46,16 @@ const HELP = {
   autosave:
     "Se guarda solo al tener fechas (y conviene el nombre del cliente). Sin habitación hasta convertir.",
   convert:
-    "Al convertir elegís habitación y pasa a prerreserva o confirmada. Ahí sí bloquea inventario y se ve en el calendario.",
+    "Al convertir elegís habitación y pasás a prerreserva, confirmada o ingresada. Ahí sí bloquea inventario y se ve en el calendario.",
   override:
-    "Podés elegir una habitación que no cumple lo obligatorio; el sistema te pide confirmar con un motivo.",
+    "Podés elegir una habitación que no cumple las características deseadas; el sistema te pide confirmar con un motivo.",
   roomLocked:
     "Habitación fijada: no la mueve el optimizador. Flexible: puede reasignarse entre habitaciones compatibles.",
+  desired:
+    "Características deseadas: sugieren y ordenan habitaciones. Recepción puede asignar otra con advertencia.",
+  nightByNight:
+    "Desglose noche a noche según el plan tarifario. El total sugerido es editable al acordar.",
 };
-
-function cycleMode(m: TagMode): TagMode {
-  if (m === "off") return "preference";
-  if (m === "preference") return "mandatory";
-  return "off";
-}
 
 function shiftDay(iso: string, days: number) {
   const d = new Date(`${iso}T00:00:00.000Z`);
@@ -86,12 +84,7 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
   const [guestDocumentNumber, setGuestDocumentNumber] = useState(
     initial?.guestDocumentNumber || "",
   );
-  const [tagModes, setTagModes] = useState<Record<string, TagMode>>(() => {
-    const m: Record<string, TagMode> = {};
-    for (const id of initial?.preferenceIds ?? []) m[id] = "preference";
-    for (const id of initial?.mandatoryIds ?? []) m[id] = "mandatory";
-    return m;
-  });
+  const [desiredIds, setDesiredIds] = useState<string[]>(initial?.desiredIds ?? []);
   const [selectionKey, setSelectionKey] = useState("");
   const [convertStatus, setConvertStatus] = useState("PRERRESERVA");
   const [roomLocked, setRoomLocked] = useState(false);
@@ -106,16 +99,6 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
   const [pendingConvert, startConvert] = useTransition();
   const skipFirstAutosave = useRef(Boolean(initial?.id));
 
-  const mandatoryIds = useMemo(
-    () => Object.entries(tagModes).filter(([, m]) => m === "mandatory").map(([id]) => id),
-    [tagModes],
-  );
-  const preferenceIds = useMemo(
-    () => Object.entries(tagModes).filter(([, m]) => m === "preference").map(([id]) => id),
-    [tagModes],
-  );
-
-  // Autosave draft (client + dates minimum → we require dates; guest name recommended)
   useEffect(() => {
     if (!checkInDate || !checkOutDate || checkInDate >= checkOutDate) return;
     if (skipFirstAutosave.current) {
@@ -139,8 +122,7 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
         guestPhone: guestPhone || null,
         guestEmail: guestEmail || null,
         guestDocumentNumber: guestDocumentNumber || null,
-        mandatoryAttributeIds: mandatoryIds,
-        preferenceAttributeIds: preferenceIds,
+        desiredAttributeIds: desiredIds,
       });
       if (!res.ok) {
         setSaveState("error");
@@ -169,12 +151,10 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
     guestPhone,
     guestEmail,
     guestDocumentNumber,
-    mandatoryIds,
-    preferenceIds,
+    desiredIds,
     router,
   ]);
 
-  // Live availability for conversion exploration (soft tags)
   useEffect(() => {
     if (!checkInDate || !checkOutDate || checkInDate >= checkOutDate) {
       setData(null);
@@ -191,9 +171,7 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
           adults: String(adults),
           children: String(children),
           serviceType,
-          mandatory: mandatoryIds.join(","),
-          preference: preferenceIds.join(","),
-          softMandatory: "1",
+          desired: desiredIds.join(","),
         });
         if (selectionKey) qs.set("selectionKey", selectionKey);
         const res = await fetch(`/api/availability?${qs}`, { signal: ctrl.signal });
@@ -231,15 +209,20 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
     adults,
     children,
     serviceType,
-    mandatoryIds,
-    preferenceIds,
+    desiredIds,
     selectionKey,
     agreedPrice,
   ]);
 
   const selected =
     data?.candidates.find((c) => c.selectionKey === selectionKey) ?? null;
-  const needsOverride = Boolean(selected && !selected.meetsMandatory);
+  const needsOverride = Boolean(selected && !selected.meetsAllDesired);
+
+  function toggleDesired(id: string) {
+    setDesiredIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  }
 
   function onConvert(formData: FormData) {
     if (!queryId) return;
@@ -313,6 +296,15 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
               className="input"
               value={guestDocumentNumber}
               onChange={(e) => setGuestDocumentNumber(e.target.value)}
+            />
+          </div>
+          <div>
+            <FieldLabel>Email</FieldLabel>
+            <input
+              className="input"
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
             />
           </div>
         </div>
@@ -402,35 +394,37 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
       <section className="panel space-y-3 rounded-xl p-5">
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="text-lg font-semibold text-[var(--brand-deep)]">
-            Qué pide (características)
+            Características deseadas
           </h2>
-          <HelpTooltip text="Preferencia ordena · Obligatorio filtra sugerencias. Al convertir podés elegir otra con advertencia." />
+          <HelpTooltip text={HELP.desired} />
         </div>
         <div className="flex flex-wrap gap-2">
           {attributes.map((a) => {
-            const mode = tagModes[a.id] || "off";
+            const on = desiredIds.includes(a.id);
             return (
               <button
                 key={a.id}
                 type="button"
-                className={`tag-chip tag-chip-${mode}`}
-                onClick={() =>
-                  setTagModes((prev) => ({ ...prev, [a.id]: cycleMode(mode) }))
-                }
+                className={`tag-chip ${on ? "tag-chip-desired" : "tag-chip-off"}`}
+                onClick={() => toggleDesired(a.id)}
               >
                 {a.label}
-                {mode !== "off" ? (
-                  <span className="tag-chip-badge">
-                    {mode === "mandatory" ? "Oblig." : "Pref."}
-                  </span>
-                ) : null}
               </button>
             );
           })}
         </div>
       </section>
 
-      <LivePanel loading={loading} data={data} serviceType={serviceType} onSelectService={setServiceType} />
+      <LivePanel
+        loading={loading}
+        data={data}
+        serviceType={serviceType}
+        onSelectService={setServiceType}
+      />
+
+      {selectionKey && data?.priceBreakdown ? (
+        <NightByNightPanel breakdown={data.priceBreakdown} />
+      ) : null}
 
       <section className="panel space-y-3 rounded-xl p-5">
         <div className="flex flex-wrap items-center gap-2">
@@ -451,6 +445,7 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
               onSelect={() => {
                 setSelectionKey(c.selectionKey);
                 setOverrideAck(false);
+                setAgreedPrice("");
               }}
             />
           ))}
@@ -470,12 +465,12 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
           {needsOverride ? (
             <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-sm text-amber-950 space-y-2">
               <p className="font-semibold inline-flex items-center gap-1">
-                Esta habitación no cumple lo pedido
+                Esta habitación no cumple lo deseado
                 <HelpTooltip text={HELP.override} />
               </p>
               <p>
                 Falta:{" "}
-                {selected.missingMandatoryLabels.join(", ") || "características obligatorias"}
+                {selected.missingDesiredLabels.join(", ") || "características deseadas"}
               </p>
               <label className="flex items-start gap-2">
                 <input
@@ -513,7 +508,7 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
             />
             <input
               type="hidden"
-              name="allowMandatoryOverride"
+              name="allowDesiredOverride"
               value={needsOverride ? "1" : ""}
             />
             <input type="hidden" name="overrideNote" value={overrideNote} />
@@ -527,10 +522,11 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
               >
                 <option value="PRERRESERVA">Prerreserva</option>
                 <option value="CONFIRMADA">Confirmada</option>
+                <option value="IN_HOUSE">Ingresada</option>
               </select>
             </div>
             <div>
-              <FieldLabel>Precio acordado (ARS)</FieldLabel>
+              <FieldLabel help={HELP.nightByNight}>Precio acordado (ARS)</FieldLabel>
               <input
                 className="input"
                 name="agreedPriceArs"
@@ -567,6 +563,60 @@ export function ConsultaForm({ attributes, initial, error }: Props) {
   );
 }
 
+function NightByNightPanel({ breakdown }: { breakdown: PriceBreakdown }) {
+  return (
+    <section className="panel space-y-3 rounded-xl p-5">
+      <div className="flex flex-wrap items-center gap-2">
+        <h2 className="text-lg font-semibold text-[var(--brand-deep)]">
+          Desglose de precio sugerido
+        </h2>
+        <HelpTooltip text="Precio noche a noche según tarifas. Si hay solapes de período, gana el tramo más corto." />
+      </div>
+      <div className="overflow-auto">
+        <table className="w-full min-w-[320px] text-sm">
+          <thead className="text-xs uppercase text-[var(--muted)] border-b border-[var(--line)]">
+            <tr>
+              <th className="py-1.5 text-left font-semibold">Noche</th>
+              <th className="py-1.5 text-left font-semibold">Período</th>
+              <th className="py-1.5 text-right font-semibold">ARS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {breakdown.nights.map((n) => (
+              <tr
+                key={n.date}
+                className={`border-b border-[var(--line)] ${
+                  n.missing ? "bg-red-50 text-red-900" : ""
+                }`}
+              >
+                <td className="py-1.5">{n.date}</td>
+                <td className="py-1.5 text-[var(--muted)]">
+                  {n.missing ? "Sin tarifa cargada" : n.periodName || "—"}
+                </td>
+                <td className="py-1.5 text-right font-medium">
+                  {n.amountArs != null ? `$ ${formatArsPlain(n.amountArs)}` : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td className="pt-2 font-semibold" colSpan={2}>
+                Total sugerido
+              </td>
+              <td className="pt-2 text-right font-semibold">
+                {breakdown.totalArs != null
+                  ? `$ ${formatArsPlain(breakdown.totalArs)}`
+                  : "Incompleto"}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function LivePanel({
   loading,
   data,
@@ -578,12 +628,12 @@ function LivePanel({
   serviceType: string;
   onSelectService: (s: string) => void;
 }) {
-  const matching = data?.candidates.filter((c) => c.meetsMandatory).length ?? 0;
+  const matching = data?.candidates.filter((c) => c.meetsAllDesired).length ?? 0;
   const total = data?.candidates.length ?? 0;
   return (
     <section
       className={`panel rounded-xl p-5 ${
-        matching > 0 ? "avail-yes" : data ? "avail-no" : ""
+        total > 0 ? "avail-yes" : data ? "avail-no" : ""
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -598,11 +648,11 @@ function LivePanel({
             {loading && !data
               ? "Consultando…"
               : data
-                ? matching > 0
-                  ? `Sí · ${matching} que cumplen`
-                  : total > 0
-                    ? `Sin match de tags · ${total} libres`
-                    : "Sin habitaciones libres"
+                ? total > 0
+                  ? matching > 0
+                    ? `Sí · ${total} libres · ${matching} con lo deseado`
+                    : `Sí · ${total} libres (ninguna con todos los deseados)`
+                  : "Sin habitaciones libres"
                 : "Ingresá fechas"}
           </div>
         </div>
@@ -630,7 +680,7 @@ function LivePanel({
               <div className="text-xs text-[var(--muted)]">
                 {s.available
                   ? s.suggestedNightlyArs != null
-                    ? `Desde ${Math.round(s.suggestedNightlyArs).toLocaleString("es-AR")} ARS/noche`
+                    ? `Desde ${formatArsPlain(s.suggestedNightlyArs)} ARS/noche`
                     : "Con tarifa"
                   : "Sin tarifa"}
               </div>
@@ -670,19 +720,19 @@ function SuggestionCard({
           </div>
           <div className="text-xs text-[var(--muted)]">Cap. {candidate.capacity}</div>
         </div>
-        {candidate.meetsMandatory ? (
+        {candidate.meetsAllDesired ? (
           <span className="rounded bg-[var(--brand)]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--brand-deep)]">
             Cumple
           </span>
         ) : (
           <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-900">
-            No cumple
+            Parcial
           </span>
         )}
       </div>
-      {!candidate.meetsMandatory && candidate.missingMandatoryLabels.length ? (
+      {!candidate.meetsAllDesired && candidate.missingDesiredLabels.length ? (
         <div className="mt-1 text-[11px] text-amber-800">
-          Falta: {candidate.missingMandatoryLabels.join(", ")}
+          Falta: {candidate.missingDesiredLabels.join(", ")}
         </div>
       ) : null}
     </button>

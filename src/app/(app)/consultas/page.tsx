@@ -124,12 +124,7 @@ function QueryTable({
                   </td>
                   <td className="px-3 py-2">
                     {q.structuredReqs.length
-                      ? q.structuredReqs
-                          .map(
-                            (r) =>
-                              `${r.attribute.label}${r.kind === "MANDATORY" ? "*" : ""}`,
-                          )
-                          .join(", ")
+                      ? q.structuredReqs.map((r) => r.attribute.label).join(", ")
                       : "—"}
                   </td>
                   <td className="px-3 py-2">

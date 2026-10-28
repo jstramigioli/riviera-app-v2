@@ -161,31 +161,28 @@ describe("availability engine", () => {
     expect(live.hasAvailability).toBe(true);
   });
 
-  it("RES-07b mandatory tags filter candidates; preferences only rank", async () => {
+  it("D-02 desired tags rank candidates; never hard-filter", async () => {
     const balcon = await prisma.unitAttribute.findUniqueOrThrow({ where: { key: "balcon" } });
     const liveAll = await listLiveAvailability(prisma, {
       checkInDate: "2027-10-01",
       checkOutDate: "2027-10-03",
     });
-    const liveMandatory = await listLiveAvailability(prisma, {
+    const liveDesired = await listLiveAvailability(prisma, {
+      checkInDate: "2027-10-01",
+      checkOutDate: "2027-10-03",
+      desiredAttributeIds: [balcon.id],
+    });
+    expect(liveDesired.candidates.length).toBe(liveAll.candidates.length);
+    expect(liveDesired.candidates[0]?.meetsAllDesired).toBe(true);
+    expect(liveDesired.candidates[0]?.desiredHits).toBeGreaterThanOrEqual(
+      liveDesired.candidates.at(-1)?.desiredHits ?? 0,
+    );
+    // legacy param still merges into desired
+    const liveLegacy = await listLiveAvailability(prisma, {
       checkInDate: "2027-10-01",
       checkOutDate: "2027-10-03",
       mandatoryAttributeIds: [balcon.id],
     });
-    expect(liveMandatory.candidates.length).toBeGreaterThan(0);
-    expect(liveMandatory.candidates.length).toBeLessThanOrEqual(liveAll.candidates.length);
-    expect(
-      liveMandatory.candidates.every((c) => c.attributeIds.includes(balcon.id)),
-    ).toBe(true);
-
-    const livePref = await listLiveAvailability(prisma, {
-      checkInDate: "2027-10-01",
-      checkOutDate: "2027-10-03",
-      preferenceAttributeIds: [balcon.id],
-    });
-    expect(livePref.candidates.length).toBe(liveAll.candidates.length);
-    expect(livePref.candidates[0]?.preferenceHits).toBeGreaterThanOrEqual(
-      livePref.candidates.at(-1)?.preferenceHits ?? 0,
-    );
+    expect(liveLegacy.candidates.length).toBe(liveAll.candidates.length);
   });
 });
