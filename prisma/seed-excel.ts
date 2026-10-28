@@ -3,25 +3,39 @@
  *
  * Prerequisites:
  *   1. `npm run db:seed` (inventory, users, tarifas, temporadas)
- *   2. `npm run migration:extract-excel` (includes Julián 2026-10-28 date fixes)
+ *   2. `npm run migration:extract-excel` (Julián fixes + comment money parse)
  *   3. Review migration/staging/ambiguous-report.md
  *
  * Guard: refuses unless ALLOW_EXCEL_SEED=1.
  * Only imports rows with confidence=high / classification=recoverable.
  * Prefers the structured "Reservas" sheet; falls back to Libro merges for
  * units/dates not already covered (guest+unit+checkIn key).
- * Waitlist sheet rows are never imported (they are aspirantes, not VIA_I bookings).
+ * Money: agreedPriceArs from comments; SENIA/FINAL payments when amounts parse.
+ * Waitlist / unit_header / ignore / noise are never imported.
  */
 import fs from "fs";
 import path from "path";
 import {
   PrismaClient,
+  type Currency,
+  type PaymentType,
   type ReservationStatus,
   type ServiceType,
 } from "@prisma/client";
-import { createReservation } from "../src/lib/reservations";
+import { createReservation, refreshPaymentStatus } from "../src/lib/reservations";
 
 const extractedPath = path.join(process.cwd(), "migration/staging/extracted.json");
+
+type ExtractedPayment = {
+  type: string;
+  currency: string;
+  amountOriginal: number;
+  amountArs?: number | null;
+  fxRateToArs?: number | null;
+  paidOn?: string | null;
+  raw?: string;
+  note?: string;
+};
 
 type ExtractedRow = {
   source: string;
@@ -34,6 +48,7 @@ type ExtractedRow = {
   lastName?: string;
   status: string;
   price?: string;
+  agreedPriceArs?: number | null;
   notes?: string;
   channel?: string;
   doNotMove?: boolean;
@@ -41,6 +56,10 @@ type ExtractedRow = {
   serviceType?: string | null;
   confidence: string;
   classification?: string;
+  payments?: ExtractedPayment[];
+  moneyHints?: string[];
+  moneyWarnings?: string[];
+  creditArs?: number | null;
 };
 
 function guestParts(row: ExtractedRow): { firstName: string; lastName: string } {
@@ -67,6 +86,69 @@ function guestParts(row: ExtractedRow): { firstName: string; lastName: string } 
 
 function keyOf(unit: string, checkIn: string, guest: string): string {
   return `${unit}|${checkIn}|${guest.trim().toLowerCase()}`;
+}
+
+function agreedPrice(row: ExtractedRow): number | null {
+  if (typeof row.agreedPriceArs === "number" && Number.isFinite(row.agreedPriceArs)) {
+    return row.agreedPriceArs;
+  }
+  if (row.price) {
+    const n = Number(row.price);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
+async function nextReceiptNumber(prisma: PrismaClient): Promise<string> {
+  const count = await prisma.payment.count();
+  return `REC-XLS-${String(count + 1).padStart(4, "0")}`;
+}
+
+async function seedPayments(
+  prisma: PrismaClient,
+  reservationId: string,
+  payments: ExtractedPayment[],
+): Promise<number> {
+  let created = 0;
+  for (const p of payments) {
+    const currency = (p.currency || "ARS").toUpperCase() as Currency;
+    const type = (p.type || "SENIA").toUpperCase() as PaymentType;
+    const amountOriginal = Number(p.amountOriginal);
+    if (!Number.isFinite(amountOriginal) || amountOriginal <= 0) continue;
+
+    let amountArs = p.amountArs != null ? Number(p.amountArs) : null;
+    let fx = p.fxRateToArs != null ? Number(p.fxRateToArs) : null;
+
+    if (currency === "USD") {
+      if (amountArs == null || !(fx && fx > 0)) {
+        // Skip USD without convertible ARS — leave hint in notes instead of inventing FX.
+        console.warn("SKIP USD payment without ARS/FX", p.raw);
+        continue;
+      }
+    } else {
+      amountArs = amountArs ?? amountOriginal;
+    }
+
+    const receiptNumber = await nextReceiptNumber(prisma);
+    await prisma.payment.create({
+      data: {
+        reservationId,
+        type,
+        currency,
+        amountOriginal,
+        fxRateToArs: currency === "USD" ? fx : null,
+        amountArs: amountArs!,
+        receiptNumber,
+        notes: [p.raw, p.note, p.paidOn ? `fecha nota: ${p.paidOn}` : ""]
+          .filter(Boolean)
+          .join(" · ")
+          .slice(0, 500),
+      },
+    });
+    created += 1;
+  }
+  if (created) await refreshPaymentStatus(reservationId);
+  return created;
 }
 
 async function main() {
@@ -109,6 +191,8 @@ async function main() {
   const prisma = new PrismaClient();
   let ok = 0;
   let failed = 0;
+  let paymentsCreated = 0;
+  let withPrice = 0;
   const failures: string[] = [];
 
   for (const row of toImport) {
@@ -128,7 +212,16 @@ async function main() {
 
       const status = (row.status as ReservationStatus) || "PRERRESERVA";
       const serviceType = (row.serviceType as ServiceType | undefined) || undefined;
-      const price = row.price ? Number(row.price) : null;
+      const price = agreedPrice(row);
+      if (price != null) withPrice += 1;
+
+      const moneyMeta = [
+        row.moneyHints?.length ? `hints=${row.moneyHints.join(",")}` : "",
+        row.moneyWarnings?.length ? `warn=${row.moneyWarnings.join(",")}` : "",
+        row.creditArs != null ? `a_favor=${row.creditArs}` : "",
+      ]
+        .filter(Boolean)
+        .join(" · ");
 
       const reservation = await createReservation({
         physicalUnitId,
@@ -137,12 +230,12 @@ async function main() {
         checkOutDate: row.checkOut,
         status: status === "CONSULTA" ? "PRERRESERVA" : status,
         channel: row.channel || "Excel",
-        notes: [row.notes, row.sourceRef ? `[excel:${row.sourceRef}]` : ""]
+        notes: [row.notes, row.sourceRef ? `[excel:${row.sourceRef}]` : "", moneyMeta]
           .filter(Boolean)
           .join("\n")
           .slice(0, 4000),
-        agreedPriceArs: Number.isFinite(price) ? price : null,
-        freezePrice: status === "CONFIRMADA",
+        agreedPriceArs: price,
+        freezePrice: status === "CONFIRMADA" || price != null,
         doNotMove: Boolean(row.doNotMove),
         adults: row.adults ?? 2,
         serviceType,
@@ -154,8 +247,20 @@ async function main() {
         data: { reservationId: reservation.id, guestId: guest.id, role: "TITULAR" },
       });
 
+      const payCount = await seedPayments(prisma, reservation.id, row.payments || []);
+      paymentsCreated += payCount;
+
       ok += 1;
-      console.log("OK", reservation.code, row.unit, row.checkIn, firstName, lastName);
+      console.log(
+        "OK",
+        reservation.code,
+        row.unit,
+        row.checkIn,
+        firstName,
+        lastName,
+        price != null ? `price=${price}` : "price=∅",
+        payCount ? `payments=${payCount}` : "",
+      );
     } catch (e) {
       failed += 1;
       const msg = e instanceof Error ? e.message : String(e);
@@ -171,10 +276,18 @@ async function main() {
         sourceSha256: data.sourceSha256,
         imported: ok,
         failed,
+        withAgreedPrice: withPrice,
+        paymentsCreated,
         skippedLow: data.rows.length - high.length,
         considered: toImport.length,
         fromReservas: reservas.length,
         fromMergesExtra: mergedExtras.length,
+        extractMoneyCounts: {
+          withAgreedPrice: data.counts?.withAgreedPrice,
+          withPayments: data.counts?.withPayments,
+          paymentsExtracted: data.counts?.paymentsExtracted,
+          reservasEnrichedFromLibro: data.counts?.reservasEnrichedFromLibro,
+        },
       },
       null,
       2,

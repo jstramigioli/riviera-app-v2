@@ -1,5 +1,5 @@
 {
-  "extractedAt": "2026-10-28T17:40:07.730070Z",
+  "extractedAt": "2026-10-28T17:46:24.668681Z",
   "sourceFile": "Reservas_2026_2027.xlsx",
   "sourceSha256": "5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b",
   "counts": {
@@ -15,7 +15,11 @@
     "reservasRecoverable": 69,
     "reservasAmbiguous": 0,
     "bodyMerges": 77,
-    "viaIBookingsRecoverable": 5
+    "viaIBookingsRecoverable": 5,
+    "withAgreedPrice": 116,
+    "withPayments": 86,
+    "paymentsExtracted": 86,
+    "reservasEnrichedFromLibro": 60
   },
   "julianCorrections": "2026-10-28",
   "rows": [
@@ -30,7 +34,6 @@
       "guest": "Jorge Aguirre x 2 -",
       "status": "CONFIRMADA",
       "price": "2064000",
-      "nightlyRateArs": 218000,
       "notes": "19/10\nHab. mat con balcón\nIn: 24/12/26 Out: 2/1/27\nTarifa x d: $ 218.000.- $ 235.000.-\nTotal x 9 d: $ 2.064.000.-\nSeña: $ 206.400.- 19/10/26\nTel:\nCorreo: joa@marval.com\n",
       "channel": "Excel",
       "doNotMove": false,
@@ -42,7 +45,31 @@
       "raw": {
         "cellValue": "Jorge Aguirre x 2 -",
         "comment": "19/10\nHab. mat con balcón\nIn: 24/12/26 Out: 2/1/27\nTarifa x d: $ 218.000.- $ 235.000.-\nTotal x 9 d: $ 2.064.000.-\nSeña: $ 206.400.- 19/10/26\nTel:\nCorreo: joa@marval.com\n"
-      }
+      },
+      "nightlyRateArs": 218000,
+      "nightlyRatesArs": [
+        218000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2064000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2064000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 206400,
+          "amountArs": 206400,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 206.400.- 19/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -55,7 +82,6 @@
       "guest": "Romina Rozas x 2 camas",
       "status": "CONFIRMADA",
       "price": "1175000",
-      "nightlyRateArs": 235000,
       "notes": "3/10\nHab. Doble - dos camas\nIn: 5/1/27 Out: 10/1/27\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 5/10/26\nTel: 03416 15542312\nCorreo: ro.ro.zas23@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -67,7 +93,31 @@
       "raw": {
         "cellValue": "Romina Rozas x 2 camas",
         "comment": "3/10\nHab. Doble - dos camas\nIn: 5/1/27 Out: 10/1/27\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 5/10/26\nTel: 03416 15542312\nCorreo: ro.ro.zas23@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-05",
+          "raw": "Seña: $ 117.500.- 5/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -104,8 +154,7 @@
       "dateSource": "comment",
       "guest": "Andres Sotelo Valenzuela x 4",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1430100",
       "notes": "08/10\nDepto. x 4\nIn: 01/02/2027 Out: 08/02/2027\nDepto. x 1 semana: $ 1.430.100.-\nSeña: $ 143.100.- 9/10/26\nTel:\nCorreo: coricampos@gmail.com\nHermano de Mariana (Tilo)",
       "channel": "Excel",
       "doNotMove": false,
@@ -117,7 +166,29 @@
       "raw": {
         "cellValue": "Andres Sotelo Valenzuela x 4",
         "comment": "08/10\nDepto. x 4\nIn: 01/02/2027 Out: 08/02/2027\nDepto. x 1 semana: $ 1.430.100.-\nSeña: $ 143.100.- 9/10/26\nTel:\nCorreo: coricampos@gmail.com\nHermano de Mariana (Tilo)"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1430100,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1430100,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 143100,
+          "amountArs": 143100,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña: $ 143.100.- 9/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -130,7 +201,6 @@
       "guest": "Sc Fatima de Paula x 1",
       "status": "CONFIRMADA",
       "price": "880000",
-      "nightlyRateArs": 176000,
       "notes": "21/10\nHab. Single\nIn: 17/1/27 Out:; 22/1/27\nTarifa x d: $ 176.000.-\nTotal x 5 d: $ 880.000.-\nSeña: $ 88.000.-\nTel:\nCorreo: fatimadepaulapires@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -142,7 +212,31 @@
       "raw": {
         "cellValue": "Sc Fatima de Paula x 1",
         "comment": "21/10\nHab. Single\nIn: 17/1/27 Out:; 22/1/27\nTarifa x d: $ 176.000.-\nTotal x 5 d: $ 880.000.-\nSeña: $ 88.000.-\nTel:\nCorreo: fatimadepaulapires@gmail.com"
-      }
+      },
+      "nightlyRateArs": 176000,
+      "nightlyRatesArs": [
+        176000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 880000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 880000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 88000,
+          "amountArs": 88000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 88.000.-"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -155,7 +249,6 @@
       "guest": "SC Laura Spinelli x 3 + bebe - no mover",
       "status": "CONFIRMADA",
       "price": "4116000",
-      "nightlyRateArs": 294000,
       "notes": "28/9\nDepto. x 3 + bebe\nno mover\nIn: 27/12/26 Out: 10/1/27\nTarifa x d: $ 294.000.-\nTotal x 14 d: $ 4.116.000.-\nSeña a Lu: $ \nTel: 011 15 54941713\nCorreo: spinellilaura@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": true,
@@ -167,7 +260,23 @@
       "raw": {
         "cellValue": "SC Laura Spinelli x 3 + bebe - no mover",
         "comment": "28/9\nDepto. x 3 + bebe\nno mover\nIn: 27/12/26 Out: 10/1/27\nTarifa x d: $ 294.000.-\nTotal x 14 d: $ 4.116.000.-\nSeña a Lu: $ \nTel: 011 15 54941713\nCorreo: spinellilaura@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": 294000,
+      "nightlyRatesArs": [
+        294000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4116000,
+      "nightsQuoted": 14,
+      "agreedPriceArs": 4116000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_blank_amount"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -179,8 +288,7 @@
       "dateSource": "comment",
       "guest": "Marcela Bianchi x 4 desayuno y map",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "2097900",
       "notes": "15/10\nDepto. x 4 con desayuno y cena\nViene con hab.\nIn: 15/2/27 Out: 22/2/27\nTarifa x semana: $ 2.097.900.-\nSeña: $ 209.000.- 16/10/26\nTel: 011 15 31739973\nCorreo: marcelabianchicui@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -192,7 +300,29 @@
       "raw": {
         "cellValue": "Marcela Bianchi x 4 desayuno y map",
         "comment": "15/10\nDepto. x 4 con desayuno y cena\nViene con hab.\nIn: 15/2/27 Out: 22/2/27\nTarifa x semana: $ 2.097.900.-\nSeña: $ 209.000.- 16/10/26\nTel: 011 15 31739973\nCorreo: marcelabianchicui@gmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 2097900,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 2097900,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 209000,
+          "amountArs": 209000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-16",
+          "raw": "Seña: $ 209.000.- 16/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -205,7 +335,6 @@
       "guest": "Marchese x3",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "Viene con hab. 25",
       "channel": "Excel",
       "doNotMove": false,
@@ -219,7 +348,19 @@
       "raw": {
         "cellValue": "Marchese x3",
         "comment": "Viene con hab. 25"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -232,7 +373,6 @@
       "guest": "Jorge Aguirre x 2 - con balcón",
       "status": "CONFIRMADA",
       "price": "1628000",
-      "nightlyRateArs": 218000,
       "notes": "19/10\nHab. mat\nIn: 26/12/26 Out: 2/1/27\nTarifa x d: $ 218.000.- $ 235.000.-\nTotal x 7 d: $ 1.628.000.-\nSeña: $ 162.800.- 19/10/26\nViene con hab. 24",
       "channel": "Excel",
       "doNotMove": false,
@@ -244,7 +384,31 @@
       "raw": {
         "cellValue": "Jorge Aguirre x 2 - con balcón",
         "comment": "19/10\nHab. mat\nIn: 26/12/26 Out: 2/1/27\nTarifa x d: $ 218.000.- $ 235.000.-\nTotal x 7 d: $ 1.628.000.-\nSeña: $ 162.800.- 19/10/26\nViene con hab. 24"
-      }
+      },
+      "nightlyRateArs": 218000,
+      "nightlyRatesArs": [
+        218000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1628000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1628000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 162800,
+          "amountArs": 162800,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 162.800.- 19/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -256,8 +420,7 @@
       "dateSource": "comment",
       "guest": "SC Carlos Magno - x 2 -  con balcón",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 235000,
+      "price": "3900000",
       "notes": "14/10\nConfirma reserva principio de diciembre\nHab. mat CON BALCÓN\nIn: 29/12/26 Out: 14/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTarifa total por 16 d: $ 3.900.000.-\nTel: 011 15 22683007\nCorreo: gbaruzzi@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -269,7 +432,21 @@
       "raw": {
         "cellValue": "SC Carlos Magno - x 2 -  con balcón",
         "comment": "14/10\nConfirma reserva principio de diciembre\nHab. mat CON BALCÓN\nIn: 29/12/26 Out: 14/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTarifa total por 16 d: $ 3.900.000.-\nTel: 011 15 22683007\nCorreo: gbaruzzi@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 3900000,
+      "nightsQuoted": 16,
+      "agreedPriceArs": 3900000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -281,8 +458,7 @@
       "dateSource": "merge_seq",
       "guest": "Analia Grosso y Mirko Rasposo x 4 dos camas ind en hab",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1838700",
       "notes": "26/9\nDepto. x 4 \nIn: 23/1/27 Out; 1/2/27\nTarifa x 9 d: $ 1.838.700.-\nSeña: $ 200.000.- 7/10/26\nTel: 03416 15101714\nCorreo: ana.lia.grosso@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -294,7 +470,29 @@
       "raw": {
         "cellValue": "Analia Grosso y Mirko Rasposo x 4 dos camas ind en hab",
         "comment": "26/9\nDepto. x 4 \nIn: 23/1/27 Out; 1/2/27\nTarifa x 9 d: $ 1.838.700.-\nSeña: $ 200.000.- 7/10/26\nTel: 03416 15101714\nCorreo: ana.lia.grosso@hotmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": 1838700,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 1838700,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 200000,
+          "amountArs": 200000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-07",
+          "raw": "Seña: $ 200.000.- 7/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -307,7 +505,6 @@
       "guest": "Jorge Cozzi x 3",
       "status": "CONFIRMADA",
       "price": "1635000",
-      "nightlyRateArs": 294000,
       "notes": "20/10\nViene con hab. 7 - 10 y 21\nHab. Triple\nIn: 8/1/27 Out: 13/1/27\nTarifa x d: $ 294.000.- $ 349.000.-\nTotal x 5 d: $ 1.635.000.-\nAbonó total con hab. 7",
       "channel": "Excel",
       "doNotMove": false,
@@ -319,7 +516,23 @@
       "raw": {
         "cellValue": "Jorge Cozzi x 3",
         "comment": "20/10\nViene con hab. 7 - 10 y 21\nHab. Triple\nIn: 8/1/27 Out: 13/1/27\nTarifa x d: $ 294.000.- $ 349.000.-\nTotal x 5 d: $ 1.635.000.-\nAbonó total con hab. 7"
-      }
+      },
+      "nightlyRateArs": 294000,
+      "nightlyRatesArs": [
+        294000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1635000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1635000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total con hab"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -358,8 +571,7 @@
       "dateSource": "comment",
       "guest": "Teresa Mauri - x 1 - sólo desayuno - no mover",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 109000,
+      "price": "2071000",
       "notes": "21/9\nHab. Single - no mover\nSolo desayuno\nIn: 26/12/26 Out: 12/1/27\nTarifa x d: $ 109.000.- $ 120.000.- $ 141.000.-\nTarifa total por 17 d: $ 2.071.000.-\nSeña: $ 200.000.- 10/10/26\nTel: 011 15 36966565\nCorreo: teromauri@gmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -371,7 +583,31 @@
       "raw": {
         "cellValue": "Teresa Mauri - x 1 - sólo desayuno - no mover",
         "comment": "21/9\nHab. Single - no mover\nSolo desayuno\nIn: 26/12/26 Out: 12/1/27\nTarifa x d: $ 109.000.- $ 120.000.- $ 141.000.-\nTarifa total por 17 d: $ 2.071.000.-\nSeña: $ 200.000.- 10/10/26\nTel: 011 15 36966565\nCorreo: teromauri@gmail.com"
-      }
+      },
+      "nightlyRateArs": 109000,
+      "nightlyRatesArs": [
+        109000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2071000,
+      "nightsQuoted": 17,
+      "agreedPriceArs": 2071000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 200000,
+          "amountArs": 200000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-10",
+          "raw": "Seña: $ 200.000.- 10/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -384,7 +620,6 @@
       "guest": "Claudia Cabrera x 2 - con balcón",
       "status": "CONFIRMADA",
       "price": "2960000",
-      "nightlyRateArs": 235000,
       "notes": "19/9\nHab. mat con balcón\nIn: 2/1/27 Out: 14/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 12 d: $ 2.960.000.-\nSeña a José Luis: $ 296.000.- 9/10/26\nTel: 011 1536991767\nCorreo: candyroy2007@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -396,7 +631,31 @@
       "raw": {
         "cellValue": "Claudia Cabrera x 2 - con balcón",
         "comment": "19/9\nHab. mat con balcón\nIn: 2/1/27 Out: 14/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 12 d: $ 2.960.000.-\nSeña a José Luis: $ 296.000.- 9/10/26\nTel: 011 1536991767\nCorreo: candyroy2007@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2960000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 2960000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 296000,
+          "amountArs": 296000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña a José Luis: $ 296.000.- 9/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -409,7 +668,6 @@
       "guest": "SC -> Lipschitz x 4 - no mover",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": 355000,
       "notes": "Viene de hab. 18\nno mover\npre reserva\nDepto. x 4\nIn: 4/1/27 Out: 19/1/27\nTarifa x d: $ 355.000.- $ 408.000.-\nTarifa total por 15 d: $ ",
       "channel": "Excel",
       "doNotMove": true,
@@ -423,7 +681,21 @@
       "raw": {
         "cellValue": "SC -> Lipschitz x 4 - no mover",
         "comment": "Viene de hab. 18\nno mover\npre reserva\nDepto. x 4\nIn: 4/1/27 Out: 19/1/27\nTarifa x d: $ 355.000.- $ 408.000.-\nTarifa total por 15 d: $ "
-      }
+      },
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -436,7 +708,6 @@
       "guest": "Juan Carlos Arce - x 2 -  no mover",
       "status": "CONFIRMADA",
       "price": "2820000",
-      "nightlyRateArs": 235000,
       "notes": "19/10\nHab. Doble - no mover\nIn: 15/2/27 Out: 27/2/27\nTarifa x d: $ 235.000.-\nTotal x 12 d: $ 2.820.000.-\nSeña: $ 282.000.- 19/10/26\nTel:\nCorreo: panchi9564@gmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -448,7 +719,31 @@
       "raw": {
         "cellValue": "Juan Carlos Arce - x 2 -  no mover",
         "comment": "19/10\nHab. Doble - no mover\nIn: 15/2/27 Out: 27/2/27\nTarifa x d: $ 235.000.-\nTotal x 12 d: $ 2.820.000.-\nSeña: $ 282.000.- 19/10/26\nTel:\nCorreo: panchi9564@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2820000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 2820000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 282000,
+          "amountArs": 282000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 282.000.- 19/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -460,8 +755,7 @@
       "dateSource": "comment",
       "guest": "SC Silvina Molina x 3 camas -  no mover - sale x la tarde",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 338000,
+      "price": "2513500",
       "notes": "24/10\nDepto. Hotelero x 3 camas\nno mover\nIn: 1/2/27 Out: 8/2/27 x la tarde\nTarifa x d: $ 338.000.-\nLate check out: $ 147.500.-\nTotal x 7 d + late check out: $ 2.513.500.-\nAbona con mastercard en 6 cuotas: $ \nTel: 03413 15059092\nCorreo: silvina29@msn.com\n",
       "channel": "Excel",
       "doNotMove": true,
@@ -473,7 +767,21 @@
       "raw": {
         "cellValue": "SC Silvina Molina x 3 camas -  no mover - sale x la tarde",
         "comment": "24/10\nDepto. Hotelero x 3 camas\nno mover\nIn: 1/2/27 Out: 8/2/27 x la tarde\nTarifa x d: $ 338.000.-\nLate check out: $ 147.500.-\nTotal x 7 d + late check out: $ 2.513.500.-\nAbona con mastercard en 6 cuotas: $ \nTel: 03413 15059092\nCorreo: silvina29@msn.com\n"
-      }
+      },
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2513500,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2513500,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": 147500,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -486,7 +794,6 @@
       "guest": "SC Drago/Farinelli x 2",
       "status": "CONFIRMADA",
       "price": "1175000",
-      "nightlyRateArs": 235000,
       "notes": "08/10\nHab. mat\nIn: 30/12/26 Out: 4/1/27\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nTel: 011 15 62184118\nCorreo: claudioomardrago@gmail.com / matyfarinelli@hotmail.com\nSeña en hotel en el mes de noviembre",
       "channel": "Excel",
       "doNotMove": false,
@@ -498,7 +805,23 @@
       "raw": {
         "cellValue": "SC Drago/Farinelli x 2",
         "comment": "08/10\nHab. mat\nIn: 30/12/26 Out: 4/1/27\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nTel: 011 15 62184118\nCorreo: claudioomardrago@gmail.com / matyfarinelli@hotmail.com\nSeña en hotel en el mes de noviembre"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Seña en hotel"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -511,7 +834,6 @@
       "guest": "SC Ángeles de la Vega x 1                ->",
       "status": "CONFIRMADA",
       "price": "894000",
-      "nightlyRateArs": 149000,
       "notes": "20/10\nHab. Single\nIn: 4/1/27 Out: 10/1/27\nTarifa x d: $ 149.000.-\nTotal x 6 d: $ 894.000.-\nAbona a Lu total: $ 804.600.-\nTel: 011 15 68797320\nCorreo: mariadelosangelesdelavega@gmail.com\nPasa luego con ruben",
       "channel": "Excel",
       "doNotMove": false,
@@ -523,7 +845,21 @@
       "raw": {
         "cellValue": "SC Ángeles de la Vega x 1                ->",
         "comment": "20/10\nHab. Single\nIn: 4/1/27 Out: 10/1/27\nTarifa x d: $ 149.000.-\nTotal x 6 d: $ 894.000.-\nAbona a Lu total: $ 804.600.-\nTel: 011 15 68797320\nCorreo: mariadelosangelesdelavega@gmail.com\nPasa luego con ruben"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 894000,
+      "nightsQuoted": 6,
+      "agreedPriceArs": 894000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -536,7 +872,6 @@
       "guest": "Romina Fabbio x 2 camas",
       "status": "CONFIRMADA",
       "price": "1350000",
-      "nightlyRateArs": 270000,
       "notes": "09/10\nHab. Doble\nIn: 30/1/27 Out: 4/2/27\nTarifa x d: $ 270.000.-\nTotal x 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 9/10/26\nTel: 011 15 50942005\nCorreo: romi.anna@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -548,7 +883,31 @@
       "raw": {
         "cellValue": "Romina Fabbio x 2 camas",
         "comment": "09/10\nHab. Doble\nIn: 30/1/27 Out: 4/2/27\nTarifa x d: $ 270.000.-\nTotal x 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 9/10/26\nTel: 011 15 50942005\nCorreo: romi.anna@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña: $ 135.000.- 9/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -561,7 +920,6 @@
       "guest": "Jorge Cozzi x 2 - no mover",
       "status": "CONFIRMADA",
       "price": "1985000",
-      "nightlyRateArs": 235000,
       "notes": "14/10\nHab. matrimonial - no mover\nIn: 5/1/27 Out: 13/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 8 d: $ 1.985.000.-\nTel: 011 15 50102103\nCorreo: jorgegabrielcozzi@yahoo.com.ar\nAbona a Luli total de 4 habitaciones: USD 3.000.- 27/10\nA FAVOR: $ 64.118.- (41.33 usd)\nViene con hab. 10, 21 y 17",
       "channel": "Excel",
       "doNotMove": true,
@@ -573,7 +931,36 @@
       "raw": {
         "cellValue": "Jorge Cozzi x 2 - no mover",
         "comment": "14/10\nHab. matrimonial - no mover\nIn: 5/1/27 Out: 13/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 8 d: $ 1.985.000.-\nTel: 011 15 50102103\nCorreo: jorgegabrielcozzi@yahoo.com.ar\nAbona a Luli total de 4 habitaciones: USD 3.000.- 27/10\nA FAVOR: $ 64.118.- (41.33 usd)\nViene con hab. 10, 21 y 17"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1985000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 1985000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": 64118,
+      "payments": [
+        {
+          "type": "FINAL",
+          "currency": "USD",
+          "amountOriginal": 3000,
+          "amountArs": null,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Abona a Luli total de 4 habitaciones: USD 3.000",
+          "note": "group_or_multi_room_total_possible"
+        }
+      ],
+      "moneyHints": [
+        "a_favor:64118"
+      ],
+      "moneyWarnings": [
+        "usd_total_without_ars_fx"
+      ]
     },
     {
       "source": "Libro de reservas",
@@ -586,7 +973,6 @@
       "guest": "Alejandro Canals x 3 + cuna chica",
       "status": "CONFIRMADA",
       "price": "1690000",
-      "nightlyRateArs": 338000,
       "notes": "21/9\nHab. Triple + cuna chica\nIn: 23/1/27 Out: 28/1/27\nTarifa x d: $ 338.000.-\nTotal x 5 d: $ 1.690.000.-\nSeña: $ 169.000.- 23/9/26\nTel: 02964 15621770\nCorreo: alejandrocanals13@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -598,7 +984,31 @@
       "raw": {
         "cellValue": "Alejandro Canals x 3 + cuna chica",
         "comment": "21/9\nHab. Triple + cuna chica\nIn: 23/1/27 Out: 28/1/27\nTarifa x d: $ 338.000.-\nTotal x 5 d: $ 1.690.000.-\nSeña: $ 169.000.- 23/9/26\nTel: 02964 15621770\nCorreo: alejandrocanals13@gmail.com"
-      }
+      },
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1690000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1690000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 169000,
+          "amountArs": 169000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-23",
+          "raw": "Seña: $ 169.000.- 23/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -611,7 +1021,6 @@
       "guest": "Sc Raúl Rossini x 1 - no mover",
       "status": "CONFIRMADA",
       "price": "2000000",
-      "nightlyRateArs": 170000,
       "notes": "2/10 - pre reserva\nHab. Single\nno mover\nIn: 12/2/27 Out: 25/2/27\nTarifa x d: $ 170.000.- $ 149.000.-\nTotal x 13 d: $ 2.000.000.-\nSeña a Luli: $ 600.000.-\nTel: 011 1569418130\nCorreo: rraulrossini@gmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -623,7 +1032,31 @@
       "raw": {
         "cellValue": "Sc Raúl Rossini x 1 - no mover",
         "comment": "2/10 - pre reserva\nHab. Single\nno mover\nIn: 12/2/27 Out: 25/2/27\nTarifa x d: $ 170.000.- $ 149.000.-\nTotal x 13 d: $ 2.000.000.-\nSeña a Luli: $ 600.000.-\nTel: 011 1569418130\nCorreo: rraulrossini@gmail.com"
-      }
+      },
+      "nightlyRateArs": 170000,
+      "nightlyRatesArs": [
+        170000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2000000,
+      "nightsQuoted": 13,
+      "agreedPriceArs": 2000000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 600000,
+          "amountArs": 600000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña a Luli: $ 600.000.-"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -636,7 +1069,6 @@
       "guest": "Osvaldo Cordero x 4 no mover",
       "status": "CONFIRMADA",
       "price": "1775000",
-      "nightlyRateArs": 355000,
       "notes": "28/9\nDepto. x 4 - planta baja\nIn: 27/12/26 Out: 1/1/27\nTarifa x d: $ 355.000.-\nTotal x 5 d: $ 1.775.000.-\nSeña: $ 177.500.- 30/9/26\nTel: 0223 155333608\nCorreo: sagoc2009@hotmail.com\n",
       "channel": "Excel",
       "doNotMove": true,
@@ -648,7 +1080,31 @@
       "raw": {
         "cellValue": "Osvaldo Cordero x 4 no mover",
         "comment": "28/9\nDepto. x 4 - planta baja\nIn: 27/12/26 Out: 1/1/27\nTarifa x d: $ 355.000.-\nTotal x 5 d: $ 1.775.000.-\nSeña: $ 177.500.- 30/9/26\nTel: 0223 155333608\nCorreo: sagoc2009@hotmail.com\n"
-      }
+      },
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1775000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1775000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 177500,
+          "amountArs": 177500,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-30",
+          "raw": "Seña: $ 177.500.- 30/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -661,7 +1117,6 @@
       "guest": "Marchese x4",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "Viene con hab. 25",
       "channel": "Excel",
       "doNotMove": false,
@@ -675,7 +1130,19 @@
       "raw": {
         "cellValue": "Marchese x4",
         "comment": "Viene con hab. 25"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -688,7 +1155,6 @@
       "guest": "Ernesto Catani x 1 no mover",
       "status": "CONFIRMADA",
       "price": "694000",
-      "nightlyRateArs": 149000,
       "notes": "08/10\nHab. Single con balcón\nIn: 25/2/27 Out: 2/3/27\nTarifa x d: $ 149.000.- $ 98.000.-\nTotal x 5 d: $ 694.000.-\nSeña: $ 70.000.- 08/10/26\nTel: 0228415535000\nCorreo: titocatani@hotmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -700,7 +1166,31 @@
       "raw": {
         "cellValue": "Ernesto Catani x 1 no mover",
         "comment": "08/10\nHab. Single con balcón\nIn: 25/2/27 Out: 2/3/27\nTarifa x d: $ 149.000.- $ 98.000.-\nTotal x 5 d: $ 694.000.-\nSeña: $ 70.000.- 08/10/26\nTel: 0228415535000\nCorreo: titocatani@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 694000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 694000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 70000,
+          "amountArs": 70000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 70.000.- 08/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -713,7 +1203,6 @@
       "guest": "Neli Senga x 2 camas p. baja",
       "status": "CONFIRMADA",
       "price": "1350000",
-      "nightlyRateArs": 270000,
       "notes": "7/10\nHab. Doble Twin -. planta baja\nIn: 1/2/27 Out: 6/2/27\nTarifa x d: $ 270.000.-\nTotal x 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 8/10/26\nTel: 02342457027\nCorreo: nelisenga-7@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -725,7 +1214,31 @@
       "raw": {
         "cellValue": "Neli Senga x 2 camas p. baja",
         "comment": "7/10\nHab. Doble Twin -. planta baja\nIn: 1/2/27 Out: 6/2/27\nTarifa x d: $ 270.000.-\nTotal x 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 8/10/26\nTel: 02342457027\nCorreo: nelisenga-7@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 135.000.- 8/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -738,7 +1251,6 @@
       "guest": "Carmen y Carlos Segreti x 2 mat con balcón",
       "status": "CONFIRMADA",
       "price": "1880000",
-      "nightlyRateArs": 235000,
       "notes": "22/9\nHab. mat\nIn: 21/2/27 Out: 1/3/27\nTarifa x d: $ 235.000.-\nTotal x 8 d: $ 1.880.000.-\nSeña: $ 165.000.- 22/9/26\nTel: 011 1540946543\nCorreo: carlossegreti@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -750,7 +1262,31 @@
       "raw": {
         "cellValue": "Carmen y Carlos Segreti x 2 mat con balcón",
         "comment": "22/9\nHab. mat\nIn: 21/2/27 Out: 1/3/27\nTarifa x d: $ 235.000.-\nTotal x 8 d: $ 1.880.000.-\nSeña: $ 165.000.- 22/9/26\nTel: 011 1540946543\nCorreo: carlossegreti@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1880000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 1880000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 165000,
+          "amountArs": 165000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-22",
+          "raw": "Seña: $ 165.000.- 22/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -763,7 +1299,6 @@
       "guest": "SC De la Vega x 2        ->",
       "status": "CONFIRMADA",
       "price": "2430000",
-      "nightlyRateArs": 270000,
       "notes": "20/10\nHab. Doble\nIn: 10/1/27 Out: 19/1/27\nPasa a hab. 24\nTarifa x d: $ 270.000.-\nTotal x 9 d: $ 2.430.000.-\n",
       "channel": "Excel",
       "doNotMove": false,
@@ -777,7 +1312,21 @@
       "raw": {
         "cellValue": "SC De la Vega x 2        ->",
         "comment": "20/10\nHab. Doble\nIn: 10/1/27 Out: 19/1/27\nPasa a hab. 24\nTarifa x d: $ 270.000.-\nTotal x 9 d: $ 2.430.000.-\n"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2430000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2430000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -789,8 +1338,7 @@
       "dateSource": "comment",
       "guest": "Alejandro Canals x 2",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 270000,
+      "price": "1350000",
       "notes": "21/9\nHab. Mat\nIn: 23/1/27 Out: 28/1/27\nTarifa x d: $ 270.000.-\nTarifa total por 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 23/9/26\nViene con hab. 33 -\n Hicieron seña juntos ",
       "channel": "Excel",
       "doNotMove": false,
@@ -802,7 +1350,31 @@
       "raw": {
         "cellValue": "Alejandro Canals x 2",
         "comment": "21/9\nHab. Mat\nIn: 23/1/27 Out: 28/1/27\nTarifa x d: $ 270.000.-\nTarifa total por 5 d: $ 1.350.000.-\nSeña: $ 135.000.- 23/9/26\nViene con hab. 33 -\n Hicieron seña juntos "
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-23",
+          "raw": "Seña: $ 135.000.- 23/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -815,7 +1387,6 @@
       "guest": "Sc Eleonora Falcón x 1 - no mover",
       "status": "CONFIRMADA",
       "price": "2424000",
-      "nightlyRateArs": 149000,
       "notes": "17/10\nHab. Single - no mover\nIn: 4/1/27 Out: 19/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 15 d: $ 2.424.000.-\nTel: 011 15 50634187\nCorreo: eleonorafalcon@hotmail.com\nSeña a Luli:",
       "channel": "Excel",
       "doNotMove": true,
@@ -827,7 +1398,21 @@
       "raw": {
         "cellValue": "Sc Eleonora Falcón x 1 - no mover",
         "comment": "17/10\nHab. Single - no mover\nIn: 4/1/27 Out: 19/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 15 d: $ 2.424.000.-\nTel: 011 15 50634187\nCorreo: eleonorafalcon@hotmail.com\nSeña a Luli:"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2424000,
+      "nightsQuoted": 15,
+      "agreedPriceArs": 2424000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -840,7 +1425,6 @@
       "guest": "SC Valeria Verdino x 2",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "17/10\nDepto. x 2\nIn: 1/1/27 Out: 1/2/27\nTarifa x mes: $ 3.800.000.- (valor promedio x cliente)\nSeña a Luli: $ \nTel: 011 15 36575182\nCorreo: valeriaverdino@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -852,7 +1436,21 @@
       "raw": {
         "cellValue": "SC Valeria Verdino x 2",
         "comment": "17/10\nDepto. x 2\nIn: 1/1/27 Out: 1/2/27\nTarifa x mes: $ 3.800.000.- (valor promedio x cliente)\nSeña a Luli: $ \nTel: 011 15 36575182\nCorreo: valeriaverdino@hotmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_blank_amount"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -865,7 +1463,6 @@
       "guest": "Patricia Gauna x 1",
       "status": "CONFIRMADA",
       "price": "1064000",
-      "nightlyRateArs": 149000,
       "notes": "26/9\nHab. Single\nIn: 4/1/27 Out: 11/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 7 d: $ 1.064.000.-\nSeña: $ 106.400.- 29/9/26\nTel: 011 15 58258682\nCorreo: dominicumma@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -877,7 +1474,31 @@
       "raw": {
         "cellValue": "Patricia Gauna x 1",
         "comment": "26/9\nHab. Single\nIn: 4/1/27 Out: 11/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 7 d: $ 1.064.000.-\nSeña: $ 106.400.- 29/9/26\nTel: 011 15 58258682\nCorreo: dominicumma@gmail.com"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1064000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1064000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 106400,
+          "amountArs": 106400,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-29",
+          "raw": "Seña: $ 106.400.- 29/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -889,8 +1510,7 @@
       "dateSource": "comment",
       "guest": "Oscar Gonzalez x 3",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 338000,
+      "price": "1690000",
       "notes": "25/9\nHab. Triple\nIn: 5/2/27 Out: 10/2/27\nTarifa x d: $ 338.000.-\nTarifa total por 5 d: $ 1.690.000.-\nSeña: $ 169.000.- 27/9/26\nTel: 011 15 28983012\nCorreo: oscarjgonzalezg@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -902,7 +1522,31 @@
       "raw": {
         "cellValue": "Oscar Gonzalez x 3",
         "comment": "25/9\nHab. Triple\nIn: 5/2/27 Out: 10/2/27\nTarifa x d: $ 338.000.-\nTarifa total por 5 d: $ 1.690.000.-\nSeña: $ 169.000.- 27/9/26\nTel: 011 15 28983012\nCorreo: oscarjgonzalezg@gmail.com"
-      }
+      },
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1690000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1690000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 169000,
+          "amountArs": 169000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-27",
+          "raw": "Seña: $ 169.000.- 27/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -915,7 +1559,6 @@
       "guest": "Cozzi x 2 mat",
       "status": "CONFIRMADA",
       "price": "740000",
-      "nightlyRateArs": 235000,
       "notes": "14/10\nviene con hab. 7\nIn: 8/1/27 Out: 11/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 3 d: $ 740.000.-\nAbonó total de hab. con hab 7\nAbona diferencia x cena buffet",
       "channel": "Excel",
       "doNotMove": false,
@@ -927,7 +1570,23 @@
       "raw": {
         "cellValue": "Cozzi x 2 mat",
         "comment": "14/10\nviene con hab. 7\nIn: 8/1/27 Out: 11/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 3 d: $ 740.000.-\nAbonó total de hab. con hab 7\nAbona diferencia x cena buffet"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 740000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 740000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total de hab"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -940,7 +1599,6 @@
       "guest": "SC Lipschitz x 2 - no mover",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": 218000,
       "notes": "pre reserva\nHab. mat\nno mover\nIn: 22/12/26 Out: 19/1/27\nTarifa x d: $ 218.000.- $ 235.000.- $ 270.000.-\nTarifa total por 28 d: $ ",
       "channel": "Excel",
       "doNotMove": true,
@@ -952,7 +1610,21 @@
       "raw": {
         "cellValue": "SC Lipschitz x 2 - no mover",
         "comment": "pre reserva\nHab. mat\nno mover\nIn: 22/12/26 Out: 19/1/27\nTarifa x d: $ 218.000.- $ 235.000.- $ 270.000.-\nTarifa total por 28 d: $ "
-      }
+      },
+      "nightlyRateArs": 218000,
+      "nightlyRatesArs": [
+        218000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -965,7 +1637,6 @@
       "guest": "Marchese x2",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "Viene con hab. 25",
       "channel": "Excel",
       "doNotMove": false,
@@ -979,7 +1650,19 @@
       "raw": {
         "cellValue": "Marchese x2",
         "comment": "Viene con hab. 25"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -992,7 +1675,6 @@
       "guest": "Norma Murcian x 2  camas - con balcón",
       "status": "CONFIRMADA",
       "price": "2700000",
-      "nightlyRateArs": 270000,
       "notes": "28/9\nHab. Doble Twin con balcón\nIn: 4/2/27 Out: 14/2/27\nTarifa x d: $ 270.000.-\nTotal x 10 d: $ 2.700.000.-\nSeña: $ 500.000.- 28/9 /26\nTel: 0341 15 3400771\nCorreo: murciann@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1004,7 +1686,31 @@
       "raw": {
         "cellValue": "Norma Murcian x 2  camas - con balcón",
         "comment": "28/9\nHab. Doble Twin con balcón\nIn: 4/2/27 Out: 14/2/27\nTarifa x d: $ 270.000.-\nTotal x 10 d: $ 2.700.000.-\nSeña: $ 500.000.- 28/9 /26\nTel: 0341 15 3400771\nCorreo: murciann@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2700000,
+      "nightsQuoted": 10,
+      "agreedPriceArs": 2700000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 500000,
+          "amountArs": 500000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 500.000.-"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1017,7 +1723,6 @@
       "guest": "Liliana Traficante - x 2 no mover",
       "status": "CONFIRMADA",
       "price": "1645000",
-      "nightlyRateArs": 235000,
       "notes": "2/10\nHab. mat - no mover\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña a Luli: $ 1.000.000.- 17/10/26\nTel: 011 15 57827433\nCorreo: lilitavidoni@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": true,
@@ -1029,7 +1734,31 @@
       "raw": {
         "cellValue": "Liliana Traficante - x 2 no mover",
         "comment": "2/10\nHab. mat - no mover\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña a Luli: $ 1.000.000.- 17/10/26\nTel: 011 15 57827433\nCorreo: lilitavidoni@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 1000000,
+          "amountArs": 1000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-17",
+          "raw": "Seña a Luli: $ 1.000.000.- 17/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1042,7 +1771,6 @@
       "guest": "José Podestá - x 2 -  no mover",
       "status": "CONFIRMADA",
       "price": "2395000",
-      "nightlyRateArs": 235000,
       "notes": "21/9\nHab. mat - no mover\nIn: 9/1/27 Out: 18/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 9 d: $ 2.395.000.-\nAbona seña a Lu en USD 700 ($ 1.075.620.-) 5/10/26\nTel: 011 1541411008\nCorreo: josepodestamail@gmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -1054,7 +1782,31 @@
       "raw": {
         "cellValue": "José Podestá - x 2 -  no mover",
         "comment": "21/9\nHab. mat - no mover\nIn: 9/1/27 Out: 18/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 9 d: $ 2.395.000.-\nAbona seña a Lu en USD 700 ($ 1.075.620.-) 5/10/26\nTel: 011 1541411008\nCorreo: josepodestamail@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2395000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2395000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "USD",
+          "amountOriginal": 700,
+          "amountArs": 1075620,
+          "fxRateToArs": 1536.6,
+          "paidOn": "2026-10-05",
+          "raw": "Abona seña a Lu en USD 700 ($ 1.075.620.-) 5/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1067,7 +1819,6 @@
       "guest": "SC <- De la Vega x 2 no mover",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "20/10\nViene de hab. 19 con ángeles",
       "channel": "Excel",
       "doNotMove": true,
@@ -1079,7 +1830,19 @@
       "raw": {
         "cellValue": "SC <- De la Vega x 2 no mover",
         "comment": "20/10\nViene de hab. 19 con ángeles"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1092,7 +1855,6 @@
       "guest": "Haydee Lewin x 2",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "26/10\nDepto. La Esquinita x 2\nIn: 6/3/27 Out: 21/3/27\nTarifa x quincena: $ 2.205.000.-\nSeña: $ 220.500.- 27/10/26\nTel: 011 15 69091866\nCorreo: hlewin51@live.com.ar",
       "channel": "Excel",
       "doNotMove": false,
@@ -1104,7 +1866,29 @@
       "raw": {
         "cellValue": "Haydee Lewin x 2",
         "comment": "26/10\nDepto. La Esquinita x 2\nIn: 6/3/27 Out: 21/3/27\nTarifa x quincena: $ 2.205.000.-\nSeña: $ 220.500.- 27/10/26\nTel: 011 15 69091866\nCorreo: hlewin51@live.com.ar"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 220500,
+          "amountArs": 220500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-27",
+          "raw": "Seña: $ 220.500.- 27/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1117,7 +1901,6 @@
       "guest": "SC x 4 ->",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "pre reserva\nhijo de lipschitz x 4\npasa a 35 y 36",
       "channel": "Excel",
       "doNotMove": false,
@@ -1129,7 +1912,19 @@
       "raw": {
         "cellValue": "SC x 4 ->",
         "comment": "pre reserva\nhijo de lipschitz x 4\npasa a 35 y 36"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1142,7 +1937,6 @@
       "guest": "Edward Hansen x 2              *",
       "status": "CONFIRMADA",
       "price": "1175000",
-      "nightlyRateArs": 235000,
       "notes": "21/10\nHab. mat\nLlega x la noche - sale por la noche\nIn: 30/12/26 Out: 4/1/27 (3 x la noche)\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 21/10/26\nTel: 011 1534370007\nCorreo: ed.ale.hansen@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1154,7 +1948,31 @@
       "raw": {
         "cellValue": "Edward Hansen x 2              *",
         "comment": "21/10\nHab. mat\nLlega x la noche - sale por la noche\nIn: 30/12/26 Out: 4/1/27 (3 x la noche)\nTarifa x d: $ 235.000.-\nTotal x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 21/10/26\nTel: 011 1534370007\nCorreo: ed.ale.hansen@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 117.500.- 21/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1167,7 +1985,6 @@
       "guest": "Marchese x4",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "Viene con hab. 25",
       "channel": "Excel",
       "doNotMove": false,
@@ -1181,7 +1998,19 @@
       "raw": {
         "cellValue": "Marchese x4",
         "comment": "Viene con hab. 25"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1194,7 +2023,6 @@
       "guest": "Cecilia Podesta -x 1 no mover",
       "status": "CONFIRMADA",
       "price": "1509000",
-      "nightlyRateArs": 149000,
       "notes": "28/9\nHab. Single\nno mover\nIn: 9/1/27 Out: 18/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 9 d: $ 1.509.000.-\nSeña a Lu: $ 680.000.- 5/10/26\nTel: 011 15 55075241\nCorreo: podestacecilia@hotmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -1206,7 +2034,31 @@
       "raw": {
         "cellValue": "Cecilia Podesta -x 1 no mover",
         "comment": "28/9\nHab. Single\nno mover\nIn: 9/1/27 Out: 18/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 9 d: $ 1.509.000.-\nSeña a Lu: $ 680.000.- 5/10/26\nTel: 011 15 55075241\nCorreo: podestacecilia@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1509000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 1509000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 680000,
+          "amountArs": 680000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-05",
+          "raw": "Seña a Lu: $ 680.000.- 5/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1219,7 +2071,6 @@
       "guest": "Nelida Torrillo x 2 P. baja",
       "status": "CONFIRMADA",
       "price": "1175000",
-      "nightlyRateArs": 235000,
       "notes": "5/10\nHab. mat - planta baja\nIn: 27/12/26 Out: 1/1/27\nTarifa x d :$ 235.000.-\nTarifa total x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 6/10/26\nTel: 011 1541592228\nCorreo: nelidatorrillo@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1231,7 +2082,31 @@
       "raw": {
         "cellValue": "Nelida Torrillo x 2 P. baja",
         "comment": "5/10\nHab. mat - planta baja\nIn: 27/12/26 Out: 1/1/27\nTarifa x d :$ 235.000.-\nTarifa total x 5 d: $ 1.175.000.-\nSeña: $ 117.500.- 6/10/26\nTel: 011 1541592228\nCorreo: nelidatorrillo@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-06",
+          "raw": "Seña: $ 117.500.- 6/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1244,7 +2119,6 @@
       "guest": "Julio Cassanello x 2 planta baja",
       "status": "CONFIRMADA",
       "price": "1645000",
-      "nightlyRateArs": 235000,
       "notes": "23/9\nHab. mat - planta baja\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña: $ 164.500.- 24/9/26\nTel: 011 15 51652529\nCorreo: graciela_castiglione@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": false,
@@ -1256,7 +2130,31 @@
       "raw": {
         "cellValue": "Julio Cassanello x 2 planta baja",
         "comment": "23/9\nHab. mat - planta baja\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña: $ 164.500.- 24/9/26\nTel: 011 15 51652529\nCorreo: graciela_castiglione@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 164500,
+          "amountArs": 164500,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-24",
+          "raw": "Seña: $ 164.500.- 24/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1269,7 +2167,6 @@
       "guest": "Pedro Marchese x 1 - poner tacos en respaldo de sommier",
       "status": "CONFIRMADA",
       "price": "2596000",
-      "nightlyRateArs": 170000,
       "notes": "15/10\nHab. Single\nPoner tacos en respaldo\nIn: 12/2/27 Out: 1/3/27\nTarifa x d: $ 170.000.- $ 149.000.-\nTotal x 17 d: $ 2.596.000.-\nSeña a Luli: $ 250.000.- 20/10/26",
       "channel": "Excel",
       "doNotMove": false,
@@ -1281,7 +2178,31 @@
       "raw": {
         "cellValue": "Pedro Marchese x 1 - poner tacos en respaldo de sommier",
         "comment": "15/10\nHab. Single\nPoner tacos en respaldo\nIn: 12/2/27 Out: 1/3/27\nTarifa x d: $ 170.000.- $ 149.000.-\nTotal x 17 d: $ 2.596.000.-\nSeña a Luli: $ 250.000.- 20/10/26"
-      }
+      },
+      "nightlyRateArs": 170000,
+      "nightlyRatesArs": [
+        170000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2596000,
+      "nightsQuoted": 17,
+      "agreedPriceArs": 2596000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 250000,
+          "amountArs": 250000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-20",
+          "raw": "Seña a Luli: $ 250.000.- 20/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1294,7 +2215,6 @@
       "guest": "Irma Teresa Maio - x 2 camas",
       "status": "CONFIRMADA",
       "price": "2350000",
-      "nightlyRateArs": 235000,
       "notes": "3/10 (hizo reserva silvio liuzzi)\nHab. Doble - dos camas\nIn: 29/12/26, salida día 8/1/27\nTarifa x d: $ 235.000.- 3/10/26\nTotal x 10 d: $ 2.350.000.-\nSeña: $ 235.000.-\nTel: 011 15 50495509\nCorreo: silvioliuzzi@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1306,7 +2226,31 @@
       "raw": {
         "cellValue": "Irma Teresa Maio - x 2 camas",
         "comment": "3/10 (hizo reserva silvio liuzzi)\nHab. Doble - dos camas\nIn: 29/12/26, salida día 8/1/27\nTarifa x d: $ 235.000.- 3/10/26\nTotal x 10 d: $ 2.350.000.-\nSeña: $ 235.000.-\nTel: 011 15 50495509\nCorreo: silvioliuzzi@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2350000,
+      "nightsQuoted": 10,
+      "agreedPriceArs": 2350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 235000,
+          "amountArs": 235000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 235.000.-"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1318,8 +2262,7 @@
       "dateSource": "comment",
       "guest": "SC Hermano Sotelo Valenzuela x 4",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1260000",
       "notes": "14/10\nDepto. x 4\nIn: 1/2/27 Out: 8/2/27\nTarifa x semana: $ 1.260.000.-\nSeña con link: $ 126.000.-\nTel: 03413 15035664\nCorreo: marianasotelovalenzuela@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1331,7 +2274,19 @@
       "raw": {
         "cellValue": "SC Hermano Sotelo Valenzuela x 4",
         "comment": "14/10\nDepto. x 4\nIn: 1/2/27 Out: 8/2/27\nTarifa x semana: $ 1.260.000.-\nSeña con link: $ 126.000.-\nTel: 03413 15035664\nCorreo: marianasotelovalenzuela@gmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1260000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1260000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1394,7 +2349,6 @@
       "guest": "SC Verdino",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -1406,7 +2360,19 @@
       "raw": {
         "cellValue": "SC Verdino",
         "comment": null
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1418,8 +2384,7 @@
       "dateSource": "comment",
       "guest": "Mariana Valenzuela x 4",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1260000",
       "notes": "17/9\nDepto. x 4  - El Tilo\nIn: 1/2/27 Out: 8/2/27\nTarifa x semana: $ 1.260.000.- \nSeña: $ 126.000.- 30/9/26 con Visa link de pago\nTel: 03413 15035664\nCorreo: marianasotelovalenzuela@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1431,7 +2396,29 @@
       "raw": {
         "cellValue": "Mariana Valenzuela x 4",
         "comment": "17/9\nDepto. x 4  - El Tilo\nIn: 1/2/27 Out: 8/2/27\nTarifa x semana: $ 1.260.000.- \nSeña: $ 126.000.- 30/9/26 con Visa link de pago\nTel: 03413 15035664\nCorreo: marianasotelovalenzuela@gmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1260000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1260000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 126000,
+          "amountArs": 126000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-30",
+          "raw": "Seña: $ 126.000.- 30/9/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1444,7 +2431,6 @@
       "guest": "Belen Albar Diaz - x 4 - no mover",
       "status": "CONFIRMADA",
       "price": "4615000",
-      "nightlyRateArs": 355000,
       "notes": "3/10\nDepto. Hotelero x 4 -  no mover\nIn: 28/12/26 Out: 10/1/27\nTarifa x d: $ 355.000.-\nTotal x 13 d: $ 4.615.000.-\nSeña: $ 461.500.- 8/10/26\nTel: 02645 15010186\nCorreo: belenalbar@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": true,
@@ -1456,7 +2442,31 @@
       "raw": {
         "cellValue": "Belen Albar Diaz - x 4 - no mover",
         "comment": "3/10\nDepto. Hotelero x 4 -  no mover\nIn: 28/12/26 Out: 10/1/27\nTarifa x d: $ 355.000.-\nTotal x 13 d: $ 4.615.000.-\nSeña: $ 461.500.- 8/10/26\nTel: 02645 15010186\nCorreo: belenalbar@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4615000,
+      "nightsQuoted": 13,
+      "agreedPriceArs": 4615000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 461500,
+          "amountArs": 461500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 461.500.- 8/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1469,7 +2479,6 @@
       "guest": "Vanina Corrado x 4",
       "status": "CONFIRMADA",
       "price": "2856000",
-      "nightlyRateArs": 408000,
       "notes": "24/10\nDepto. Hotelero x 4\nIn: 01/02/27 Out: 8/2/27\nTarifa x d: $ 408.000.-\nTotal x 7 d: $ 2.856.000.-\nSeña: $ 285.600.- 24/10/26\nCorreo: corradovanina@gmail.com\nTel: 03415 15208582",
       "channel": "Excel",
       "doNotMove": false,
@@ -1481,7 +2490,31 @@
       "raw": {
         "cellValue": "Vanina Corrado x 4",
         "comment": "24/10\nDepto. Hotelero x 4\nIn: 01/02/27 Out: 8/2/27\nTarifa x d: $ 408.000.-\nTotal x 7 d: $ 2.856.000.-\nSeña: $ 285.600.- 24/10/26\nCorreo: corradovanina@gmail.com\nTel: 03415 15208582"
-      }
+      },
+      "nightlyRateArs": 408000,
+      "nightlyRatesArs": [
+        408000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2856000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2856000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 285600,
+          "amountArs": 285600,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-24",
+          "raw": "Seña: $ 285.600.- 24/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1494,7 +2527,6 @@
       "guest": "x 2 - reserva de Juli",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -1506,7 +2538,19 @@
       "raw": {
         "cellValue": "x 2 - reserva de Juli",
         "comment": null
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1519,7 +2563,6 @@
       "guest": "Bonilauri x 1",
       "status": "CONFIRMADA",
       "price": "246000",
-      "nightlyRateArs": 82000,
       "notes": "20/10\nHab. Single\nIn: 17/12/26 Out: 20/12/26\nTarifa x d: $ 82.000.-\nTotal x 3 d: $ 246.000.-\nSeña: $ 24.600.- 21/10/26\nTel: 011 15 56920595\nCorreo: marianabonilauri@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1531,7 +2574,31 @@
       "raw": {
         "cellValue": "Bonilauri x 1",
         "comment": "20/10\nHab. Single\nIn: 17/12/26 Out: 20/12/26\nTarifa x d: $ 82.000.-\nTotal x 3 d: $ 246.000.-\nSeña: $ 24.600.- 21/10/26\nTel: 011 15 56920595\nCorreo: marianabonilauri@gmail.com"
-      }
+      },
+      "nightlyRateArs": 82000,
+      "nightlyRatesArs": [
+        82000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 246000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 246000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 24600,
+          "amountArs": 24600,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 24.600.- 21/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1544,7 +2611,6 @@
       "guest": "Irma Udrizard x 1",
       "status": "CONFIRMADA",
       "price": "1043000",
-      "nightlyRateArs": 149000,
       "notes": "2/10\nHab. Single\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 149.000.-\nTotal x 7 d: $ 1.043.000.-\nSeña a Luli: $ 700.000.- 17/10/26\nTel:\nCorreo: iudrizard@gmail.com\nViene con Traficante",
       "channel": "Excel",
       "doNotMove": false,
@@ -1556,7 +2622,31 @@
       "raw": {
         "cellValue": "Irma Udrizard x 1",
         "comment": "2/10\nHab. Single\nIn: 2/1/27 Out: 9/1/27\nTarifa x d: $ 149.000.-\nTotal x 7 d: $ 1.043.000.-\nSeña a Luli: $ 700.000.- 17/10/26\nTel:\nCorreo: iudrizard@gmail.com\nViene con Traficante"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1043000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1043000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 700000,
+          "amountArs": 700000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-17",
+          "raw": "Seña a Luli: $ 700.000.- 17/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1569,7 +2659,6 @@
       "guest": "Graciela Herrera - x 2 no mover",
       "status": "CONFIRMADA",
       "price": "3535000",
-      "nightlyRateArs": 235000,
       "notes": "22/9\nHab. mat amplia - no mover\nIn: 3/1/27 Out: 17/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 14 d: $ 3.535.000.-\nSin seña - abona en hotel en USD\nTel: 02614 15682070\nCorreo: gracielaherrera213@gmail.com",
       "channel": "Excel",
       "doNotMove": true,
@@ -1581,7 +2670,21 @@
       "raw": {
         "cellValue": "Graciela Herrera - x 2 no mover",
         "comment": "22/9\nHab. mat amplia - no mover\nIn: 3/1/27 Out: 17/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 14 d: $ 3.535.000.-\nSin seña - abona en hotel en USD\nTel: 02614 15682070\nCorreo: gracielaherrera213@gmail.com"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 3535000,
+      "nightsQuoted": 14,
+      "agreedPriceArs": 3535000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1594,7 +2697,6 @@
       "guest": "Johanna Bauer x 4 - 1° piso y 2 baños",
       "status": "CONFIRMADA",
       "price": "4313000",
-      "nightlyRateArs": 355000,
       "notes": "26/9\nViene con hab. 2 Marini\nDepto. Hotelero x 4 - 1° piso y 2 baños\nIn: 30/12/26 Out: 11/1/27\nTarifa x d: $ 355.000.- $ 408.000.-\nTotal x 12 d: $ 4.313.000.-\nSeña a Luli: $ 3.000.000.-.3/10/26\nTel: 011 1561845590\nCorreo: titania713@hotmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1606,7 +2708,31 @@
       "raw": {
         "cellValue": "Johanna Bauer x 4 - 1° piso y 2 baños",
         "comment": "26/9\nViene con hab. 2 Marini\nDepto. Hotelero x 4 - 1° piso y 2 baños\nIn: 30/12/26 Out: 11/1/27\nTarifa x d: $ 355.000.- $ 408.000.-\nTotal x 12 d: $ 4.313.000.-\nSeña a Luli: $ 3.000.000.-.3/10/26\nTel: 011 1561845590\nCorreo: titania713@hotmail.com"
-      }
+      },
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4313000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 4313000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 3000000,
+          "amountArs": 3000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-03",
+          "raw": "Seña a Luli: $ 3.000.000.-.3/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1618,8 +2744,7 @@
       "dateSource": "comment",
       "guest": "BK Daniel Bonanno -  2 camas c/balcón",
       "status": "CONFIRMADA",
-      "price": "1645000",
-      "nightlyRateArs": 235000,
+      "price": "1431150",
       "notes": "5/10\nBooking\nHab. Doble twin con balcón\nIn: 30/12/26 Out: 6/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\n-dest. GENIUS del 13%: $ 1.431.150.-\nTel: 011 15 53877880\nCorreo:",
       "channel": "Booking",
       "doNotMove": false,
@@ -1631,7 +2756,21 @@
       "raw": {
         "cellValue": "BK Daniel Bonanno -  2 camas c/balcón",
         "comment": "5/10\nBooking\nHab. Doble twin con balcón\nIn: 30/12/26 Out: 6/1/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\n-dest. GENIUS del 13%: $ 1.431.150.-\nTel: 011 15 53877880\nCorreo:"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1431150,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1643,8 +2782,7 @@
       "dateSource": "comment",
       "guest": "BK Ana Luz La banca - x 2 mat",
       "status": "CONFIRMADA",
-      "price": "1890000",
-      "nightlyRateArs": 270000,
+      "price": "1663200",
       "notes": "2/10\nBooking\nHab. mat\nIn: 11/1/27 Out: 18/1/27\nTarifa x d: $ 270.000.-\nTotal x 7 d: $ 1.890.000.-\nDescuento GENIUS del 12 %: $ 1.663.200.-\nTel: 011 15 53378071\nCorreo:\n",
       "channel": "Booking",
       "doNotMove": false,
@@ -1656,7 +2794,21 @@
       "raw": {
         "cellValue": "BK Ana Luz La banca - x 2 mat",
         "comment": "2/10\nBooking\nHab. mat\nIn: 11/1/27 Out: 18/1/27\nTarifa x d: $ 270.000.-\nTotal x 7 d: $ 1.890.000.-\nDescuento GENIUS del 12 %: $ 1.663.200.-\nTel: 011 15 53378071\nCorreo:\n"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1890000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1663200,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1668,8 +2820,7 @@
       "dateSource": "julian_correction",
       "guest": "BK Silvia Paiges - x 4 camas",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": 421000,
+      "price": "2641000",
       "notes": "21/10\nBooking\nDepto. x 4 camas\nIn: 01/02/2027 Out: 08/02/2025\nTarifa x d: $ 421.000.-\nTarifa total por 7 d: $ 2.947.000.-\nTarifa final con descuento GENIUS del 11 %: $ 2.641.000.- (21/10)\nTel: 011 15 57009688\nCorreo:",
       "channel": "Booking",
       "doNotMove": false,
@@ -1684,7 +2835,21 @@
       "raw": {
         "cellValue": "BK Silvia Paiges - x 4 camas",
         "comment": "21/10\nBooking\nDepto. x 4 camas\nIn: 01/02/2027 Out: 08/02/2025\nTarifa x d: $ 421.000.-\nTarifa total por 7 d: $ 2.947.000.-\nTarifa final con descuento GENIUS del 11 %: $ 2.641.000.- (21/10)\nTel: 011 15 57009688\nCorreo:"
-      }
+      },
+      "nightlyRateArs": 421000,
+      "nightlyRatesArs": [
+        421000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2947000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2641000,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1697,7 +2862,6 @@
       "guest": "Marcela Bianchi x 2 camas con balcón",
       "status": "CONFIRMADA",
       "price": "1645000",
-      "nightlyRateArs": 235000,
       "notes": "15/10\nHab. twin con balcón\nIn: 15/2/27 Out: 22/2/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña: $ 164.500.- 16/10/26\nviene con La Esquinita",
       "channel": "Excel",
       "doNotMove": false,
@@ -1709,7 +2873,31 @@
       "raw": {
         "cellValue": "Marcela Bianchi x 2 camas con balcón",
         "comment": "15/10\nHab. twin con balcón\nIn: 15/2/27 Out: 22/2/27\nTarifa x d: $ 235.000.-\nTotal x 7 d: $ 1.645.000.-\nSeña: $ 164.500.- 16/10/26\nviene con La Esquinita"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 164500,
+          "amountArs": 164500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-16",
+          "raw": "Seña: $ 164.500.- 16/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1721,8 +2909,7 @@
       "dateSource": "comment",
       "guest": "Cynthia y Gastón x 4",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1575000",
       "notes": "20/10\nDepto. x 4\nIn: 8/2/27 Out: 15/2/27\nTarifa x semana: $ 1.575.000.-\nSeña: $ 157.500.- 21/10/26\nTel: 11 64352234\nCorreo: vanidelgado55@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1734,7 +2921,29 @@
       "raw": {
         "cellValue": "Cynthia y Gastón x 4",
         "comment": "20/10\nDepto. x 4\nIn: 8/2/27 Out: 15/2/27\nTarifa x semana: $ 1.575.000.-\nSeña: $ 157.500.- 21/10/26\nTel: 11 64352234\nCorreo: vanidelgado55@gmail.com"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1575000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1575000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 157500,
+          "amountArs": 157500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 157.500.- 21/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1746,8 +2955,7 @@
       "dateSource": "comment",
       "guest": "Laura Pereyra x 2 - con balcón",
       "status": "CONFIRMADA",
-      "price": "2430000",
-      "nightlyRateArs": 270000,
+      "price": "2187000",
       "notes": "19/9\nHab. Mat con balcón\nIn: 19/1/27 Out: 28/1/27\nTarifa x d: $ 270.000.-\nTotal x 9 d: $ 2.430.000.-\nFinal con descuento: $ 2.187.000.-\nAbona a Lu en USD 5/10/26\nA CUENTA: $ \nTel: 11 53781078\nCorreo: laurapereyra957@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1759,7 +2967,21 @@
       "raw": {
         "cellValue": "Laura Pereyra x 2 - con balcón",
         "comment": "19/9\nHab. Mat con balcón\nIn: 19/1/27 Out: 28/1/27\nTarifa x d: $ 270.000.-\nTotal x 9 d: $ 2.430.000.-\nFinal con descuento: $ 2.187.000.-\nAbona a Lu en USD 5/10/26\nA CUENTA: $ \nTel: 11 53781078\nCorreo: laurapereyra957@gmail.com"
-      }
+      },
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2430000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2187000,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1771,8 +2993,7 @@
       "dateSource": "comment",
       "guest": "Anabella Tiberi x 4",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "1335600",
       "notes": "6/10\nDepto. x 4\nIn: 2/1/27 Out: 9/1/27\nTarifa x semana: $ 1.335.600.-\nSeña: $ 135.000.- 8/10/26\nTel: 0346415563792\nCorreo: atiberi@outlook.es",
       "channel": "Excel",
       "doNotMove": false,
@@ -1784,7 +3005,29 @@
       "raw": {
         "cellValue": "Anabella Tiberi x 4",
         "comment": "6/10\nDepto. x 4\nIn: 2/1/27 Out: 9/1/27\nTarifa x semana: $ 1.335.600.-\nSeña: $ 135.000.- 8/10/26\nTel: 0346415563792\nCorreo: atiberi@outlook.es"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1335600,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1335600,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 135.000.- 8/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1797,7 +3040,6 @@
       "guest": "Nidia Marini x 1  - Planta baja",
       "status": "CONFIRMADA",
       "price": "1809000",
-      "nightlyRateArs": 149000,
       "notes": "26/9\nViene con hab. 8 y 9\nHab. Single planta baja\nIn: 30/12/26 Out: 11/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 12 d: $ 1.809.000.-\nSeña junto a Johanna",
       "channel": "Excel",
       "doNotMove": false,
@@ -1809,7 +3051,23 @@
       "raw": {
         "cellValue": "Nidia Marini x 1  - Planta baja",
         "comment": "26/9\nViene con hab. 8 y 9\nHab. Single planta baja\nIn: 30/12/26 Out: 11/1/27\nTarifa x d: $ 149.000.- $ 170.000.-\nTotal x 12 d: $ 1.809.000.-\nSeña junto a Johanna"
-      }
+      },
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1809000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 1809000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Seña junto a"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1822,7 +3080,6 @@
       "guest": "SC Alberto Garcia - x 4 -  dos mat",
       "status": "CONFIRMADA",
       "price": "2840000",
-      "nightlyRateArs": 355000,
       "notes": "29/9 pre-reserva\nDepto. hotelero x 4\ndos camas mat\nIn: 29/12/26 Out: 6/1/27\nTarifa x d: $ 355.000.-\nTarifa total x 8 d: $ 2.840.000.-\nSeña: $ 284.000.-\nTel: 02604 15557121\ncorreo: agarciaromin@gmail.com",
       "channel": "Excel",
       "doNotMove": false,
@@ -1834,7 +3091,31 @@
       "raw": {
         "cellValue": "SC Alberto Garcia - x 4 -  dos mat",
         "comment": "29/9 pre-reserva\nDepto. hotelero x 4\ndos camas mat\nIn: 29/12/26 Out: 6/1/27\nTarifa x d: $ 355.000.-\nTarifa total x 8 d: $ 2.840.000.-\nSeña: $ 284.000.-\nTel: 02604 15557121\ncorreo: agarciaromin@gmail.com"
-      }
+      },
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2840000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 2840000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 284000,
+          "amountArs": 284000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 284.000.-"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1847,7 +3128,6 @@
       "guest": "Cozzi x 2 camas",
       "status": "CONFIRMADA",
       "price": "740000",
-      "nightlyRateArs": 235000,
       "notes": "14/10\nViene con hab. 7\nIn: 8/1/27 Out: 11/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 3 d: $ 740.000.-\nAbonó total de hab. con hab. 7\nAbona diferencia x cena buffet",
       "channel": "Excel",
       "doNotMove": false,
@@ -1859,7 +3139,23 @@
       "raw": {
         "cellValue": "Cozzi x 2 camas",
         "comment": "14/10\nViene con hab. 7\nIn: 8/1/27 Out: 11/1/27\nTarifa x d: $ 235.000.- $ 270.000.-\nTotal x 3 d: $ 740.000.-\nAbonó total de hab. con hab. 7\nAbona diferencia x cena buffet"
-      }
+      },
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 740000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 740000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total de hab"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1871,8 +3167,7 @@
       "dateSource": "comment",
       "guest": "Marchese x1",
       "status": "CONFIRMADA",
-      "price": "",
-      "nightlyRateArs": null,
+      "price": "3867000",
       "notes": "28/9\nIn: 23/12/26 Out: 26/12/26\nReserva a cargo de pedro + diferencia de cena buffet. Resto de extras deben cargarse y cobrarse a cada habitación.\n1 hab. sgl x 3 d: $ 414.000.-\n1 hab. Dbl x 3 d: $ 654.000.-\n1 hab. tpl x 3 d: $ 819.000.-\n2 depto. x 4 x 3 d: $ 1.980.000.-\nTotal: $ 3.867.000.-\nSeña a Luli: $ 3.000.000.- 20/10/26\nTel: 011 15 44264925\nCorreo: pedro11pam@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": false,
@@ -1886,7 +3181,29 @@
       "raw": {
         "cellValue": "Marchese x1",
         "comment": "28/9\nIn: 23/12/26 Out: 26/12/26\nReserva a cargo de pedro + diferencia de cena buffet. Resto de extras deben cargarse y cobrarse a cada habitación.\n1 hab. sgl x 3 d: $ 414.000.-\n1 hab. Dbl x 3 d: $ 654.000.-\n1 hab. tpl x 3 d: $ 819.000.-\n2 depto. x 4 x 3 d: $ 1.980.000.-\nTotal: $ 3.867.000.-\nSeña a Luli: $ 3.000.000.- 20/10/26\nTel: 011 15 44264925\nCorreo: pedro11pam@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": 3867000,
+      "nightsQuoted": null,
+      "agreedPriceArs": 3867000,
+      "agreedPriceSource": "total_bare",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 3000000,
+          "amountArs": 3000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-20",
+          "raw": "Seña a Luli: $ 3.000.000.- 20/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1899,7 +3216,6 @@
       "guest": "Dante Mereles x 5",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "23/9\nDepto. El Tilo\nIn: 1/1/27 Out: 1/2/27\nTarifa x mes: $ 4.788.900.-\nSeña: $ 2.394.450.- 6/10/26\nTel: 011 1569078768\nCorreo: dantemereles@yahoo.com.ar",
       "channel": "Excel",
       "doNotMove": false,
@@ -1911,7 +3227,29 @@
       "raw": {
         "cellValue": "Dante Mereles x 5",
         "comment": "23/9\nDepto. El Tilo\nIn: 1/1/27 Out: 1/2/27\nTarifa x mes: $ 4.788.900.-\nSeña: $ 2.394.450.- 6/10/26\nTel: 011 1569078768\nCorreo: dantemereles@yahoo.com.ar"
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 2394450,
+          "amountArs": 2394450,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-06",
+          "raw": "Seña: $ 2.394.450.- 6/10/26"
+        }
+      ],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1924,7 +3262,6 @@
       "guest": "Luli",
       "status": "CONFIRMADA",
       "price": "",
-      "nightlyRateArs": null,
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -1936,7 +3273,19 @@
       "raw": {
         "cellValue": "Luli",
         "comment": null
-      }
+      },
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [],
+      "moneyWarnings": []
     },
     {
       "source": "Libro de reservas",
@@ -1978,7 +3327,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1260000",
       "notes": "Link de pago - Visa",
       "channel": "Excel",
       "doNotMove": false,
@@ -1992,7 +3341,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC41:CI41 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1260000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1260000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 126000,
+          "amountArs": 126000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-30",
+          "raw": "Seña: $ 126.000.- 30/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2009,7 +3384,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Pago Total",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2187000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -2023,7 +3398,25 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BP27:BX27 score=10"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2430000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2187000,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2040,7 +3433,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2960000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -2054,7 +3447,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AY27:BJ27 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2960000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 2960000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 296000,
+          "amountArs": 296000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña a José Luis: $ 296.000.- 9/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2071,7 +3492,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "DESAYUNO",
-      "price": "",
+      "price": "2071000",
       "notes": "Con balcón - no mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2085,7 +3506,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AR34:BH34 score=9"
+      ],
+      "nightlyRateArs": 109000,
+      "nightlyRatesArs": [
+        109000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2071000,
+      "nightsQuoted": 17,
+      "agreedPriceArs": 2071000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 200000,
+          "amountArs": 200000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-10",
+          "raw": "Seña: $ 200.000.- 10/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2102,7 +3551,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2395000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2116,7 +3565,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BF8:BN8 score=8"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2395000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2395000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "USD",
+          "amountOriginal": 700,
+          "amountArs": 1075620,
+          "fxRateToArs": 1536.6,
+          "paidOn": "2026-10-05",
+          "raw": "Abona seña a Lu en USD 700 ($ 1.075.620.-) 5/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2133,7 +3610,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1690000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -2147,7 +3624,35 @@
         "estado": "Con Seña",
         "pax": "3 + bebe"
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BT36:BX36 score=10"
+      ],
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1690000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1690000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 169000,
+          "amountArs": 169000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-23",
+          "raw": "Seña: $ 169.000.- 23/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2164,7 +3669,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1350000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -2178,7 +3683,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BT37:BX37 score=10"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-23",
+          "raw": "Seña: $ 135.000.- 23/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2195,7 +3728,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "Sin seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "3535000",
       "notes": "Abona en USD -  no mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2209,7 +3742,25 @@
         "estado": "Sin seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AZ36:BM36 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 3535000,
+      "nightsQuoted": 14,
+      "agreedPriceArs": 3535000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2226,7 +3777,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1880000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -2240,7 +3791,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CW27:DD27 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1880000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 1880000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 165000,
+          "amountArs": 165000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-22",
+          "raw": "Seña: $ 165.000.- 22/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2257,7 +3836,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1645000",
       "notes": "Planta baja",
       "channel": "Excel",
       "doNotMove": false,
@@ -2271,7 +3850,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AY8:BE8 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 164500,
+          "amountArs": 164500,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-24",
+          "raw": "Seña: $ 164.500.- 24/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2288,7 +3895,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1690000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -2302,7 +3909,35 @@
         "estado": "Con Seña",
         "pax": 3.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CG31:CK31 score=10"
+      ],
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1690000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1690000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 169000,
+          "amountArs": 169000,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-27",
+          "raw": "Seña: $ 169.000.- 27/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2319,7 +3954,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1809000",
       "notes": "Planta baja",
       "channel": "Excel",
       "doNotMove": false,
@@ -2333,7 +3968,26 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AV7:BG7 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1809000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 1809000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Seña junto a",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2350,7 +4004,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "4313000",
       "notes": "1° piso, dos  baños",
       "channel": "Excel",
       "doNotMove": false,
@@ -2364,7 +4018,35 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AV12:BG13 score=8"
+      ],
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4313000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 4313000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 3000000,
+          "amountArs": 3000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-03",
+          "raw": "Seña a Luli: $ 3.000.000.-.3/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2381,7 +4063,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1064000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -2395,7 +4077,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BA28:BG28 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1064000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1064000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 106400,
+          "amountArs": 106400,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-29",
+          "raw": "Seña: $ 106.400.- 29/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2412,7 +4122,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1838700",
       "notes": "Pasa a vía de quedar libre - NO",
       "channel": "Excel",
       "doNotMove": false,
@@ -2426,7 +4136,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BT43:CB43 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": 1838700,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 1838700,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 200000,
+          "amountArs": 200000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-07",
+          "raw": "Seña: $ 200.000.- 7/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2443,7 +4179,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2700000",
       "notes": "Con balcón - dos camas",
       "channel": "Excel",
       "doNotMove": false,
@@ -2457,7 +4193,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CF32:CO32 score=10"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2700000,
+      "nightsQuoted": 10,
+      "agreedPriceArs": 2700000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 500000,
+          "amountArs": 500000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 500.000.-"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2474,7 +4238,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "3867000",
       "notes": "Poner tacos en respaldo",
       "channel": "Excel",
       "doNotMove": false,
@@ -2489,8 +4253,33 @@
         "pax": 1.0
       },
       "parseNotes": [
-        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
-      ]
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26",
+        "money_enriched_from:AO28:AQ28 score=9"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": 3867000,
+      "nightsQuoted": null,
+      "agreedPriceArs": 3867000,
+      "agreedPriceSource": "total_bare",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 3000000,
+          "amountArs": 3000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-20",
+          "raw": "Seña a Luli: $ 3.000.000.- 20/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2639,7 +4428,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1509000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2653,7 +4442,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BF30:BN30 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1509000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 1509000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 680000,
+          "amountArs": 680000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-05",
+          "raw": "Seña a Lu: $ 680.000.- 5/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2670,7 +4487,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1775000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2684,7 +4501,35 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AS10:AW10 score=10"
+      ],
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1775000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1775000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 177500,
+          "amountArs": 177500,
+          "fxRateToArs": null,
+          "paidOn": "2026-09-30",
+          "raw": "Seña: $ 177.500.- 30/9/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2701,7 +4546,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "4116000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2715,7 +4560,26 @@
         "estado": null,
         "pax": "3 + bb"
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AS6:BF6 score=10"
+      ],
+      "nightlyRateArs": 294000,
+      "nightlyRatesArs": [
+        294000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4116000,
+      "nightsQuoted": 14,
+      "agreedPriceArs": 4116000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_blank_amount",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2732,7 +4596,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2840000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2746,7 +4610,35 @@
         "estado": null,
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AU38:BB39 score=8"
+      ],
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2840000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 2840000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 284000,
+          "amountArs": 284000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 284.000.-"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2763,7 +4655,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2000000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2777,7 +4669,35 @@
         "estado": null,
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CN23:CZ23 score=10"
+      ],
+      "nightlyRateArs": 170000,
+      "nightlyRatesArs": [
+        170000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2000000,
+      "nightsQuoted": 13,
+      "agreedPriceArs": 2000000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 600000,
+          "amountArs": 600000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña a Luli: $ 600.000.-"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2794,7 +4714,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1645000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2808,7 +4728,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AY31:BE31 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 1000000,
+          "amountArs": 1000000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-17",
+          "raw": "Seña a Luli: $ 1.000.000.- 17/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2825,7 +4773,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1043000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -2839,7 +4787,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AY30:BE30 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1043000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1043000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 700000,
+          "amountArs": 700000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-17",
+          "raw": "Seña a Luli: $ 700.000.- 17/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2856,7 +4832,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1663200",
       "notes": "Booking",
       "channel": "Excel",
       "doNotMove": false,
@@ -2870,7 +4846,25 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BH25:BN25 score=11"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1890000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1663200,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2887,7 +4881,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "4615000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -2901,7 +4895,35 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AT9:BF9 score=11"
+      ],
+      "nightlyRateArs": 355000,
+      "nightlyRatesArs": [
+        355000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 4615000,
+      "nightsQuoted": 13,
+      "agreedPriceArs": 4615000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 461500,
+          "amountArs": 461500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 461.500.- 8/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2918,7 +4940,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1175000",
       "notes": "2 camas",
       "channel": "Excel",
       "doNotMove": false,
@@ -2932,7 +4954,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BB33:BF33 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-05",
+          "raw": "Seña: $ 117.500.- 5/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2949,7 +4999,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2350000",
       "notes": "2 camas",
       "channel": "Excel",
       "doNotMove": false,
@@ -2963,7 +5013,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AU24:BD24 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2350000,
+      "nightsQuoted": 10,
+      "agreedPriceArs": 2350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 235000,
+          "amountArs": 235000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 235.000.-"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -2980,7 +5058,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1431150",
       "notes": "Booking",
       "channel": "Excel",
       "doNotMove": false,
@@ -2994,7 +5072,25 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AV25:BB25 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1431150,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3011,7 +5107,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1175000",
       "notes": "Planta baja",
       "channel": "Excel",
       "doNotMove": false,
@@ -3025,7 +5121,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AS11:AW11 score=9"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-06",
+          "raw": "Seña: $ 117.500.- 6/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3042,7 +5166,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1335600",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3056,7 +5180,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AY43:BE43 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1335600,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1335600,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 135.000.- 8/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3073,7 +5223,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1350000",
       "notes": "Dos camas - Planta baja",
       "channel": "Excel",
       "doNotMove": false,
@@ -3087,7 +5237,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC11:CG11 score=10"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 135.000.- 8/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3104,7 +5282,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1430100",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3118,7 +5296,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC43:CI43 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1430100,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1430100,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 143100,
+          "amountArs": 143100,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña: $ 143.100.- 9/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3135,7 +5339,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "694000",
       "notes": "con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -3150,8 +5354,35 @@
         "pax": 1.0
       },
       "parseNotes": [
-        "julian: out 2026-03-02→2027-03-02"
-      ]
+        "julian: out 2026-03-02→2027-03-02",
+        "money_enriched_from:DA34:DE34 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 694000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 694000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 70000,
+          "amountArs": 70000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-08",
+          "raw": "Seña: $ 70.000.- 08/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3168,7 +5399,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1175000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3182,7 +5413,26 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AV20:AZ20 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Seña en hotel",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3199,7 +5449,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1350000",
       "notes": "Dos camas",
       "channel": "Excel",
       "doNotMove": false,
@@ -3213,7 +5463,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CA24:CE24 score=10"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1350000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1350000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 135000,
+          "amountArs": 135000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-09",
+          "raw": "Seña: $ 135.000.- 9/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3323,7 +5601,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Pago Total",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1985000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -3337,7 +5615,39 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BB11:BI11 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1985000,
+      "nightsQuoted": 8,
+      "agreedPriceArs": 1985000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": 64118,
+      "payments": [
+        {
+          "type": "FINAL",
+          "currency": "USD",
+          "amountOriginal": 3000,
+          "amountArs": null,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Abona a Luli total de 4 habitaciones: USD 3.000",
+          "note": "group_or_multi_room_total_possible"
+        }
+      ],
+      "moneyHints": [
+        "a_favor:64118",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": [
+        "usd_total_without_ars_fx"
+      ]
     },
     {
       "source": "Reservas",
@@ -3354,7 +5664,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Pago Total",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "740000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3368,7 +5678,26 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BE14:BG14 score=9"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 740000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 740000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total de hab",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3385,7 +5714,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Pago Total",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "740000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3399,7 +5728,26 @@
         "estado": "Pago Total",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BE24:BG24 score=9"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 740000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 740000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total de hab",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3430,7 +5778,33 @@
         "estado": "Con Seña",
         "pax": 5.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AX41:CB41 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 2394450,
+          "amountArs": 2394450,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-06",
+          "raw": "Seña: $ 2.394.450.- 6/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3461,7 +5835,33 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:DJ43:DX43 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": null,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": null,
+      "agreedPriceSource": null,
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 220500,
+          "amountArs": 220500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-27",
+          "raw": "Seña: $ 220.500.- 27/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3511,7 +5911,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1260000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3525,7 +5925,23 @@
         "estado": null,
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC40:CI40 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1260000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1260000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3542,7 +5958,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "3900000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -3556,7 +5972,25 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AU29:BJ29 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 3900000,
+      "nightsQuoted": 16,
+      "agreedPriceArs": 3900000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3573,7 +6007,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2097900",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3587,7 +6021,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CQ43:CW43 score=10"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 2097900,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 2097900,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 209000,
+          "amountArs": 209000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-16",
+          "raw": "Seña: $ 209.000.- 16/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3604,7 +6064,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2596000",
       "notes": "Poner tacos en respaldo",
       "channel": "Excel",
       "doNotMove": false,
@@ -3618,7 +6078,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CN28:DD28 score=10"
+      ],
+      "nightlyRateArs": 170000,
+      "nightlyRatesArs": [
+        170000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2596000,
+      "nightsQuoted": 17,
+      "agreedPriceArs": 2596000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 250000,
+          "amountArs": 250000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-20",
+          "raw": "Seña a Luli: $ 250.000.- 20/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3635,7 +6123,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1645000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -3649,7 +6137,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CQ32:CW32 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1645000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1645000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 164500,
+          "amountArs": 164500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-16",
+          "raw": "Seña: $ 164.500.- 16/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3697,7 +6213,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2424000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -3711,7 +6227,25 @@
         "estado": null,
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BA35:BO35 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2424000,
+      "nightsQuoted": 15,
+      "agreedPriceArs": 2424000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3728,7 +6262,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2820000",
       "notes": "No mover",
       "channel": "Excel",
       "doNotMove": true,
@@ -3742,7 +6276,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CQ16:DB16 score=11"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2820000,
+      "nightsQuoted": 12,
+      "agreedPriceArs": 2820000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 282000,
+          "amountArs": 282000,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 282.000.- 19/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3759,7 +6321,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2064000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3773,7 +6335,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AP31:AX31 score=10"
+      ],
+      "nightlyRateArs": 218000,
+      "nightlyRatesArs": [
+        218000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2064000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2064000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 206400,
+          "amountArs": 206400,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 206.400.- 19/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3790,7 +6380,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1628000",
       "notes": "Con balcón",
       "channel": "Excel",
       "doNotMove": false,
@@ -3804,7 +6394,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AR27:AX27 score=10"
+      ],
+      "nightlyRateArs": 218000,
+      "nightlyRatesArs": [
+        218000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1628000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 1628000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 162800,
+          "amountArs": 162800,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-19",
+          "raw": "Seña: $ 162.800.- 19/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3821,7 +6439,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "DESAYUNO",
-      "price": "",
+      "price": "246000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3835,7 +6453,35 @@
         "estado": "Con Seña",
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AI35:AK35 score=9"
+      ],
+      "nightlyRateArs": 82000,
+      "nightlyRatesArs": [
+        82000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 246000,
+      "nightsQuoted": 3,
+      "agreedPriceArs": 246000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 24600,
+          "amountArs": 24600,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 24.600.- 21/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3852,7 +6498,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Pago Total",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1635000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3866,7 +6512,26 @@
         "estado": "Pago Total",
         "pax": 3.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BE21:BI21 score=10"
+      ],
+      "nightlyRateArs": 294000,
+      "nightlyRatesArs": [
+        294000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1635000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1635000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "senia_text_only:Abonó total con hab",
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3883,7 +6548,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "SIN_DESAYUNO",
-      "price": "",
+      "price": "1575000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3897,7 +6562,33 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CJ43:CP43 score=9"
+      ],
+      "nightlyRateArs": null,
+      "nightlyRatesArs": [],
+      "weeklyRateArs": 1575000,
+      "totalArs": null,
+      "nightsQuoted": null,
+      "agreedPriceArs": 1575000,
+      "agreedPriceSource": "weekly",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 157500,
+          "amountArs": 157500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 157.500.- 21/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3914,7 +6605,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "894000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3928,7 +6619,25 @@
         "estado": null,
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BA23:BF23 score=10"
+      ],
+      "nightlyRateArs": 149000,
+      "nightlyRatesArs": [
+        149000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 894000,
+      "nightsQuoted": 6,
+      "agreedPriceArs": 894000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -3945,7 +6654,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2430000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -3959,7 +6668,25 @@
         "estado": null,
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BG23:BJ23 score=7"
+      ],
+      "nightlyRateArs": 270000,
+      "nightlyRatesArs": [
+        270000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2430000,
+      "nightsQuoted": 9,
+      "agreedPriceArs": 2430000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -4007,7 +6734,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "1175000",
       "notes": "Llega 30 x la noche-sale 3 x la noche",
       "channel": "Excel",
       "doNotMove": false,
@@ -4021,7 +6748,35 @@
         "estado": "Con Seña",
         "pax": 2.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:AV23:AZ23 score=10"
+      ],
+      "nightlyRateArs": 235000,
+      "nightlyRatesArs": [
+        235000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 1175000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 1175000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 117500,
+          "amountArs": 117500,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-21",
+          "raw": "Seña: $ 117.500.- 21/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -4038,7 +6793,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "880000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -4052,7 +6807,35 @@
         "estado": null,
         "pax": 1.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:BN34:BR34 score=10"
+      ],
+      "nightlyRateArs": 176000,
+      "nightlyRatesArs": [
+        176000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 880000,
+      "nightsQuoted": 5,
+      "agreedPriceArs": 880000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 88000,
+          "amountArs": 88000,
+          "fxRateToArs": null,
+          "paidOn": null,
+          "raw": "Seña: $ 88.000.-"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -4069,7 +6852,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2641000",
       "notes": "Booking - Cuatro camas",
       "channel": "Excel",
       "doNotMove": false,
@@ -4083,7 +6866,25 @@
         "estado": null,
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC12:CI13 score=8"
+      ],
+      "nightlyRateArs": 421000,
+      "nightlyRatesArs": [
+        421000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2947000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2641000,
+      "agreedPriceSource": "discounted_final",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -4100,7 +6901,7 @@
       "status": "PRERRESERVA",
       "paymentHint": "",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2513500",
       "notes": "Late check out - sale 18 hs.",
       "channel": "Excel",
       "doNotMove": false,
@@ -4114,7 +6915,25 @@
         "estado": null,
         "pax": 3.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC21:CJ21 score=10"
+      ],
+      "nightlyRateArs": 338000,
+      "nightlyRatesArs": [
+        338000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2513500,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2513500,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": 147500,
+      "creditArs": null,
+      "payments": [],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",
@@ -4131,7 +6950,7 @@
       "status": "CONFIRMADA",
       "paymentHint": "Con Seña",
       "serviceType": "MEDIA_PENSION",
-      "price": "",
+      "price": "2856000",
       "notes": "",
       "channel": "Excel",
       "doNotMove": false,
@@ -4145,7 +6964,35 @@
         "estado": "Con Seña",
         "pax": 4.0
       },
-      "parseNotes": []
+      "parseNotes": [
+        "money_enriched_from:CC22:CI22 score=10"
+      ],
+      "nightlyRateArs": 408000,
+      "nightlyRatesArs": [
+        408000
+      ],
+      "weeklyRateArs": null,
+      "totalArs": 2856000,
+      "nightsQuoted": 7,
+      "agreedPriceArs": 2856000,
+      "agreedPriceSource": "total_xd",
+      "lateCheckoutArs": null,
+      "creditArs": null,
+      "payments": [
+        {
+          "type": "SENIA",
+          "currency": "ARS",
+          "amountOriginal": 285600,
+          "amountArs": 285600,
+          "fxRateToArs": null,
+          "paidOn": "2026-10-24",
+          "raw": "Seña: $ 285.600.- 24/10/26"
+        }
+      ],
+      "moneyHints": [
+        "enriched_from_libro"
+      ],
+      "moneyWarnings": []
     },
     {
       "source": "Reservas",

@@ -57,11 +57,60 @@ IN_OUT_RE = re.compile(
     r"In:\s*(\d{1,2})/(\d{1,2})/(\d{2,4})\s*Out:\s*(\d{1,2})/(\d{1,2})/(\d{2,4})",
     re.I,
 )
-TARIFA_RE = re.compile(r"Tarifa\s*x\s*d[:\s]*\$?\s*([\d.]+)", re.I)
-TOTAL_RE = re.compile(r"Total\s*x\s*\d+\s*d[:\s]*\$?\s*([\d.]+)", re.I)
 NO_MOVER_RE = re.compile(r"no\s*mover", re.I)
 BOOKING_RE = re.compile(r"Booking", re.I)
 PAX_RE = re.compile(r"x\s*(\d+)", re.I)
+
+# Money patterns from Libro cell comments (ARS uses . as thousands separator).
+MONEY_TOKEN = r"([\d]{1,3}(?:\.\d{3})+|\d+)"
+NIGHTLY_RE = re.compile(
+    rf"Tarifa\s*x\s*d\s*:?\s*\$?\s*{MONEY_TOKEN}(?:\s*\$?\s*{MONEY_TOKEN})?",
+    re.I,
+)
+WEEKLY_RE = re.compile(
+    rf"(?:Tarifa\s*x\s*semana|Depto\.\s*x\s*\d+\s*semana)\s*:?\s*\$?\s*{MONEY_TOKEN}",
+    re.I,
+)
+TOTAL_XD_RE = re.compile(
+    rf"(?:Tarifa\s+)?Total(?:\s*x|\s+por)?\s*(\d+)\s*d(?:\s*\+\s*late\s*check\s*out)?\s*:?\s*\$?\s*{MONEY_TOKEN}",
+    re.I,
+)
+# e.g. "Tarifa x 9 d: $ 1.838.700.-" (no "Total" word)
+TARIFA_XD_RE = re.compile(
+    rf"Tarifa\s*x\s*(\d+)\s*d\s*:?\s*\$?\s*{MONEY_TOKEN}",
+    re.I,
+)
+TOTAL_BARE_RE = re.compile(rf"^Total\s*:?\s*\$?\s*{MONEY_TOKEN}", re.I | re.M)
+GENIUS_FINAL_RE = re.compile(
+    rf"(?:Tarifa\s+final\s+con\s+descuento|Final\s+con\s+descuento|Descuento\s+GENIUS|"
+    rf"-?\s*dest\.?\s*GENIUS)[^\n$]*\$\s*{MONEY_TOKEN}",
+    re.I,
+)
+LATE_RE = re.compile(rf"Late\s*check\s*out\s*:?\s*\$?\s*{MONEY_TOKEN}", re.I)
+A_FAVOR_RE = re.compile(rf"A\s+FAVOR\s*:?\s*\$?\s*{MONEY_TOKEN}", re.I)
+# Seña: $ 164.500.- 24/9/26  |  Seña a Luli: $ 600.000.-
+SENIA_ARS_RE = re.compile(
+    rf"Seña(?:\s+a\s+[\w\s]+?)?\s*:?\s*\$\s*{MONEY_TOKEN}"
+    rf"(?:\.-)?(?:\s*[.]?\s*(\d{{1,2}}/\d{{1,2}}/\d{{2,4}}))?",
+    re.I,
+)
+# Abona seña a Lu en USD 700 ($ 1.075.620.-) 5/10/26
+SENIA_USD_RE = re.compile(
+    rf"(?:Abona\s+)?[Ss]eña[^\n]*?\bUSD\s*{MONEY_TOKEN}"
+    rf"(?:\s*\(\s*\$\s*{MONEY_TOKEN}\s*\.-?\s*\))?"
+    rf"(?:\s*(\d{{1,2}}/\d{{1,2}}/\d{{2,4}}))?",
+    re.I,
+)
+# Abona a Lu total: $ 804.600.-  |  Abona a Luli total de 4 habitaciones: USD 3.000.-
+ABONA_TOTAL_RE = re.compile(
+    rf"Abon[aó]\w*\s+(?:a\s+\w+\s+)?total[^\n$]*?(?:USD\s*{MONEY_TOKEN}|\${MONEY_TOKEN})",
+    re.I,
+)
+EMPTY_SENIA_RE = re.compile(r"Seña(?:\s+a\s+\w+)?\s*:?\s*\$\s*$", re.I | re.M)
+SENIA_TEXT_ONLY_RE = re.compile(
+    r"Seña\s+(?:junto\s+a|en\s+hotel)|Abon[oó]\s+total\s+(?:de\s+hab|con\s+hab)",
+    re.I,
+)
 
 
 def parse_year(y: str) -> int:
@@ -74,6 +123,271 @@ def parse_money(s: str) -> int | None:
         return int(s.replace(".", "").replace(" ", ""))
     except ValueError:
         return None
+
+
+def parse_dmy(s: str | None) -> str | None:
+    if not s:
+        return None
+    m = re.match(r"(\d{1,2})/(\d{1,2})/(\d{2,4})$", s.strip())
+    if not m:
+        return None
+    d, mo, y = m.groups()
+    return date(parse_year(y), int(mo), int(d)).isoformat()
+
+
+def parse_comment_money(comment: str | None) -> dict:
+    """
+    Extract agreed price + payment hints from a Libro cell comment.
+    Returns structured money fields; never invents amounts from empty '$'.
+    """
+    empty = {
+        "nightlyRatesArs": [],
+        "nightlyRateArs": None,
+        "weeklyRateArs": None,
+        "totalArs": None,
+        "nightsQuoted": None,
+        "agreedPriceArs": None,
+        "agreedPriceSource": None,
+        "lateCheckoutArs": None,
+        "creditArs": None,
+        "payments": [],
+        "moneyHints": [],
+        "parseWarnings": [],
+    }
+    if not comment:
+        return empty
+
+    out = dict(empty)
+    out["nightlyRatesArs"] = []
+    out["payments"] = []
+    out["moneyHints"] = []
+    out["parseWarnings"] = []
+
+    nm = NIGHTLY_RE.search(comment)
+    if nm:
+        rates = [parse_money(g) for g in nm.groups() if g]
+        rates = [r for r in rates if r is not None]
+        out["nightlyRatesArs"] = rates
+        out["nightlyRateArs"] = rates[0] if rates else None
+
+    wm = WEEKLY_RE.search(comment)
+    if wm:
+        out["weeklyRateArs"] = parse_money(wm.group(1))
+
+    tm = TOTAL_XD_RE.search(comment)
+    if tm:
+        out["nightsQuoted"] = int(tm.group(1))
+        out["totalArs"] = parse_money(tm.group(2))
+
+    if out["totalArs"] is None:
+        tx = TARIFA_XD_RE.search(comment)
+        if tx:
+            out["nightsQuoted"] = int(tx.group(1))
+            out["totalArs"] = parse_money(tx.group(2))
+
+    if out["totalArs"] is None:
+        bm = TOTAL_BARE_RE.search(comment)
+        if bm:
+            out["totalArs"] = parse_money(bm.group(1))
+            out["agreedPriceSource"] = out["agreedPriceSource"] or "total_bare"
+
+    lm = LATE_RE.search(comment)
+    if lm:
+        out["lateCheckoutArs"] = parse_money(lm.group(1))
+
+    af = A_FAVOR_RE.search(comment)
+    if af:
+        out["creditArs"] = parse_money(af.group(1))
+        out["moneyHints"].append(f"a_favor:{out['creditArs']}")
+
+    # Prefer GENIUS / final discounted as agreed price when present.
+    gm = GENIUS_FINAL_RE.search(comment)
+    if gm:
+        discounted = parse_money(gm.group(1))
+        out["agreedPriceArs"] = discounted
+        out["agreedPriceSource"] = "discounted_final"
+    elif out["totalArs"] is not None:
+        out["agreedPriceArs"] = out["totalArs"]
+        out["agreedPriceSource"] = out["agreedPriceSource"] or "total_xd"
+    elif out["weeklyRateArs"] is not None:
+        # Single-week depto quotes often only state weekly total.
+        out["agreedPriceArs"] = out["weeklyRateArs"]
+        out["agreedPriceSource"] = "weekly"
+
+    # USD seña (check before ARS so "Seña … USD" doesn't become empty ARS)
+    for um in SENIA_USD_RE.finditer(comment):
+        usd = parse_money(um.group(1))
+        ars = parse_money(um.group(2)) if um.lastindex and um.lastindex >= 2 and um.group(2) else None
+        paid_on = parse_dmy(um.group(3) if um.lastindex and um.lastindex >= 3 else None)
+        if usd is None:
+            continue
+        fx = round(ars / usd, 4) if ars and usd else None
+        out["payments"].append(
+            {
+                "type": "SENIA",
+                "currency": "USD",
+                "amountOriginal": usd,
+                "amountArs": ars,
+                "fxRateToArs": fx,
+                "paidOn": paid_on,
+                "raw": um.group(0).strip()[:200],
+            }
+        )
+
+    for sm in SENIA_ARS_RE.finditer(comment):
+        # Skip if this span was already captured as USD seña
+        raw = sm.group(0)
+        if re.search(r"\bUSD\b", raw, re.I):
+            continue
+        ars = parse_money(sm.group(1))
+        if ars is None:
+            continue
+        paid_on = parse_dmy(sm.group(2) if sm.lastindex and sm.lastindex >= 2 else None)
+        out["payments"].append(
+            {
+                "type": "SENIA",
+                "currency": "ARS",
+                "amountOriginal": ars,
+                "amountArs": ars,
+                "fxRateToArs": None,
+                "paidOn": paid_on,
+                "raw": raw.strip()[:200],
+            }
+        )
+
+    for am in ABONA_TOTAL_RE.finditer(comment):
+        raw = am.group(0)
+        if re.search(r"\bUSD\b", raw, re.I):
+            usd_m = re.search(rf"USD\s*{MONEY_TOKEN}", raw, re.I)
+            usd = parse_money(usd_m.group(1)) if usd_m else None
+            if usd is None:
+                continue
+            out["payments"].append(
+                {
+                    "type": "FINAL",
+                    "currency": "USD",
+                    "amountOriginal": usd,
+                    "amountArs": None,
+                    "fxRateToArs": None,
+                    "paidOn": None,
+                    "raw": raw.strip()[:200],
+                    "note": "group_or_multi_room_total_possible",
+                }
+            )
+            out["parseWarnings"].append("usd_total_without_ars_fx")
+        else:
+            ars_m = re.search(rf"\$\s*{MONEY_TOKEN}", raw)
+            ars = parse_money(ars_m.group(1)) if ars_m else None
+            if ars is None:
+                continue
+            out["payments"].append(
+                {
+                    "type": "FINAL",
+                    "currency": "ARS",
+                    "amountOriginal": ars,
+                    "amountArs": ars,
+                    "fxRateToArs": None,
+                    "paidOn": None,
+                    "raw": raw.strip()[:200],
+                }
+            )
+
+    if EMPTY_SENIA_RE.search(comment):
+        out["moneyHints"].append("senia_blank_amount")
+    for tm_ in SENIA_TEXT_ONLY_RE.finditer(comment):
+        out["moneyHints"].append(f"senia_text_only:{tm_.group(0).strip()[:80]}")
+
+    return out
+
+
+def apply_money_fields(row: dict, money: dict) -> None:
+    """Attach parsed money onto an extracted row (mutates)."""
+    row["nightlyRateArs"] = money.get("nightlyRateArs")
+    row["nightlyRatesArs"] = money.get("nightlyRatesArs") or []
+    row["weeklyRateArs"] = money.get("weeklyRateArs")
+    row["totalArs"] = money.get("totalArs")
+    row["nightsQuoted"] = money.get("nightsQuoted")
+    row["agreedPriceArs"] = money.get("agreedPriceArs")
+    row["agreedPriceSource"] = money.get("agreedPriceSource")
+    row["lateCheckoutArs"] = money.get("lateCheckoutArs")
+    row["creditArs"] = money.get("creditArs")
+    row["payments"] = money.get("payments") or []
+    row["moneyHints"] = money.get("moneyHints") or []
+    row["moneyWarnings"] = money.get("parseWarnings") or []
+    # Back-compat: `price` string used by seed-excel agreedPriceArs
+    if money.get("agreedPriceArs") is not None:
+        row["price"] = str(money["agreedPriceArs"])
+    elif money.get("totalArs") is not None:
+        row["price"] = str(money["totalArs"])
+    else:
+        row.setdefault("price", "")
+
+
+def guest_tokens(text: str) -> set[str]:
+    return {
+        t
+        for t in re.findall(r"[A-Za-zÁÉÍÓÚÜáéíóúüÑñ]{3,}", (text or "").lower())
+        if t not in {"hab", "depto", "camas", "planta", "baja", "doble", "twin", "viene", "con", "mover", "booking"}
+    }
+
+
+def enrich_reservas_with_libro_money(rows: list[dict]) -> None:
+    """Copy comment money from Libro merges onto matching Reservas rows (seed prefers Reservas)."""
+    libro = [
+        r
+        for r in rows
+        if r.get("source") == "Libro de reservas" and r.get("classification") == "recoverable"
+    ]
+    for res in rows:
+        if res.get("source") != "Reservas" or res.get("classification") != "recoverable":
+            continue
+        if res.get("agreedPriceArs") or res.get("payments"):
+            continue
+        res_tokens = guest_tokens(
+            f"{res.get('guest','')} {res.get('firstName','')} {res.get('lastName','')}"
+        )
+        best = None
+        best_score = 0
+        for m in libro:
+            score = 0
+            if res.get("checkIn") and res["checkIn"] == m.get("checkIn"):
+                score += 3
+            if res.get("checkOut") and res["checkOut"] == m.get("checkOut"):
+                score += 2
+            if res.get("unit") and res["unit"] == m.get("unit"):
+                score += 2
+            # composite 8+9 vs physical 8/9
+            if res.get("unit") and m.get("unit") and (
+                res["unit"].startswith(m["unit"])
+                or m["unit"] in (res["unit"].split("+") if "+" in res["unit"] else [])
+            ):
+                score += 1
+            overlap = res_tokens & guest_tokens(m.get("guest") or "")
+            score += min(3, len(overlap))
+            if score > best_score and (overlap or res.get("unit") == m.get("unit")):
+                best_score = score
+                best = m
+        if best and best_score >= 4 and (best.get("agreedPriceArs") or best.get("payments")):
+            apply_money_fields(
+                res,
+                {
+                    "nightlyRateArs": best.get("nightlyRateArs"),
+                    "nightlyRatesArs": best.get("nightlyRatesArs") or [],
+                    "weeklyRateArs": best.get("weeklyRateArs"),
+                    "totalArs": best.get("totalArs"),
+                    "nightsQuoted": best.get("nightsQuoted"),
+                    "agreedPriceArs": best.get("agreedPriceArs"),
+                    "agreedPriceSource": best.get("agreedPriceSource"),
+                    "lateCheckoutArs": best.get("lateCheckoutArs"),
+                    "creditArs": best.get("creditArs"),
+                    "payments": best.get("payments") or [],
+                    "moneyHints": (best.get("moneyHints") or []) + ["enriched_from_libro"],
+                    "parseWarnings": best.get("moneyWarnings") or [],
+                },
+            )
+            res.setdefault("parseNotes", []).append(
+                f"money_enriched_from:{best.get('sourceRef')} score={best_score}"
+            )
 
 
 def sha256(path: Path) -> str:
@@ -121,19 +435,13 @@ def extract_merges(ws) -> list[dict]:
         merge_out = (d_end_night + timedelta(days=1)) if d_end_night else None
 
         cin = cout = None
-        tarifa = total = None
+        money = parse_comment_money(comment)
         if comment:
             mo = IN_OUT_RE.search(comment)
             if mo:
                 d1, m1, y1, d2, m2, y2 = mo.groups()
                 cin = date(parse_year(y1), int(m1), int(d1))
                 cout = date(parse_year(y2), int(m2), int(d2))
-            tm = TARIFA_RE.search(comment)
-            if tm:
-                tarifa = parse_money(tm.group(1))
-            tt = TOTAL_RE.search(comment)
-            if tt:
-                total = parse_money(tt.group(1))
 
         is_label = isinstance(val, str) and val.strip() in (
             room_raw,
@@ -253,30 +561,29 @@ def extract_merges(ws) -> list[dict]:
         channel = "Booking" if (comment and BOOKING_RE.search(comment)) else "Excel"
 
         confidence = "recoverable" if not issues else "ambiguous"
-        rows.append(
-            {
-                "source": "Libro de reservas",
-                "sourceRef": str(m),
-                "unit": unit or "",
-                "roomRaw": room_raw,
-                "checkIn": check_in.isoformat() if check_in else "",
-                "checkOut": check_out.isoformat() if check_out else "",
-                "dateSource": "comment" if cin else ("merge_seq" if d_start else None),
-                "guest": guest or "",
-                "status": "CONFIRMADA",
-                "price": str(total) if total is not None else "",
-                "nightlyRateArs": tarifa,
-                "notes": (comment or "")[:2000],
-                "channel": channel,
-                "doNotMove": do_not_move,
-                "adults": adults,
-                "confidence": "high" if confidence == "recoverable" else "low",
-                "classification": confidence,
-                "issues": issues,
-                "parseNotes": notes,
-                "raw": {"cellValue": val, "comment": comment},
-            }
-        )
+        row = {
+            "source": "Libro de reservas",
+            "sourceRef": str(m),
+            "unit": unit or "",
+            "roomRaw": room_raw,
+            "checkIn": check_in.isoformat() if check_in else "",
+            "checkOut": check_out.isoformat() if check_out else "",
+            "dateSource": "comment" if cin else ("merge_seq" if d_start else None),
+            "guest": guest or "",
+            "status": "CONFIRMADA",
+            "price": "",
+            "notes": (comment or "")[:2000],
+            "channel": channel,
+            "doNotMove": do_not_move,
+            "adults": adults,
+            "confidence": "high" if confidence == "recoverable" else "low",
+            "classification": confidence,
+            "issues": issues,
+            "parseNotes": notes,
+            "raw": {"cellValue": val, "comment": comment},
+        }
+        apply_money_fields(row, money)
+        rows.append(row)
 
     # Emit unit_header for named dept rows whose label isn't an A:B merge (e.g. A42 Romerito).
     header_units = {
@@ -662,11 +969,21 @@ def write_report(payload: dict, path: Path) -> None:
         "- `J31:K31`: merge vacío espurio → `ignore` (no reserva).",
         "- `A40:B40`, `A41`, `A42`, `A43`: headers de depto → `unit_header`.",
         "",
+        "## Money from comments",
+        "",
+        f"- Recoverable con `agreedPriceArs`: **{payload['counts'].get('withAgreedPrice', 0)}**",
+        f"- Recoverable con ≥1 payment parseado: **{payload['counts'].get('withPayments', 0)}** "
+        f"({payload['counts'].get('paymentsExtracted', 0)} pagos)",
+        f"- Filas Reservas enriquecidas desde Libro: **{payload['counts'].get('reservasEnrichedFromLibro', 0)}**",
+        "",
+        "Patrones: ver `docs/migration/excel-money-patterns.md`.",
+        "",
         "## Acción requerida",
         "",
         "- Revisar ambiguous restantes (si hay) antes de `ALLOW_EXCEL_SEED=1`.",
         "- `unit_header` / `ignore` / waitlist / noise **nunca** entran al seed.",
         "- Deptos: `D1` (Tilo), `D2` (Romerito), `D3` (Esquinita), `VIA_I`.",
+        "- Pagos USD sin FX / seña en blanco / totales multi-hab quedan en `moneyHints`/`moneyWarnings`.",
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
@@ -684,14 +1001,16 @@ def main() -> None:
     reservas = extract_reservas(wb[" Reservas"])
     waitlist = extract_waitlist(wb["Lista de espera Via I"])
     all_rows = apply_julian_corrections(merges + reservas + waitlist)
+    enrich_reservas_with_libro_money(all_rows)
 
     # refresh sheet-level counts after corrections
     merges = [r for r in all_rows if r.get("source") == "Libro de reservas"]
     reservas = [r for r in all_rows if r.get("source") == "Reservas"]
     waitlist = [r for r in all_rows if r.get("source") == "Lista de espera Via I"]
+    recoverable = [r for r in all_rows if r.get("classification") == "recoverable"]
 
     counts = {
-        "recoverable": sum(1 for r in all_rows if r.get("classification") == "recoverable"),
+        "recoverable": len(recoverable),
         "ambiguous": sum(1 for r in all_rows if r.get("classification") == "ambiguous"),
         "noise": sum(1 for r in all_rows if r.get("classification") == "noise"),
         "waitlist": sum(1 for r in all_rows if r.get("classification") == "waitlist"),
@@ -705,6 +1024,15 @@ def main() -> None:
         "bodyMerges": len(merges),
         "viaIBookingsRecoverable": sum(
             1 for r in all_rows if r.get("unit") == "VIA_I" and r.get("classification") == "recoverable"
+        ),
+        "withAgreedPrice": sum(1 for r in recoverable if r.get("agreedPriceArs")),
+        "withPayments": sum(1 for r in recoverable if r.get("payments")),
+        "paymentsExtracted": sum(len(r.get("payments") or []) for r in recoverable),
+        "reservasEnrichedFromLibro": sum(
+            1
+            for r in reservas
+            if r.get("classification") == "recoverable"
+            and any("enriched_from_libro" in h for h in (r.get("moneyHints") or []))
         ),
     }
 

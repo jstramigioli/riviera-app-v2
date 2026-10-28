@@ -1,6 +1,6 @@
 # Informe de datos ambiguos (no importar en silencio)
 
-Generado: 2026-10-28T17:40:07.730070Z
+Generado: 2026-10-28T17:46:24.668681Z
 Fuente: `Reservas_2026_2027.xlsx`
 SHA-256: `5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b`
 
@@ -74,8 +74,17 @@ Las reservas reales del depto (`unit=VIA_I`) ya están como recoverable: **5** (
 - `J31:K31`: merge vacío espurio → `ignore` (no reserva).
 - `A40:B40`, `A41`, `A42`, `A43`: headers de depto → `unit_header`.
 
+## Money from comments
+
+- Recoverable con `agreedPriceArs`: **116**
+- Recoverable con ≥1 payment parseado: **86** (86 pagos)
+- Filas Reservas enriquecidas desde Libro: **60**
+
+Patrones: ver `docs/migration/excel-money-patterns.md`.
+
 ## Acción requerida
 
 - Revisar ambiguous restantes (si hay) antes de `ALLOW_EXCEL_SEED=1`.
 - `unit_header` / `ignore` / waitlist / noise **nunca** entran al seed.
 - Deptos: `D1` (Tilo), `D2` (Romerito), `D3` (Esquinita), `VIA_I`.
+- Pagos USD sin FX / seña en blanco / totales multi-hab quedan en `moneyHints`/`moneyWarnings`.

@@ -50,6 +50,18 @@
 | `8 y 9` / `35 y 36` | `8+9` / `35+36` |
 | Tilo / Romerito / Esquinita / via I | `D1` / `D2` / `D3` / `VIA_I` |
 
+## Money from comments → seed
+
+Comments on Libro merges carry tarifas / totales / señas. Extract parses them into `agreedPriceArs` + `payments[]`; Reservas rows are enriched from matching Libro comments. Patterns: [`excel-money-patterns.md`](./excel-money-patterns.md).
+
+| Metric (this workbook) | Before money pass | After |
+|------------------------|------------------:|------:|
+| Recoverable with agreed price | ~44 Libro `price` only; Reservas **0** | **116** |
+| Parsed payments (seña/total) | **0** structured | **86** |
+| Reservas enriched from Libro | 0 | **60** |
+
+Seed creates `Payment` (SENIA/FINAL) when amounts parse; skips blank seña and USD without ARS/FX.
+
 ## Pipeline
 
 ```bash
