@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { createReservationAction } from "@/app/actions/reservations";
 import { autosaveQueryAction } from "@/app/actions/queries";
 import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
@@ -72,12 +72,20 @@ export function CreateStayPanel({ attributes, seed, onClose, onCreated }: Props)
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [pending, startTransition] = useTransition();
 
-  // Prefill unit when opening from a free cell
+  // Apply seed only when the panel opens with a new seed identity (don't fight user mode switches).
+  const seedKey = `${seed?.mode ?? ""}|${seed?.checkInDate ?? ""}|${seed?.checkOutDate ?? ""}|${seed?.physicalUnitId ?? ""}`;
+  const appliedSeedKey = useRef<string | null>(null);
   useEffect(() => {
+    if (appliedSeedKey.current === seedKey) return;
+    appliedSeedKey.current = seedKey;
     if (seed?.mode) setMode(seed.mode);
     if (seed?.checkInDate) setCheckInDate(seed.checkInDate);
-    if (seed?.checkOutDate) setCheckOutDate(seed.checkOutDate);
-  }, [seed?.mode, seed?.checkInDate, seed?.checkOutDate]);
+    if (seed?.checkOutDate) {
+      setCheckOutDate(seed.checkOutDate);
+    } else if (seed?.checkInDate) {
+      setCheckOutDate(shiftDay(seed.checkInDate, 2));
+    }
+  }, [seedKey, seed?.mode, seed?.checkInDate, seed?.checkOutDate]);
 
   useEffect(() => {
     if (!checkInDate || !checkOutDate || checkInDate >= checkOutDate) {
@@ -270,18 +278,28 @@ export function CreateStayPanel({ attributes, seed, onClose, onCreated }: Props)
           <button
             type="button"
             role="tab"
+            data-testid="mode-reserva"
             aria-selected={mode === "reserva"}
             className={mode === "reserva" ? "mode-switch-active" : ""}
-            onClick={() => switchMode("reserva")}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              switchMode("reserva");
+            }}
           >
             Reserva
           </button>
           <button
             type="button"
             role="tab"
+            data-testid="mode-consulta"
             aria-selected={mode === "consulta"}
             className={mode === "consulta" ? "mode-switch-active" : ""}
-            onClick={() => switchMode("consulta")}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              switchMode("consulta");
+            }}
           >
             Consulta
           </button>

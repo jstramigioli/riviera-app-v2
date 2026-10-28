@@ -303,6 +303,9 @@ a {
   display: flex;
   flex-direction: column;
   animation: drawerIn 0.28s ease both;
+  z-index: 30;
+  isolation: isolate;
+  pointer-events: auto;
 }
 
 @keyframes drawerIn {
@@ -317,23 +320,30 @@ a {
 }
 
 .mode-switch {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   padding: 0.2rem;
   border-radius: 0.65rem;
   border: 1px solid var(--line);
   background: #f7f3ea;
   gap: 0.15rem;
+  pointer-events: auto;
 }
 
 .mode-switch button {
   border: 0;
   background: transparent;
   border-radius: 0.5rem;
-  padding: 0.4rem 0.85rem;
+  padding: 0.55rem 1rem;
+  min-height: 2.25rem;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
