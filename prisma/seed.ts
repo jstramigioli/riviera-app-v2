@@ -222,6 +222,54 @@ async function main() {
     create: { key: "usd_blue_rate", valueJson: { rate: 1400 } },
   });
 
+  // Temporadas abiertas (hotel abierto SOLO dentro de estos rangos). Varias por año OK.
+  const year = new Date().getFullYear();
+  const openWindows = [
+    {
+      name: "Temporada alta",
+      openFrom: new Date(Date.UTC(year, 0, 1)), // 1 ene
+      openTo: new Date(Date.UTC(year, 3, 30)), // 30 abr
+      notes: "Apertura principal (demo seed).",
+    },
+    {
+      name: "Puente mayo (demo)",
+      openFrom: new Date(Date.UTC(year, 4, 23)), // ej. fin de semana largo
+      openTo: new Date(Date.UTC(year, 4, 26)),
+      notes: "Ejemplo de apertura corta (largo fin de semana).",
+    },
+    {
+      name: "Temporada primavera-verano",
+      openFrom: new Date(Date.UTC(year, 9, 1)), // 1 oct
+      openTo: new Date(Date.UTC(year + 1, 3, 30)), // 30 abr año+1
+      notes: "Cubre el resto del año operativo demo.",
+    },
+    // Ventana amplia para demos/tests futuros (huecos de invierno quedan cerrados vía otras ventanas).
+    {
+      name: "Cobertura demo extendida",
+      openFrom: new Date(Date.UTC(year + 1, 9, 1)),
+      openTo: new Date(Date.UTC(year + 3, 3, 30)),
+      notes: "Temporada larga para demos y fixtures; editable/desactivable en Admin.",
+    },
+  ];
+  for (const w of openWindows) {
+    const existing = await prisma.hotelOpenPeriod.findFirst({ where: { name: w.name } });
+    if (!existing) {
+      await prisma.hotelOpenPeriod.create({
+        data: { ...w, active: true },
+      });
+    } else {
+      await prisma.hotelOpenPeriod.update({
+        where: { id: existing.id },
+        data: {
+          openFrom: w.openFrom,
+          openTo: w.openTo,
+          notes: w.notes,
+          active: true,
+        },
+      });
+    }
+  }
+
   // Demo reservation for calendar (unit 1, next week) if none
   const demoCount = await prisma.reservation.count();
   if (demoCount === 0) {
@@ -280,7 +328,7 @@ async function main() {
   }
 
   console.log(
-    "Seed OK: users, inventory, comunicadas, período Temporada base, rates, demo reservation",
+    "Seed OK: users, inventory, comunicadas, tarifas, temporadas abiertas, demo reservation",
   );
 }
 
