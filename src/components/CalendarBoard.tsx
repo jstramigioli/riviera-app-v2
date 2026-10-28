@@ -309,11 +309,17 @@ export function CalendarBoard({ focusIso, attributes, initial }: Props) {
                   {monthSpans.map((span) => (
                     <div
                       key={span.key}
-                      className="shrink-0 border-r border-[var(--line)] px-1 py-1 text-center text-[11px] font-semibold capitalize text-[var(--brand-deep)]"
+                      className="relative shrink-0 border-r border-[var(--line)] py-1 text-[11px] font-semibold text-[var(--brand-deep)]"
                       style={{ width: span.count * CELL }}
                       title={span.label}
                     >
-                      <span className="block truncate">{span.label}</span>
+                      {/* Sticky so the month name stays visible while scrolling within that month */}
+                      <span
+                        className="sticky inline-block max-w-full truncate px-2"
+                        style={{ left: LABEL_W }}
+                      >
+                        {span.label}
+                      </span>
                     </div>
                   ))}
                 </div>
