@@ -26,7 +26,7 @@ export default async function ReciboPage({
 
   return (
     <div className="mx-auto max-w-xl space-y-4 fade-up">
-      <Link href={`/reservas/${payment.reservationId}`} className="text-xs text-[var(--muted)]">
+      <Link href={`/reservas/${payment.reservationId}`} className="text-link-back text-xs">
         ← Reserva
       </Link>
       <div className="panel rounded-xl p-6 print:shadow-none">

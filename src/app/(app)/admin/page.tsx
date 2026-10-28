@@ -76,7 +76,7 @@ export default async function AdminPage() {
         <p className="text-xs text-[var(--muted)]">
           Una sola lista: cada temporada activa abre el hotel en esas fechas y guarda los precios.
           Fuera de toda temporada activa el hotel figura cerrado. Se administran en{" "}
-          <Link href="/tarifas" className="underline">
+          <Link href="/tarifas" className="text-link">
             Tarifas
           </Link>
           .

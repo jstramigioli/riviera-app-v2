@@ -31,7 +31,7 @@ export default async function ConsultaDetailPage({
   if (query.status !== "OPEN") {
     return (
       <div className="space-y-4 fade-up max-w-2xl">
-        <Link href="/consultas" className="text-xs text-[var(--muted)]">
+        <Link href="/consultas" className="text-link-back text-xs">
           ← Consultas
         </Link>
         <h1
@@ -47,7 +47,7 @@ export default async function ConsultaDetailPage({
           <p>
             Convertida a{" "}
             <Link
-              className="text-[var(--brand)] font-semibold"
+              className="text-link font-semibold"
               href={`/reservas/${query.convertedReservation.id}`}
             >
               {query.convertedReservation.code}
@@ -62,7 +62,7 @@ export default async function ConsultaDetailPage({
     <div className="space-y-4 fade-up max-w-4xl">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/consultas" className="text-xs text-[var(--muted)]">
+          <Link href="/consultas" className="text-link-back text-xs">
             ← Consultas
           </Link>
           <h1
