@@ -5,7 +5,7 @@ import { prisma } from "./db";
 import { isoDate, toDateOnly } from "./dates";
 import { BLOCKING_STATUSES } from "./availability";
 import { RESERVATION_STATUS_COLOR } from "./status";
-import { calendarFocusDate, isDateClosed } from "./hotel-calendar";
+import { isDateClosed } from "./hotel-calendar";
 import { loadActiveOpenPeriods } from "./hotel-open";
 
 export { loadActiveOpenPeriods } from "./hotel-open";
@@ -38,10 +38,9 @@ export type CalendarUnitRow = {
   blocks: CalendarBlock[];
 };
 
+/** Calendar centers on system today (not next opening). */
 export async function resolveCalendarFocusIso(todayIso?: string): Promise<string> {
-  const today = todayIso ? toDateOnly(todayIso) : toDateOnly(isoDate(new Date()));
-  const periods = await loadActiveOpenPeriods();
-  return isoDate(calendarFocusDate(today, periods));
+  return todayIso ?? isoDate(new Date());
 }
 
 export async function loadCalendar(startIso: string, days: number) {
