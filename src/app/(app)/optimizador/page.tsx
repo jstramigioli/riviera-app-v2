@@ -6,7 +6,7 @@ export default function OptimizadorPage() {
   return (
     <div className="space-y-4 fade-up max-w-4xl">
       <div>
-        <Link href="/calendario" className="text-xs text-[var(--muted)]">
+        <Link href="/calendario" className="text-link-back text-xs">
           ← Calendario
         </Link>
         <h1

@@ -27,7 +27,7 @@ export default async function ReservasPage() {
           </h1>
           <p className="text-sm text-[var(--muted)]">
             Estado operativo ≠ estado de pago. Las consultas van en{" "}
-            <Link className="text-[var(--brand)]" href="/consultas">
+            <Link className="text-link" href="/consultas">
               Consultas
             </Link>
             .
@@ -61,7 +61,7 @@ export default async function ReservasPage() {
               return (
                 <tr key={r.id} className="border-b border-[var(--line)] hover:bg-white/50">
                   <td className="px-3 py-2">
-                    <Link className="font-semibold text-[var(--brand)]" href={`/reservas/${r.id}`}>
+                    <Link className="text-link font-semibold" href={`/reservas/${r.id}`}>
                       {r.code}
                     </Link>
                     {r.doNotMove ? (
@@ -71,7 +71,13 @@ export default async function ReservasPage() {
                     )}
                   </td>
                   <td className="px-3 py-2">
-                    {g ? `${g.lastName}, ${g.firstName}` : "—"}
+                    {g ? (
+                      <Link className="text-link" href={`/huespedes/${g.id}`}>
+                        {g.lastName}, {g.firstName}
+                      </Link>
+                    ) : (
+                      "—"
+                    )}
                     <span className="ml-1 text-xs text-[var(--muted)]">
                       · {r.adults + r.children} pax
                     </span>

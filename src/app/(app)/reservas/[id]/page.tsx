@@ -64,7 +64,7 @@ export default async function ReservaDetailPage({
     <div className="space-y-5 fade-up">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/calendario" className="text-xs text-[var(--muted)]">
+          <Link href="/calendario" className="text-link-back text-xs">
             ← Calendario
           </Link>
           <h1
@@ -278,7 +278,7 @@ export default async function ReservaDetailPage({
           <ul className="space-y-1 text-sm">
             {reservation.guests.map((rg) => (
               <li key={rg.id}>
-                <Link href={`/huespedes/${rg.guestId}`} className="text-[var(--brand)]">
+                <Link href={`/huespedes/${rg.guestId}`} className="text-link font-semibold">
                   {rg.guest.lastName}, {rg.guest.firstName}
                 </Link>{" "}
                 · {rg.role === "TITULAR" ? "Titular" : "Acompañante"}
@@ -335,7 +335,7 @@ export default async function ReservaDetailPage({
               {reservation.payments.map((p) => (
                 <tr key={p.id} className="border-t border-[var(--line)]">
                   <td className="py-1">
-                    <Link href={`/recibos/${p.id}`} className="text-[var(--brand)]">
+                    <Link href={`/recibos/${p.id}`} className="text-link">
                       {p.receiptNumber}
                     </Link>
                   </td>
