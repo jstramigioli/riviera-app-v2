@@ -171,21 +171,22 @@ model RatePeriod {
   @@index([validFrom, validTo])
 }
 
-/// Período de cierre del hotel (noches sin operación). Mismo patrón de rangos que RatePeriod.
-/// Fuera de estos rangos el hotel se considera abierto. Configurable vía seed/DB/admin — no hardcode.
-model HotelClosedPeriod {
+/// Temporada / ventana de apertura del hotel (Julián / D-08).
+/// El hotel está ABIERTO solo dentro de estos rangos (pueden ser varios al año,
+/// incluso un fin de semana largo). Fuera = cerrado. Configurable seed/DB/admin.
+model HotelOpenPeriod {
   id        String   @id @default(cuid())
   name      String
-  /// Inclusive: primera noche cerrada.
-  closedFrom DateTime @db.Date
-  /// Inclusive: última noche cerrada.
-  closedTo   DateTime @db.Date
+  /// Inclusive: primera noche abierta.
+  openFrom  DateTime @db.Date
+  /// Inclusive: última noche abierta.
+  openTo    DateTime @db.Date
   active    Boolean  @default(true)
   notes     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([closedFrom, closedTo])
+  @@index([openFrom, openTo])
 }
 
 model RatePlan {

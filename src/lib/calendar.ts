@@ -6,9 +6,9 @@ import { isoDate, toDateOnly } from "./dates";
 import { BLOCKING_STATUSES } from "./availability";
 import { RESERVATION_STATUS_COLOR } from "./status";
 import { calendarFocusDate, isDateClosed } from "./hotel-calendar";
-import { loadActiveClosedPeriods } from "./hotel-closed";
+import { loadActiveOpenPeriods } from "./hotel-open";
 
-export { loadActiveClosedPeriods } from "./hotel-closed";
+export { loadActiveOpenPeriods } from "./hotel-open";
 
 export type CalendarBlock = {
   reservationId: string;
@@ -40,7 +40,7 @@ export type CalendarUnitRow = {
 
 export async function resolveCalendarFocusIso(todayIso?: string): Promise<string> {
   const today = todayIso ? toDateOnly(todayIso) : toDateOnly(isoDate(new Date()));
-  const periods = await loadActiveClosedPeriods();
+  const periods = await loadActiveOpenPeriods();
   return isoDate(calendarFocusDate(today, periods));
 }
 
@@ -50,7 +50,7 @@ export async function loadCalendar(startIso: string, days: number) {
   const end = addDays(start, dayCount);
   const dayList = eachDayOfInterval({ start, end: addDays(end, -1) });
 
-  const [units, composites, segments, closedPeriods] = await Promise.all([
+  const [units, composites, segments, openPeriods] = await Promise.all([
     prisma.physicalUnit.findMany({
       where: { active: true },
       orderBy: { sortOrder: "asc" },
@@ -85,7 +85,7 @@ export async function loadCalendar(startIso: string, days: number) {
         },
       },
     }),
-    loadActiveClosedPeriods(),
+    loadActiveOpenPeriods(),
   ]);
 
   const blocksByUnit = new Map<string, CalendarBlock[]>();
@@ -120,7 +120,7 @@ export async function loadCalendar(startIso: string, days: number) {
     iso: format(d, "yyyy-MM-dd"),
     label: format(d, "dd", { locale: es }),
     weekday: format(d, "EEE", { locale: es }),
-    closed: isDateClosed(d, closedPeriods),
+    closed: isDateClosed(d, openPeriods),
   }));
 
   return {
@@ -128,11 +128,11 @@ export async function loadCalendar(startIso: string, days: number) {
     endIso: isoDate(end),
     dayCount,
     days: daysOut,
-    closedPeriods: closedPeriods.map((p) => ({
+    openPeriods: openPeriods.map((p) => ({
       id: p.id,
       name: p.name ?? "",
-      closedFrom: isoDate(p.closedFrom),
-      closedTo: isoDate(p.closedTo),
+      openFrom: isoDate(p.openFrom),
+      openTo: isoDate(p.openTo),
     })),
     units: units.map(
       (u): CalendarUnitRow => ({

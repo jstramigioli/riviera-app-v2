@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { listLiveAvailability } from "@/lib/availability";
 import { suggestPriceArs, suggestPriceBreakdown } from "@/lib/rates";
 import type { ServiceType } from "@prisma/client";
-import { loadActiveClosedPeriods } from "@/lib/hotel-closed";
+import { loadActiveOpenPeriods } from "@/lib/hotel-open";
 import { assertStayDatesOpen, closedNightsInStay } from "@/lib/hotel-calendar";
 import { isoDate } from "@/lib/dates";
 
@@ -25,11 +25,11 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const closedPeriods = await loadActiveClosedPeriods();
+    const openPeriods = await loadActiveOpenPeriods();
     try {
-      assertStayDatesOpen(checkInDate, checkOutDate, closedPeriods);
+      assertStayDatesOpen(checkInDate, checkOutDate, openPeriods);
     } catch (closedErr) {
-      const nights = closedNightsInStay(checkInDate, checkOutDate, closedPeriods).map(
+      const nights = closedNightsInStay(checkInDate, checkOutDate, openPeriods).map(
         isoDate,
       );
       return NextResponse.json(

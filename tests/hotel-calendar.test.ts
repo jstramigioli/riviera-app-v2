@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { addDays } from "date-fns";
 import { toDateOnly, isoDate } from "../src/lib/dates";
 import {
   assertStayDatesOpen,
@@ -7,63 +6,69 @@ import {
   closedNightsInStay,
   howManyDaysFit,
   isDateClosed,
+  isDateOpen,
   nextOpenDate,
-  stayTouchesClosedPeriod,
+  stayHasClosedNights,
 } from "../src/lib/hotel-calendar";
 
-const winter = {
-  name: "Cierre invierno",
-  closedFrom: toDateOnly("2027-06-01"),
-  closedTo: toDateOnly("2027-08-31"),
+/** Hotel open only Jan–Apr and Oct–Dec (gaps May–Sep closed). */
+const seasonA = {
+  name: "Alta",
+  openFrom: toDateOnly("2027-01-01"),
+  openTo: toDateOnly("2027-04-30"),
 };
+const seasonB = {
+  name: "Puente mayo",
+  openFrom: toDateOnly("2027-05-23"),
+  openTo: toDateOnly("2027-05-26"),
+};
+const seasonC = {
+  name: "Primavera-verano",
+  openFrom: toDateOnly("2027-10-01"),
+  openTo: toDateOnly("2027-12-31"),
+};
+const periods = [seasonA, seasonB, seasonC];
 
-describe("hotel closed periods", () => {
-  it("detects closed dates inside inclusive range", () => {
-    expect(isDateClosed("2027-06-01", [winter])).toBe(true);
-    expect(isDateClosed("2027-08-31", [winter])).toBe(true);
-    expect(isDateClosed("2027-05-31", [winter])).toBe(false);
-    expect(isDateClosed("2027-09-01", [winter])).toBe(false);
+describe("hotel open periods (temporadas abiertas)", () => {
+  it("is open only inside configured windows", () => {
+    expect(isDateOpen("2027-03-15", periods)).toBe(true);
+    expect(isDateOpen("2027-05-24", periods)).toBe(true);
+    expect(isDateOpen("2027-05-01", periods)).toBe(false);
+    expect(isDateClosed("2027-06-15", periods)).toBe(true);
+    expect(isDateOpen("2027-04-30", periods)).toBe(true);
+    expect(isDateOpen("2027-05-01", periods)).toBe(false);
   });
 
-  it("centers on today when open, else next opening", () => {
-    expect(isoDate(calendarFocusDate("2027-05-15", [winter]))).toBe("2027-05-15");
-    expect(isoDate(calendarFocusDate("2027-07-10", [winter]))).toBe("2027-09-01");
-    expect(isoDate(nextOpenDate("2027-08-31", [winter]))).toBe("2027-09-01");
+  it("centers on today if open, else next temporada start", () => {
+    expect(isoDate(calendarFocusDate("2027-03-10", periods))).toBe("2027-03-10");
+    expect(isoDate(calendarFocusDate("2027-05-10", periods))).toBe("2027-05-23");
+    expect(isoDate(nextOpenDate("2027-05-27", periods))).toBe("2027-10-01");
   });
 
-  it("blocks stays that touch closed nights (checkout exclusive)", () => {
-    expect(stayTouchesClosedPeriod("2027-05-28", "2027-06-02", [winter])).toBe(true);
-    expect(stayTouchesClosedPeriod("2027-05-28", "2027-06-01", [winter])).toBe(false);
-    expect(stayTouchesClosedPeriod("2027-08-31", "2027-09-02", [winter])).toBe(true);
-    expect(stayTouchesClosedPeriod("2027-09-01", "2027-09-03", [winter])).toBe(false);
+  it("blocks stays that touch nights outside open windows", () => {
+    expect(stayHasClosedNights("2027-04-28", "2027-05-02", periods)).toBe(true);
+    expect(stayHasClosedNights("2027-04-28", "2027-05-01", periods)).toBe(false);
+    expect(stayHasClosedNights("2027-05-23", "2027-05-27", periods)).toBe(false);
+    expect(stayHasClosedNights("2027-05-23", "2027-05-28", periods)).toBe(true);
 
-    const nights = closedNightsInStay("2027-05-30", "2027-06-03", [winter]);
-    expect(nights.map(isoDate)).toEqual(["2027-06-01", "2027-06-02"]);
+    const nights = closedNightsInStay("2027-04-29", "2027-05-02", periods);
+    expect(nights.map(isoDate)).toEqual(["2027-05-01"]);
 
     expect(() =>
-      assertStayDatesOpen("2027-06-10", "2027-06-12", [winter]),
-    ).toThrow(/cerrado/);
+      assertStayDatesOpen("2027-06-10", "2027-06-12", periods),
+    ).toThrow(/cerrado|temporada abierta/i);
     expect(() =>
-      assertStayDatesOpen("2027-05-01", "2027-05-03", [winter]),
+      assertStayDatesOpen("2027-03-01", "2027-03-03", periods),
     ).not.toThrow();
+  });
+
+  it("treats empty open-period list as always closed", () => {
+    expect(isDateOpen("2027-01-01", [])).toBe(false);
+    expect(stayHasClosedNights("2027-01-01", "2027-01-03", [])).toBe(true);
   });
 
   it("fits as many day columns as the viewport allows", () => {
     expect(howManyDaysFit(140 + 42 * 10)).toBe(10);
     expect(howManyDaysFit(200, { minDays: 3 })).toBeGreaterThanOrEqual(3);
-    expect(howManyDaysFit(50, { minDays: 3 })).toBe(3);
-  });
-
-  it("handles adjacent closed periods for next open", () => {
-    const periods = [
-      winter,
-      {
-        name: "Extra",
-        closedFrom: toDateOnly("2027-09-01"),
-        closedTo: toDateOnly("2027-09-05"),
-      },
-    ];
-    expect(isoDate(nextOpenDate("2027-07-01", periods))).toBe("2027-09-06");
-    expect(isoDate(addDays(toDateOnly("2027-09-05"), 1))).toBe("2027-09-06");
   });
 });

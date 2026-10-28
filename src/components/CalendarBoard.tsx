@@ -211,7 +211,7 @@ export function CalendarBoard({ focusIso, attributes, initial }: Props) {
           <p className="text-sm text-[var(--muted)] inline-flex flex-wrap items-center gap-1">
             Columnas según el ancho · scroll horizontal con más fechas · foco{" "}
             <strong className="font-semibold text-[var(--ink)]">{focusIso}</strong>
-            <HelpTooltip text="Si el hotel está cerrado hoy, el calendario se centra en la próxima apertura. Los días cerrados van grisados y no permiten crear." />
+            <HelpTooltip text="El hotel solo opera en temporadas abiertas (Admin). Si hoy no cae en una, el foco es el inicio de la próxima. Fuera = cerrado (grisado, sin alta)." />
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
