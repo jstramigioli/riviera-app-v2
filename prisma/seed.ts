@@ -158,12 +158,33 @@ async function main() {
 
   const comp = await prisma.commercialCategory.findUniqueOrThrow({ where: { code: "COMP" } });
 
-  // Sample rate plans
+  // Temporada base (plan tarifario) — montos solo vía seed/DB, no hardcode en UI
+  const from = startOfDay(new Date());
+  const to = addDays(from, 365);
+  let basePeriod = await prisma.ratePeriod.findFirst({
+    where: { name: "Temporada base" },
+  });
+  if (!basePeriod) {
+    basePeriod = await prisma.ratePeriod.create({
+      data: {
+        name: "Temporada base",
+        validFrom: from,
+        validTo: to,
+        active: true,
+      },
+    });
+  } else {
+    basePeriod = await prisma.ratePeriod.update({
+      where: { id: basePeriod.id },
+      data: { validFrom: from, validTo: to, active: true },
+    });
+  }
+
   for (const cat of [std, sup, dep, comp]) {
     for (const service of [ServiceType.SIN_DESAYUNO, ServiceType.DESAYUNO, ServiceType.MEDIA_PENSION]) {
       const name = `${cat.code} / ${service}`;
       const existing = await prisma.ratePlan.findFirst({
-        where: { commercialCategoryId: cat.id, serviceType: service, name },
+        where: { commercialCategoryId: cat.id, serviceType: service },
       });
       const plan =
         existing ??
@@ -175,16 +196,17 @@ async function main() {
           },
         }));
       const base =
-        cat.code === "DEP" ? 180000 : cat.code === "SUP" ? 140000 : 110000;
+        cat.code === "DEP" ? 180000 : cat.code === "SUP" ? 140000 : cat.code === "COMP" ? 200000 : 110000;
       const bump =
         service === ServiceType.MEDIA_PENSION ? 40000 : service === ServiceType.DESAYUNO ? 20000 : 0;
-      const from = startOfDay(new Date());
-      const to = addDays(from, 365);
-      const rateCount = await prisma.rate.count({ where: { ratePlanId: plan.id } });
-      if (rateCount === 0) {
+      const existingRate = await prisma.rate.findFirst({
+        where: { ratePlanId: plan.id, periodId: basePeriod.id },
+      });
+      if (!existingRate) {
         await prisma.rate.create({
           data: {
             ratePlanId: plan.id,
+            periodId: basePeriod.id,
             validFrom: from,
             validTo: to,
             amountArs: base + bump,
@@ -257,7 +279,9 @@ async function main() {
     });
   }
 
-  console.log("Seed OK: users, inventory 1–36 (sin 4/20), deptos, 8+9, 35+36, rates, demo reservation");
+  console.log(
+    "Seed OK: users, inventory, comunicadas, período Temporada base, rates, demo reservation",
+  );
 }
 
 main()

@@ -14,21 +14,18 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
-describe("PMS-9 consultas + conversion", () => {
-  const ids: { query?: string; reservation?: string; reservation2?: string } = {};
+describe("PMS-9/12 consultas + conversion", () => {
+  const ids: { query?: string; reservation?: string; reservation2?: string; reservation3?: string } =
+    {};
   let unit8: string;
-  let unit9: string;
   let balconId: string;
 
   beforeAll(async () => {
     const u8 = await prisma.physicalUnit.findUniqueOrThrow({ where: { code: "8" } });
-    const u9 = await prisma.physicalUnit.findUniqueOrThrow({ where: { code: "9" } });
     const balcon = await prisma.unitAttribute.findUniqueOrThrow({ where: { key: "balcon" } });
     unit8 = u8.id;
-    unit9 = u9.id;
     balconId = balcon.id;
 
-    // Ensure unit 8 has balcon for matching tests; unit without may vary by seed
     await prisma.unitAttributeLink.upsert({
       where: { unitId_attributeId: { unitId: unit8, attributeId: balconId } },
       update: {},
@@ -45,7 +42,7 @@ describe("PMS-9 consultas + conversion", () => {
       await prisma.queryRequirement.deleteMany({ where: { queryId: ids.query } });
       await prisma.query.delete({ where: { id: ids.query } }).catch(() => undefined);
     }
-    for (const rid of [ids.reservation, ids.reservation2]) {
+    for (const rid of [ids.reservation, ids.reservation2, ids.reservation3]) {
       if (!rid) continue;
       await prisma.query.updateMany({
         where: { convertedReservationId: rid },
@@ -64,11 +61,12 @@ describe("PMS-9 consultas + conversion", () => {
       checkOutDate: "2028-03-04",
       guestFirstName: "Ana",
       guestLastName: "Consulta",
-      structuredRequirements: [{ attributeId: balconId, kind: "MANDATORY" }],
+      structuredRequirements: [{ attributeId: balconId, kind: "DESIRED" }],
     });
     ids.query = q.id;
 
     expect(q.status).toBe("OPEN");
+    expect(q.structuredReqs.every((r) => r.kind === "DESIRED")).toBe(true);
     const segs = await prisma.assignmentSegment.count({
       where: { reservation: { code: q.code } },
     });
@@ -81,8 +79,7 @@ describe("PMS-9 consultas + conversion", () => {
     expect(live.candidates.some((c) => c.id === unit8 && c.kind === "unit")).toBe(true);
   });
 
-  it("softMandatory includes non-matching rooms with meetsMandatory=false", async () => {
-    // Pick a unit that does NOT have balcon
+  it("desired tags rank but never hard-filter (D-02)", async () => {
     const units = await prisma.physicalUnit.findMany({
       where: { active: true, kind: "HABITACION" },
       include: { attributes: true },
@@ -90,25 +87,20 @@ describe("PMS-9 consultas + conversion", () => {
     const without = units.find((u) => !u.attributes.some((a) => a.attributeId === balconId));
     expect(without).toBeTruthy();
 
-    const hard = await listLiveAvailability(prisma, {
+    const ranked = await listLiveAvailability(prisma, {
       checkInDate: "2028-03-10",
       checkOutDate: "2028-03-12",
-      mandatoryAttributeIds: [balconId],
-      softMandatory: false,
+      desiredAttributeIds: [balconId],
     });
-    expect(hard.candidates.every((c) => c.meetsMandatory)).toBe(true);
-    expect(hard.candidates.some((c) => c.id === without!.id)).toBe(false);
+    expect(ranked.candidates.some((c) => c.id === without!.id)).toBe(true);
+    const softHit = ranked.candidates.find((c) => c.id === without!.id && c.kind === "unit");
+    expect(softHit!.meetsAllDesired).toBe(false);
+    expect(softHit!.missingDesiredLabels.length).toBeGreaterThan(0);
 
-    const soft = await listLiveAvailability(prisma, {
-      checkInDate: "2028-03-10",
-      checkOutDate: "2028-03-12",
-      mandatoryAttributeIds: [balconId],
-      softMandatory: true,
-    });
-    const softHit = soft.candidates.find((c) => c.id === without!.id && c.kind === "unit");
-    expect(softHit).toBeTruthy();
-    expect(softHit!.meetsMandatory).toBe(false);
-    expect(softHit!.missingMandatoryLabels.length).toBeGreaterThan(0);
+    const withBalcon = ranked.candidates.find((c) => c.id === unit8);
+    expect(withBalcon?.meetsAllDesired).toBe(true);
+    // Matching rooms should rank first
+    expect(ranked.candidates[0]?.meetsAllDesired).toBe(true);
   });
 
   it("convert creates reservation with room; rejects without override when tags fail", async () => {
@@ -118,7 +110,7 @@ describe("PMS-9 consultas + conversion", () => {
       checkOutDate: "2028-04-03",
       guestFirstName: "Ana",
       guestLastName: "Consulta",
-      structuredRequirements: [{ attributeId: balconId, kind: "MANDATORY" }],
+      structuredRequirements: [{ attributeId: balconId, kind: "DESIRED" }],
     });
 
     const units = await prisma.physicalUnit.findMany({
@@ -134,7 +126,7 @@ describe("PMS-9 consultas + conversion", () => {
         physicalUnitId: without!.id,
         status: "PRERRESERVA",
       }),
-    ).rejects.toThrow(/características obligatorias/i);
+    ).rejects.toThrow(/características deseadas/i);
 
     const withBalcon = units.find((u) =>
       u.attributes.some((a) => a.attributeId === balconId),
@@ -156,13 +148,13 @@ describe("PMS-9 consultas + conversion", () => {
     expect(updatedQ.convertedReservationId).toBe(reservation.id);
   });
 
-  it("override conversion requires note and persists room despite missing tags", async () => {
+  it("override conversion requires note; can convert to IN_HOUSE (ingresada)", async () => {
     const q2 = await upsertQueryDraft({
       checkInDate: "2028-05-01",
       checkOutDate: "2028-05-03",
       guestFirstName: "Luis",
       guestLastName: "Override",
-      structuredRequirements: [{ attributeId: balconId, kind: "MANDATORY" }],
+      structuredRequirements: [{ attributeId: balconId, kind: "DESIRED" }],
     });
 
     const units = await prisma.physicalUnit.findMany({
@@ -175,23 +167,44 @@ describe("PMS-9 consultas + conversion", () => {
       convertQueryToReservation({
         queryId: q2.id,
         physicalUnitId: without!.id,
-        allowMandatoryOverride: true,
+        allowDesiredOverride: true,
       }),
     ).rejects.toThrow(/motivo/i);
 
     const reservation = await convertQueryToReservation({
       queryId: q2.id,
       physicalUnitId: without!.id,
-      allowMandatoryOverride: true,
+      allowDesiredOverride: true,
       overrideNote: "Cliente acepta sin balcón",
-      status: "PRERRESERVA",
+      status: "IN_HOUSE",
     });
     ids.reservation2 = reservation.id;
     expect(reservation.segments[0]?.physicalUnitId).toBe(without!.id);
+    expect(reservation.status).toBe("IN_HOUSE");
+    expect(reservation.priceFrozen).toBe(true);
     expect(reservation.notes || "").toMatch(/Override/);
 
     await prisma.queryRequirement.deleteMany({ where: { queryId: q2.id } });
     await prisma.query.delete({ where: { id: q2.id } });
+  });
+
+  it("convert to CONFIRMADA freezes price path", async () => {
+    const q3 = await upsertQueryDraft({
+      checkInDate: "2028-05-10",
+      checkOutDate: "2028-05-12",
+      guestFirstName: "Eva",
+      guestLastName: "Confirm",
+    });
+    const reservation = await convertQueryToReservation({
+      queryId: q3.id,
+      physicalUnitId: unit8,
+      status: "CONFIRMADA",
+      agreedPriceArs: 250000,
+    });
+    ids.reservation3 = reservation.id;
+    expect(reservation.status).toBe("CONFIRMADA");
+    expect(reservation.priceFrozen).toBe(true);
+    await prisma.query.delete({ where: { id: q3.id } }).catch(() => undefined);
   });
 });
 
@@ -207,7 +220,6 @@ describe("PMS-10 optimizer constraints", () => {
       orderBy: { sortOrder: "asc" },
       take: 6,
     });
-    // Prefer high numbers less likely used by other tests
     unitA = units[3]!.id;
     unitB = units[4]!.id;
     unitC = units[5]!.id;
@@ -264,7 +276,6 @@ describe("PMS-10 optimizer constraints", () => {
       end: "2028-06-04",
       status: "IN_HOUSE",
     });
-    // Flexible neighbor that could theoretically move
     await makeRes({
       code: `OPT-FL-${stamp}`,
       unitId: unitC,

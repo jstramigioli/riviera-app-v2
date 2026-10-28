@@ -234,7 +234,8 @@ a {
   color: var(--muted);
 }
 
-.tag-chip-preference {
+.tag-chip-preference,
+.tag-chip-desired {
   border-color: #93c5c3;
   background: #e8f5f4;
   color: var(--brand-deep);

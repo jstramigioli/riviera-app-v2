@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { RequirementKind, ReservationStatus, ServiceType } from "@prisma/client";
+import type { ReservationStatus, ServiceType } from "@prisma/client";
 import { requireUser } from "@/lib/auth";
 import {
   createReservation,
@@ -23,32 +23,49 @@ export async function createReservationAction(formData: FormData) {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  const mandatory = String(formData.get("mandatoryAttributeIds") || "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const preference = String(formData.get("preferenceAttributeIds") || "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  const structuredRequirements = [
-    ...mandatory.map((attributeId) => ({
-      attributeId,
-      kind: "MANDATORY" as RequirementKind,
-    })),
-    ...preference
-      .filter((id) => !mandatory.includes(id))
-      .map((attributeId) => ({
-        attributeId,
-        kind: "PREFERENCE" as RequirementKind,
-      })),
+  const desired = [
+    ...new Set(
+      [
+        ...String(formData.get("desiredAttributeIds") || "").split(","),
+        ...String(formData.get("mandatoryAttributeIds") || "").split(","),
+        ...String(formData.get("preferenceAttributeIds") || "").split(","),
+      ]
+        .map((s) => s.trim())
+        .filter(Boolean),
+    ),
   ];
+
+  const structuredRequirements = desired.map((attributeId) => ({
+    attributeId,
+    kind: "DESIRED" as const,
+  }));
+
+  const allowOverride =
+    formData.get("allowDesiredOverride") === "on" ||
+    formData.get("allowDesiredOverride") === "true" ||
+    formData.get("allowDesiredOverride") === "1" ||
+    formData.get("allowMandatoryOverride") === "on";
+  const overrideNote = String(formData.get("overrideNote") || "").trim();
 
   try {
     if (!physicalUnitId && !compositeUnitId) {
       throw new Error("Elegí una habitación disponible para esas fechas");
     }
+    if (allowOverride && !overrideNote) {
+      throw new Error(
+        "Para asignar una habitación que no cumple lo pedido, indicá el motivo",
+      );
+    }
+
+    const baseNotes = String(formData.get("notes") || "") || undefined;
+    const notes = [
+      baseNotes,
+      allowOverride && overrideNote
+        ? `Override características deseadas: ${overrideNote}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n") || undefined;
 
     const reservation = await createReservation({
       physicalUnitId,
@@ -60,7 +77,7 @@ export async function createReservationAction(formData: FormData) {
       status: (String(formData.get("status") || "PRERRESERVA") as ReservationStatus),
       channel: String(formData.get("channel") || "") || undefined,
       doNotMove: formData.get("doNotMove") === "on",
-      notes: String(formData.get("notes") || "") || undefined,
+      notes,
       structuredRequirements,
       adults: Number(formData.get("adults") || 2),
       children: Number(formData.get("children") || 0),
@@ -69,6 +86,7 @@ export async function createReservationAction(formData: FormData) {
         ? Number(formData.get("agreedPriceArs"))
         : null,
       freezePrice: formData.get("freezePrice") === "on",
+      allowDesiredOverride: allowOverride,
       userId: user.id,
     });
 

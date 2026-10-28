@@ -1,6 +1,7 @@
 import type { PrismaClient, ReservationStatus, ServiceType, UnitKind } from "@prisma/client";
 import { eachNight, rangesOverlap, toDateOnly } from "./dates";
 import { communicatingRoomsLabel, roomDisplayName } from "./labels";
+import { pickMostSpecificRate } from "./rates";
 
 const BLOCKING_STATUSES: ReservationStatus[] = [
   "PRERRESERVA",
@@ -161,11 +162,18 @@ export type AvailabilityCandidate = {
   unitKind?: UnitKind;
   attributeIds: string[];
   attributeLabels: string[];
-  preferenceHits: number;
-  meetsAllPreferences: boolean;
-  /** False when softMandatory and room lacks some mandatory tags. */
+  /** How many desired tags this room hits (D-02). */
+  desiredHits: number;
+  meetsAllDesired: boolean;
+  missingDesiredLabels: string[];
+  /** @deprecated alias of meetsAllDesired — kept for gradual UI migration */
   meetsMandatory: boolean;
+  /** @deprecated alias of missingDesiredLabels */
   missingMandatoryLabels: string[];
+  /** @deprecated alias of desiredHits */
+  preferenceHits: number;
+  /** @deprecated alias of meetsAllDesired */
+  meetsAllPreferences: boolean;
   capacityOk: boolean;
   commercialCategoryId: string | null;
   memberCodes?: string[];
@@ -188,12 +196,12 @@ export type LiveAvailabilityResult = {
 };
 
 /**
- * List rooms / communicating pairs free for [checkIn, checkOut),
- * filtered by mandatory attributes and ranked by preferences.
+ * List rooms / communicating pairs free for [checkIn, checkOut).
+ * Tags are **desired only** (D-02): they rank / highlight, never hard-filter.
+ * Rooms missing desired tags are included and flagged so recepción can override with warning.
  *
- * softMandatory: include rooms that miss mandatory tags (ranked lower,
- * flagged with meetsMandatory=false) — used when converting a consulta
- * so recepción can override with an explicit warning.
+ * Legacy params `mandatoryAttributeIds` / `preferenceAttributeIds` / `softMandatory`
+ * are merged into the desired set for backward-compatible callers/tests.
  */
 export async function listLiveAvailability(
   db: Db,
@@ -202,9 +210,13 @@ export async function listLiveAvailability(
     checkOutDate: string;
     adults?: number;
     children?: number;
+    desiredAttributeIds?: string[];
+    /** @deprecated merged into desired */
     mandatoryAttributeIds?: string[];
+    /** @deprecated merged into desired */
     preferenceAttributeIds?: string[];
     excludeReservationId?: string;
+    /** @deprecated ignored — desired tags never hard-filter */
     softMandatory?: boolean;
   },
 ): Promise<LiveAvailabilityResult> {
@@ -215,10 +227,13 @@ export async function listLiveAvailability(
   }
   const nights = eachNight(checkIn, checkOut).length;
   const guests = (input.adults ?? 2) + (input.children ?? 0);
-  const mandatoryIds = input.mandatoryAttributeIds ?? [];
-  const mandatory = new Set(mandatoryIds);
-  const preferences = input.preferenceAttributeIds ?? [];
-  const soft = Boolean(input.softMandatory);
+  const desiredIds = [
+    ...new Set([
+      ...(input.desiredAttributeIds ?? []),
+      ...(input.mandatoryAttributeIds ?? []),
+      ...(input.preferenceAttributeIds ?? []),
+    ]),
+  ];
 
   const units = await db.physicalUnit.findMany({
     where: { active: true },
@@ -235,10 +250,9 @@ export async function listLiveAvailability(
       attrLabelById.set(a.attributeId, a.attribute.label);
     }
   }
-  // Ensure we have labels even if no unit has the attr
-  if (mandatoryIds.length) {
+  if (desiredIds.length) {
     const attrs = await db.unitAttribute.findMany({
-      where: { id: { in: mandatoryIds } },
+      where: { id: { in: desiredIds } },
       select: { id: true, label: true },
     });
     for (const a of attrs) attrLabelById.set(a.id, a.label);
@@ -258,8 +272,10 @@ export async function listLiveAvailability(
     orderBy: { code: "asc" },
   });
 
-  const compCat = await db.commercialCategory.findFirst({
-    where: { code: "COMP" },
+  // Category for communicating rooms comes from DB catalog (seed), never hardcoded amounts.
+  const communicatingCat = await db.commercialCategory.findFirst({
+    where: { active: true, OR: [{ code: "COMP" }, { name: { contains: "comunicad", mode: "insensitive" } }] },
+    orderBy: { sortOrder: "asc" },
   });
 
   const busySegments = await db.assignmentSegment.findMany({
@@ -281,15 +297,29 @@ export async function listLiveAvailability(
         rangesOverlap(checkIn, checkOut, s.startDate, s.endDate),
     );
 
+  function scoreCandidate(attributeIds: string[]) {
+    const missing = desiredIds.filter((id) => !attributeIds.includes(id));
+    const desiredHits = desiredIds.filter((id) => attributeIds.includes(id)).length;
+    const meetsAllDesired = missing.length === 0;
+    const missingLabels = missing.map((id) => attrLabelById.get(id) ?? id);
+    return {
+      desiredHits,
+      meetsAllDesired,
+      missingDesiredLabels: missingLabels,
+      // legacy aliases
+      preferenceHits: desiredHits,
+      meetsAllPreferences: meetsAllDesired,
+      meetsMandatory: meetsAllDesired,
+      missingMandatoryLabels: missingLabels,
+    };
+  }
+
   const candidates: AvailabilityCandidate[] = [];
 
   for (const u of units) {
     if (!isUnitFree(u.id)) continue;
     const attributeIds = u.attributes.map((a) => a.attributeId);
-    const missingMandatory = mandatoryIds.filter((id) => !attributeIds.includes(id));
-    const meetsMandatory = missingMandatory.length === 0;
-    if (!meetsMandatory && !soft) continue;
-    const preferenceHits = preferences.filter((id) => attributeIds.includes(id)).length;
+    const scored = scoreCandidate(attributeIds);
     candidates.push({
       selectionKey: `unit:${u.id}`,
       kind: "unit",
@@ -300,13 +330,7 @@ export async function listLiveAvailability(
       unitKind: u.kind,
       attributeIds,
       attributeLabels: u.attributes.map((a) => a.attribute.label),
-      preferenceHits,
-      meetsAllPreferences:
-        preferences.length === 0 || preferenceHits === preferences.length,
-      meetsMandatory,
-      missingMandatoryLabels: missingMandatory.map(
-        (id) => attrLabelById.get(id) ?? id,
-      ),
+      ...scored,
       capacityOk: guests <= u.capacity,
       commercialCategoryId: u.commercialCategoryId,
     });
@@ -327,10 +351,7 @@ export async function listLiveAvailability(
       }
     }
     const attributeIds = [...attrSet];
-    const missingMandatory = mandatoryIds.filter((id) => !attributeIds.includes(id));
-    const meetsMandatory = missingMandatory.length === 0;
-    if (!meetsMandatory && !soft) continue;
-    const preferenceHits = preferences.filter((id) => attributeIds.includes(id)).length;
+    const scored = scoreCandidate(attributeIds);
     const firstMember = units.find((u) => u.id === c.members[0]?.unitId);
     candidates.push({
       selectionKey: `communicating:${c.id}`,
@@ -341,41 +362,35 @@ export async function listLiveAvailability(
       capacity,
       attributeIds,
       attributeLabels: [...attrLabels],
-      preferenceHits,
-      meetsAllPreferences:
-        preferences.length === 0 || preferenceHits === preferences.length,
-      meetsMandatory,
-      missingMandatoryLabels: missingMandatory.map(
-        (id) => attrLabelById.get(id) ?? id,
-      ),
+      ...scored,
       capacityOk: guests <= capacity,
-      commercialCategoryId: compCat?.id ?? firstMember?.commercialCategoryId ?? null,
+      commercialCategoryId:
+        communicatingCat?.id ?? firstMember?.commercialCategoryId ?? null,
       memberCodes: c.members.map((m) => m.unit.code),
     });
   }
 
   candidates.sort((a, b) => {
-    if (a.meetsMandatory !== b.meetsMandatory) return a.meetsMandatory ? -1 : 1;
-    if (b.preferenceHits !== a.preferenceHits) return b.preferenceHits - a.preferenceHits;
+    if (a.meetsAllDesired !== b.meetsAllDesired) return a.meetsAllDesired ? -1 : 1;
+    if (b.desiredHits !== a.desiredHits) return b.desiredHits - a.desiredHits;
     if (a.capacityOk !== b.capacityOk) return a.capacityOk ? -1 : 1;
     return a.code.localeCompare(b.code, undefined, { numeric: true });
   });
 
-  const matchingCount = candidates.filter((c) => c.meetsMandatory).length;
   const services = await listServiceAvailability(db, checkIn, checkOut);
 
   return {
     checkInDate: input.checkInDate,
     checkOutDate: input.checkOutDate,
     nights,
-    hasAvailability: soft ? candidates.length > 0 : matchingCount > 0,
-    availableCount: soft ? matchingCount : candidates.length,
+    hasAvailability: candidates.length > 0,
+    availableCount: candidates.length,
     candidates,
     services,
   };
 }
 
-/** A service type is “available” if there is rate coverage for every night. */
+/** A service type is “available” if there is rate coverage for every night (any category). */
 export async function listServiceAvailability(
   db: Db,
   checkIn: Date,
@@ -385,7 +400,9 @@ export async function listServiceAvailability(
   const serviceTypes: ServiceType[] = ["SIN_DESAYUNO", "DESAYUNO", "MEDIA_PENSION"];
   const plans = await db.ratePlan.findMany({
     where: { active: true },
-    include: { rates: true },
+    include: {
+      rates: { include: { period: { select: { id: true, name: true, active: true } } } },
+    },
   });
 
   return serviceTypes.map((serviceType) => {
@@ -394,48 +411,29 @@ export async function listServiceAvailability(
     let suggestedNightlyArs: number | null = null;
     for (const night of nights) {
       const covering = matching.flatMap((p) =>
-        p.rates.filter((r) => r.validFrom <= night && night <= r.validTo),
+        p.rates
+          .filter((r) => (!r.period || r.period.active) && r.validFrom <= night && night <= r.validTo)
+          .map((r) => ({
+            amountArs: Number(r.amountArs),
+            validFrom: r.validFrom,
+            validTo: r.validTo,
+            updatedAt: r.updatedAt,
+            periodId: r.periodId,
+            periodName: r.period?.name ?? null,
+          })),
       );
       if (covering.length === 0) {
         available = false;
         break;
       }
-      const amounts = covering.map((r) => Number(r.amountArs));
-      const min = Math.min(...amounts);
+      const picked = pickMostSpecificRate(covering);
+      const amount = picked?.amountArs ?? Math.min(...covering.map((c) => c.amountArs));
       suggestedNightlyArs =
-        suggestedNightlyArs == null ? min : Math.min(suggestedNightlyArs, min);
+        suggestedNightlyArs == null ? amount : Math.min(suggestedNightlyArs, amount);
     }
     if (!available) suggestedNightlyArs = null;
     return { serviceType, available, suggestedNightlyArs };
   });
 }
 
-export async function suggestPriceArs(
-  db: Db,
-  input: {
-    commercialCategoryId: string | null;
-    serviceType: ServiceType;
-    checkInDate: string;
-    checkOutDate: string;
-  },
-): Promise<number | null> {
-  if (!input.commercialCategoryId) return null;
-  const nights = eachNight(toDateOnly(input.checkInDate), toDateOnly(input.checkOutDate));
-  if (nights.length === 0) return null;
-  const plan = await db.ratePlan.findFirst({
-    where: {
-      active: true,
-      commercialCategoryId: input.commercialCategoryId,
-      serviceType: input.serviceType,
-    },
-    include: { rates: true },
-  });
-  if (!plan) return null;
-  let total = 0;
-  for (const night of nights) {
-    const rate = plan.rates.find((r) => r.validFrom <= night && night <= r.validTo);
-    if (!rate) return null;
-    total += Number(rate.amountArs);
-  }
-  return total;
-}
+export { suggestPriceArs, suggestPriceBreakdown } from "./rates";

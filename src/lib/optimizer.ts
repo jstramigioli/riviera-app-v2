@@ -39,7 +39,7 @@ type OccupancySeg = {
   doNotMove: boolean;
   code: string;
   guestName: string | null;
-  mandatoryIds: string[];
+  desiredIds: string[];
   segmentIds: string[];
   isSinglePhysical: boolean;
 };
@@ -161,9 +161,7 @@ export async function previewOccupancyOptimizer(
       doNotMove: r.doNotMove,
       code: r.code,
       guestName: guest ? `${guest.lastName}, ${guest.firstName}` : null,
-      mandatoryIds: r.structuredReqs
-        .filter((x) => x.kind === "MANDATORY")
-        .map((x) => x.attributeId),
+      desiredIds: r.structuredReqs.map((x) => x.attributeId),
       segmentIds: [seg.id],
       isSinglePhysical: r.segments.length === 1 && !r.segments[0]?.compositeUnitId,
     });
@@ -217,14 +215,16 @@ export async function previewOccupancyOptimizer(
     for (const u of units) {
       if (u.id === current.unitId) continue;
       const attrs = unitAttrs.get(u.id) ?? new Set();
-      if (!m.mandatoryIds.every((id) => attrs.has(id))) continue;
+      // Desired tags rank; never hard-block (D-02)
+      const desiredHits = m.desiredIds.filter((id) => attrs.has(id)).length;
+      const meetsDesired =
+        m.desiredIds.length === 0 || desiredHits === m.desiredIds.length;
       if (!isFree(sim, u.id, m.start, m.end, m.reservationId)) continue;
 
       const trial = sim.map((s) =>
         s.reservationId === m.reservationId ? { ...s, unitId: u.id } : s,
       );
       const score = gapScore(trial, unitIds, windowStart, windowEnd);
-      // Prefer lower gap score; tie-break: adjacency bonus (touching another stay)
       const adjacent = trial.some(
         (s) =>
           s.unitId === u.id &&
@@ -232,16 +232,28 @@ export async function previewOccupancyOptimizer(
           (s.end.getTime() === m.start.getTime() ||
             s.start.getTime() === m.end.getTime()),
       );
+      // Prefer: better gap score, then desired match, then adjacency
+      const currentBestAttrs = unitAttrs.get(bestUnit) ?? new Set();
+      const bestDesiredHits = m.desiredIds.filter((id) =>
+        currentBestAttrs.has(id),
+      ).length;
       const improved =
         score < bestScore ||
-        (score === bestScore && adjacent && u.id !== current.unitId && bestUnit === current.unitId);
+        (score === bestScore && desiredHits > bestDesiredHits) ||
+        (score === bestScore &&
+          desiredHits === bestDesiredHits &&
+          adjacent &&
+          u.id !== current.unitId &&
+          bestUnit === current.unitId);
 
       if (improved) {
         bestScore = score;
         bestUnit = u.id;
-        bestReason = adjacent
-          ? "Se junta con otra estadía (menos huecos)"
-          : "Reduce huecos libres entre reservas";
+        bestReason = !meetsDesired
+          ? "Reduce huecos (sin todas las características deseadas)"
+          : adjacent
+            ? "Se junta con otra estadía (menos huecos)"
+            : "Reduce huecos libres entre reservas";
       }
     }
 
@@ -343,21 +355,7 @@ export async function applyOccupancyOptimizer(
         );
       }
 
-      // Mandatory tags still apply unless room was already non-matching (we only propose matching)
-      const mandatory = await tx.reservationRequirement.findMany({
-        where: { reservationId: reservation.id, kind: "MANDATORY" },
-      });
-      if (mandatory.length) {
-        const links = await tx.unitAttributeLink.findMany({
-          where: { unitId: move.toUnitId },
-        });
-        const have = new Set(links.map((l) => l.attributeId));
-        if (mandatory.some((m) => !have.has(m.attributeId))) {
-          throw new Error(
-            `Destino no cumple características obligatorias (${reservation.code})`,
-          );
-        }
-      }
+      // Desired tags do not block apply (D-02); availability already checked above.
 
       await tx.assignmentSegment.update({
         where: { id: seg.id },

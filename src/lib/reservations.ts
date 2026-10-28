@@ -1,4 +1,4 @@
-import type { Prisma, RequirementKind, ReservationStatus, ServiceType } from "@prisma/client";
+import type { Prisma, ReservationStatus, ServiceType } from "@prisma/client";
 import { prisma } from "./db";
 import { assertAvailable, expandCompositeSegments, type SegmentInput } from "./availability";
 import { toDateOnly } from "./dates";
@@ -14,7 +14,8 @@ async function nextReservationCode(): Promise<string> {
 
 export type StructuredRequirementInput = {
   attributeId: string;
-  kind: RequirementKind;
+  /** Always DESIRED in MVP (D-02). */
+  kind?: "DESIRED";
 };
 
 export type CreateReservationInput = {
@@ -38,6 +39,12 @@ export type CreateReservationInput = {
   groupName?: string;
   extraUnitIds?: string[];
   userId?: string;
+  /**
+   * When true, room may miss desired tags (reception override with note).
+   * Tags never hard-block; this flag is for audit / requiring a note upstream.
+   */
+  allowDesiredOverride?: boolean;
+  /** @deprecated alias of allowDesiredOverride */
   allowMandatoryOverride?: boolean;
 };
 
@@ -77,9 +84,19 @@ export async function createReservation(input: CreateReservationInput) {
   }
 
   const structured = dedupeRequirements(input.structuredRequirements ?? []);
-  const mandatoryIds = structured.filter((r) => r.kind === "MANDATORY").map((r) => r.attributeId);
-  if (mandatoryIds.length && !input.allowMandatoryOverride) {
-    await assertMandatoryAttributes(prisma, segments, mandatoryIds);
+  const desiredIds = structured.map((r) => r.attributeId);
+  const override =
+    Boolean(input.allowDesiredOverride) || Boolean(input.allowMandatoryOverride);
+
+  // D-02: tags deseados no bloquean. Si faltan y no hay override explícito → error
+  // para forzar advertencia + motivo en UI (recepción override).
+  if (desiredIds.length && !override) {
+    const missing = await missingDesiredAttributes(prisma, segments, desiredIds);
+    if (missing.length) {
+      throw new Error(
+        "La habitación elegida no cumple las características deseadas. Confirmá el override con un motivo.",
+      );
+    }
   }
 
   const status = input.status ?? "PRERRESERVA";
@@ -135,7 +152,7 @@ export async function createReservation(input: CreateReservationInput) {
           ? {
               create: structured.map((r) => ({
                 attributeId: r.attributeId,
-                kind: r.kind,
+                kind: "DESIRED" as const,
               })),
             }
           : undefined,
@@ -150,7 +167,7 @@ export async function createReservation(input: CreateReservationInput) {
     action: "reservation.create",
     entityType: "Reservation",
     entityId: result.id,
-    after: { code: result.code, status: result.status },
+    after: { code: result.code, status: result.status, desiredOverride: override },
   });
 
   return result;
@@ -270,17 +287,16 @@ function dedupeRequirements(
 ): StructuredRequirementInput[] {
   const map = new Map<string, StructuredRequirementInput>();
   for (const item of items) {
-    const prev = map.get(item.attributeId);
-    if (!prev || item.kind === "MANDATORY") map.set(item.attributeId, item);
+    map.set(item.attributeId, { attributeId: item.attributeId, kind: "DESIRED" });
   }
   return [...map.values()];
 }
 
-async function assertMandatoryAttributes(
+async function missingDesiredAttributes(
   db: typeof prisma,
   segments: SegmentInput[],
-  mandatoryIds: string[],
-) {
+  desiredIds: string[],
+): Promise<string[]> {
   const unitIds = [...new Set(segments.map((s) => s.physicalUnitId))];
   const links = await db.unitAttributeLink.findMany({
     where: { unitId: { in: unitIds } },
@@ -292,34 +308,28 @@ async function assertMandatoryAttributes(
     byUnit.get(l.unitId)!.add(l.attributeId);
   }
 
-  // For communicating rooms: require the union of member attributes to cover mandatory
   const compositeIds = [
     ...new Set(segments.map((s) => s.compositeUnitId).filter(Boolean) as string[]),
   ];
   if (compositeIds.length) {
+    const missingAll: string[] = [];
     for (const cid of compositeIds) {
       const memberSegs = segments.filter((s) => s.compositeUnitId === cid);
       const union = new Set<string>();
       for (const s of memberSegs) {
         for (const a of byUnit.get(s.physicalUnitId) ?? []) union.add(a);
       }
-      const missing = mandatoryIds.filter((id) => !union.has(id));
-      if (missing.length) {
-        throw new Error(
-          "La habitación elegida no cumple características obligatorias",
-        );
-      }
+      missingAll.push(...desiredIds.filter((id) => !union.has(id)));
     }
-    return;
+    return [...new Set(missingAll)];
   }
 
+  const missing: string[] = [];
   for (const uid of unitIds) {
     const have = byUnit.get(uid) ?? new Set();
-    const missing = mandatoryIds.filter((id) => !have.has(id));
-    if (missing.length) {
-      throw new Error(
-        "La habitación elegida no cumple características obligatorias",
-      );
+    for (const id of desiredIds) {
+      if (!have.has(id)) missing.push(id);
     }
   }
+  return [...new Set(missing)];
 }
