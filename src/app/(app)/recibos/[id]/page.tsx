@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { formatArs } from "@/lib/money";
+import { formatDateUi } from "@/lib/dates";
 
 export default async function ReciboPage({
   params,
@@ -42,7 +43,7 @@ export default async function ReciboPage({
             <strong>Nº</strong> {payment.receiptNumber}
           </div>
           <div>
-            <strong>Fecha</strong> {payment.createdAt.toISOString().slice(0, 10)}
+            <strong>Fecha</strong> {formatDateUi(payment.createdAt)}
           </div>
           <div>
             <strong>Reserva</strong> {payment.reservation.code}
@@ -62,7 +63,7 @@ export default async function ReciboPage({
           </div>
           {payment.voidedAt ? (
             <div className="text-[var(--danger)]">
-              ANULADO {payment.voidedAt.toISOString().slice(0, 10)} — {payment.voidReason}
+              ANULADO {formatDateUi(payment.voidedAt)} — {payment.voidReason}
             </div>
           ) : null}
           {payment.notes ? <div>Notas: {payment.notes}</div> : null}

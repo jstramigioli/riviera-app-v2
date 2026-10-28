@@ -17,6 +17,7 @@ import {
   type CreateStaySeed,
 } from "@/components/CreateStayPanel";
 import { howManyDaysFit } from "@/lib/hotel-calendar";
+import { formatDateUi } from "@/lib/dates";
 import type { CalendarDay, CalendarUnitRow } from "@/lib/calendar";
 
 const CELL = 42;
@@ -346,7 +347,11 @@ export function CalendarBoard({ focusIso, attributes, initial }: Props) {
                             : ""
                       }`}
                       style={{ width: CELL }}
-                      title={d.closed ? `${d.iso} · hotel cerrado` : d.iso}
+                      title={
+                        d.closed
+                          ? `${formatDateUi(d.iso)} · hotel cerrado`
+                          : formatDateUi(d.iso)
+                      }
                     >
                       <div className="uppercase text-[var(--muted)]">{d.weekday}</div>
                       <div className="font-semibold">{d.label}</div>
@@ -405,7 +410,7 @@ export function CalendarBoard({ focusIso, attributes, initial }: Props) {
                             type="button"
                             className="h-full border-r border-[var(--line)] bg-white/30 hover:bg-[var(--brand)]/10"
                             style={{ width: CELL }}
-                            title={`Nueva reserva · ${unit.code} · ${d.iso}`}
+                            title={`Nueva reserva · ${unit.code} · ${formatDateUi(d.iso)}`}
                             onClick={() =>
                               openCreate({
                                 mode: "reserva",

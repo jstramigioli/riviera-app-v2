@@ -41,6 +41,8 @@ export async function createPeriodAction(formData: FormData) {
     after: { name, validFrom, validTo, copyFromPeriodId },
   });
   revalidatePath("/tarifas");
+  revalidatePath("/calendario");
+  revalidatePath("/admin");
   return { ok: true as const, id: period.id };
 }
 
@@ -61,6 +63,8 @@ export async function updatePeriodMetaAction(payload: {
     after: payload,
   });
   revalidatePath("/tarifas");
+  revalidatePath("/calendario");
+  revalidatePath("/admin");
   return { ok: true as const };
 }
 
@@ -75,6 +79,8 @@ export async function deletePeriodAction(formData: FormData) {
     entityId: id,
   });
   revalidatePath("/tarifas");
+  revalidatePath("/calendario");
+  revalidatePath("/admin");
   return { ok: true as const };
 }
 

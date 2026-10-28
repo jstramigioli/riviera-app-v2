@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { toDateOnly } from "@/lib/dates";
+import { formatDateUi, toDateOnly } from "@/lib/dates";
 import { checkInAction, checkOutAction } from "@/app/actions/stay";
 
 export default async function OperacionPage({
@@ -11,6 +11,7 @@ export default async function OperacionPage({
   const sp = await searchParams;
   const dateIso = sp.date || new Date().toISOString().slice(0, 10);
   const day = toDateOnly(dateIso);
+  const dateLabel = formatDateUi(day);
 
   const [arrivals, departures, inHouse] = await Promise.all([
     prisma.reservation.findMany({
@@ -68,13 +69,13 @@ export default async function OperacionPage({
       </div>
 
       <List
-        title={`Llegadas ${dateIso}`}
+        title={`Llegadas ${dateLabel}`}
         items={arrivals}
         action={checkInAction}
         actionLabel="Check-in"
       />
       <List
-        title={`Salidas ${dateIso}`}
+        title={`Salidas ${dateLabel}`}
         items={departures}
         action={checkOutAction}
         actionLabel="Check-out"

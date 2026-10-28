@@ -155,38 +155,22 @@ model CompositeUnitMember {
   @@id([compositeId, unitId])
 }
 
-/// Temporada / período tarifario (nombre + rango de noches).
+/// Temporada unificada (D-08 / D-10): define noches abiertas del hotel Y guarda tarifas.
+/// Hotel abierto ⇔ noche ∈ ∪ períodos activos. Fuera = cerrado.
 model RatePeriod {
   id        String   @id @default(cuid())
   name      String
-  /// Inclusive: primera noche cubierta.
+  /// Inclusive: primera noche abierta / con tarifa.
   validFrom DateTime @db.Date
-  /// Inclusive: última noche cubierta.
+  /// Inclusive: última noche abierta / con tarifa.
   validTo   DateTime @db.Date
   active    Boolean  @default(true)
+  notes     String?
   rates     Rate[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([validFrom, validTo])
-}
-
-/// Temporada / ventana de apertura del hotel (Julián / D-08).
-/// El hotel está ABIERTO solo dentro de estos rangos (pueden ser varios al año,
-/// incluso un fin de semana largo). Fuera = cerrado. Configurable seed/DB/admin.
-model HotelOpenPeriod {
-  id        String   @id @default(cuid())
-  name      String
-  /// Inclusive: primera noche abierta.
-  openFrom  DateTime @db.Date
-  /// Inclusive: última noche abierta.
-  openTo    DateTime @db.Date
-  active    Boolean  @default(true)
-  notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([openFrom, openTo])
 }
 
 model RatePlan {
