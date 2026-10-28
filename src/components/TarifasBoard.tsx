@@ -11,6 +11,7 @@ import {
 } from "@/app/actions/rates";
 import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
 import { SERVICE_TYPE_LABEL, formatArsPlain } from "@/lib/labels";
+import { formatDateUi } from "@/lib/dates";
 import type { PeriodOverlap, PeriodWithMatrix } from "@/lib/rates";
 
 type Category = { id: string; code: string; name: string; sortOrder: number };
@@ -40,17 +41,22 @@ export function TarifasBoard({
   const [selectedId, setSelectedId] = useState(periods[0]?.id ?? "");
   const [draft, setDraft] = useState<DraftCells>(() => buildDraft(initialPeriods));
   const [dirtyPeriods, setDirtyPeriods] = useState<Set<string>>(new Set());
-  const [mobileService, setMobileService] = useState<ServiceType>(serviceTypes[0] ?? "DESAYUNO");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [showCreate, setShowCreate] = useState(false);
+  const [showCopyFrom, setShowCopyFrom] = useState(false);
+  const [copySourceId, setCopySourceId] = useState("");
+  const [copyPercent, setCopyPercent] = useState("0");
   const [bulkValue, setBulkValue] = useState("");
   const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
+  const [bulkService, setBulkService] = useState<ServiceType>(serviceTypes[0] ?? "DESAYUNO");
+  const [bulkCategoryId, setBulkCategoryId] = useState(categories[0]?.id ?? "");
 
   const selected = periods.find((p) => p.id === selectedId) ?? periods[0] ?? null;
 
   const localOverlaps = useMemo(() => overlaps, [overlaps]);
+  const otherPeriods = periods.filter((p) => p.id !== selected?.id);
 
   function markDirty(periodId: string, key: string, value: string) {
     setDraft((prev) => ({ ...prev, [key]: value }));
@@ -90,7 +96,7 @@ export function TarifasBoard({
     setMessage(keys.length ? `Rellenadas ${keys.length} celdas` : null);
   }
 
-  function fillServiceRow(service: ServiceType) {
+  function fillServiceColumn(service: ServiceType) {
     if (!selected || !canEdit) return;
     const amount = bulkValue.trim();
     if (amount !== "" && !(Number(amount) > 0)) {
@@ -105,6 +111,26 @@ export function TarifasBoard({
       return next;
     });
     setDirtyPeriods((prev) => new Set(prev).add(selected.id));
+    setMessage(`Columna «${SERVICE_TYPE_LABEL[service]}» actualizada`);
+  }
+
+  function fillCategoryRow(categoryId: string) {
+    if (!selected || !canEdit) return;
+    const amount = bulkValue.trim();
+    if (amount !== "" && !(Number(amount) > 0)) {
+      setError("El monto debe ser mayor a 0");
+      return;
+    }
+    const cat = categories.find((c) => c.id === categoryId);
+    setDraft((prev) => {
+      const next = { ...prev };
+      for (const st of serviceTypes) {
+        next[cellKey(selected.id, categoryId, st)] = amount;
+      }
+      return next;
+    });
+    setDirtyPeriods((prev) => new Set(prev).add(selected.id));
+    setMessage(cat ? `Fila «${cat.name}» actualizada` : "Fila actualizada");
   }
 
   function savePeriod(periodId: string) {
@@ -136,7 +162,6 @@ export function TarifasBoard({
           return next;
         });
         setMessage("Cambios guardados");
-        // Refresh local period cells from draft
         setPeriods((prev) =>
           prev.map((p) => {
             if (p.id !== periodId) return p;
@@ -164,56 +189,30 @@ export function TarifasBoard({
       try {
         const res = await createPeriodAction(formData);
         setShowCreate(false);
-        setMessage("Período creado");
-        // Soft reload via navigation
+        setMessage("Temporada creada");
         window.location.href = `/tarifas?period=${res.id}`;
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Error al crear período");
+        setError(e instanceof Error ? e.message : "Error al crear temporada");
       }
     });
   }
 
-  function onCopyToNew() {
-    if (!selected || !canEdit) return;
-    const name = window.prompt("Nombre del nuevo período", `${selected.name} (copia)`);
-    if (!name) return;
-    const from = window.prompt("Desde (AAAA-MM-DD)", selected.validFrom);
-    if (!from) return;
-    const to = window.prompt("Hasta (AAAA-MM-DD)", selected.validTo);
-    if (!to) return;
-    const pctRaw = window.prompt("Ajuste % (0 = igual)", "0") ?? "0";
-    const fd = new FormData();
-    fd.set("name", name);
-    fd.set("validFrom", from);
-    fd.set("validTo", to);
-    fd.set("copyFromPeriodId", selected.id);
-    fd.set("percentAdjust", pctRaw);
-    onCreate(fd);
-  }
-
-  function onCopyIntoExisting() {
-    if (!selected || !canEdit || periods.length < 2) return;
-    const others = periods.filter((p) => p.id !== selected.id);
-    const pick = window.prompt(
-      `Copiar montos DE otro período A «${selected.name}».\nIDs:\n${others
-        .map((p) => `${p.id.slice(0, 8)}… ${p.name}`)
-        .join("\n")}\n\nPegá el id completo del origen:`,
-    );
-    if (!pick) return;
-    const source = periods.find((p) => p.id === pick || p.id.startsWith(pick));
-    if (!source) {
-      setError("Período origen no encontrado");
+  function onCopyFromOther() {
+    if (!selected || !canEdit || !copySourceId) {
+      setError("Elegí la temporada de origen");
       return;
     }
+    const pct = Number(copyPercent || "0");
     startTransition(async () => {
       try {
         await copyPeriodAction({
-          sourcePeriodId: source.id,
+          sourcePeriodId: copySourceId,
           targetPeriodId: selected.id,
+          percentAdjust: Number.isFinite(pct) ? pct : 0,
         });
         window.location.reload();
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Error al copiar");
+        setError(e instanceof Error ? e.message : "Error al copiar precios");
       }
     });
   }
@@ -234,12 +233,12 @@ export function TarifasBoard({
 
       {localOverlaps.length > 0 ? (
         <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-950">
-          <strong>Solapes de período:</strong> si coinciden noches, gana el tramo más corto
+          <strong>Solapes de temporada:</strong> si coinciden noches, gana el tramo más corto
           (si empatan, el más reciente).{" "}
           {localOverlaps
             .map(
               (o) =>
-                `«${o.aName}» ↔ «${o.bName}» (${o.from}→${o.to})`,
+                `«${o.aName}» ↔ «${o.bName}» (${formatDateUi(o.from)}→${formatDateUi(o.to)})`,
             )
             .join(" · ")}
         </div>
@@ -254,8 +253,8 @@ export function TarifasBoard({
             Tarifas
           </h1>
           <p className="text-sm text-[var(--muted)] inline-flex items-center gap-1">
-            Precios por noche según temporada, tipo de habitación y servicio.
-            <HelpTooltip text="ARS por noche × categoría. Al confirmar una reserva el precio acordado se congela." />
+            Temporadas = apertura del hotel + precios por categoría y servicio.
+            <HelpTooltip text="Fuera de toda temporada activa el hotel figura cerrado. ARS por noche × categoría. Al confirmar una reserva el precio acordado se congela." />
           </p>
         </div>
         {canEdit ? (
@@ -265,17 +264,19 @@ export function TarifasBoard({
               className="btn btn-primary"
               onClick={() => setShowCreate(true)}
             >
-              + Nuevo período
+              + Nueva temporada
             </button>
-            {selected ? (
-              <>
-                <button type="button" className="btn btn-ghost" onClick={onCopyToNew}>
-                  Copiar a otro período
-                </button>
-                <button type="button" className="btn btn-ghost" onClick={onCopyIntoExisting}>
-                  Pegar desde…
-                </button>
-              </>
+            {selected && otherPeriods.length > 0 ? (
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => {
+                  setShowCopyFrom(true);
+                  setCopySourceId(otherPeriods[0]?.id ?? "");
+                }}
+              >
+                Copiar precios de otro período
+              </button>
             ) : null}
           </div>
         ) : (
@@ -293,15 +294,15 @@ export function TarifasBoard({
             <input className="input" name="name" placeholder="Ej. Verano 26/27" required />
           </div>
           <div>
-            <FieldLabel help="Primera noche cubierta.">Desde</FieldLabel>
+            <FieldLabel help="Primera noche abierta / con tarifa.">Desde</FieldLabel>
             <input className="input" type="date" name="validFrom" required />
           </div>
           <div>
-            <FieldLabel help="Última noche cubierta.">Hasta</FieldLabel>
+            <FieldLabel help="Última noche abierta / con tarifa.">Hasta</FieldLabel>
             <input className="input" type="date" name="validTo" required />
           </div>
           <div className="sm:col-span-2">
-            <FieldLabel>Copiar montos desde (opcional)</FieldLabel>
+            <FieldLabel>Copiar precios desde (opcional)</FieldLabel>
             <select className="select" name="copyFromPeriodId" defaultValue="">
               <option value="">— vacío —</option>
               {periods.map((p) => (
@@ -330,13 +331,60 @@ export function TarifasBoard({
         </form>
       ) : null}
 
+      {showCopyFrom && canEdit && selected ? (
+        <div className="panel grid gap-3 rounded-xl p-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="sm:col-span-2">
+            <FieldLabel>
+              Copiar precios hacia «{selected.name}» desde
+            </FieldLabel>
+            <select
+              className="select"
+              value={copySourceId}
+              onChange={(e) => setCopySourceId(e.target.value)}
+            >
+              {otherPeriods.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({formatDateUi(p.validFrom)}–{formatDateUi(p.validTo)})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <FieldLabel>Ajuste %</FieldLabel>
+            <input
+              className="input"
+              type="number"
+              value={copyPercent}
+              onChange={(e) => setCopyPercent(e.target.value)}
+            />
+          </div>
+          <div className="flex items-end gap-2">
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={pending || !copySourceId}
+              onClick={onCopyFromOther}
+            >
+              Copiar precios
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => setShowCopyFrom(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       <div className="grid gap-4 lg:grid-cols-[220px_1fr]">
         <aside className="panel space-y-1 rounded-xl p-2">
           <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
-            Períodos
+            Temporadas
           </div>
           {periods.length === 0 ? (
-            <p className="px-2 py-3 text-sm text-[var(--muted)]">Sin períodos aún.</p>
+            <p className="px-2 py-3 text-sm text-[var(--muted)]">Sin temporadas aún.</p>
           ) : (
             periods.map((p) => (
               <button
@@ -356,8 +404,8 @@ export function TarifasBoard({
                   ) : null}
                 </div>
                 <div className="text-[11px] text-[var(--muted)]">
-                  {p.validFrom} → {p.validTo}
-                  {!p.active ? " · inactivo" : ""}
+                  {formatDateUi(p.validFrom)} → {formatDateUi(p.validTo)}
+                  {!p.active ? " · inactiva" : ""}
                 </div>
               </button>
             ))
@@ -366,7 +414,9 @@ export function TarifasBoard({
 
         <section className="panel space-y-4 rounded-xl p-4">
           {!selected ? (
-            <p className="text-sm text-[var(--muted)]">Creá un período para cargar tarifas.</p>
+            <p className="text-sm text-[var(--muted)]">
+              Creá una temporada para abrir fechas y cargar tarifas.
+            </p>
           ) : (
             <>
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -375,7 +425,8 @@ export function TarifasBoard({
                     {selected.name}
                   </h2>
                   <p className="text-sm text-[var(--muted)]">
-                    Noches del {selected.validFrom} al {selected.validTo}
+                    Hotel abierto y tarifas del {formatDateUi(selected.validFrom)} al{" "}
+                    {formatDateUi(selected.validTo)}
                   </p>
                 </div>
                 {canEdit ? (
@@ -394,9 +445,15 @@ export function TarifasBoard({
                       onClick={() => {
                         const name = window.prompt("Nombre", selected.name);
                         if (!name) return;
-                        const from = window.prompt("Desde", selected.validFrom);
+                        const from = window.prompt(
+                          "Desde (usar el mismo formato del calendario del sistema)",
+                          selected.validFrom,
+                        );
                         if (!from) return;
-                        const to = window.prompt("Hasta", selected.validTo);
+                        const to = window.prompt(
+                          "Hasta (usar el mismo formato del calendario del sistema)",
+                          selected.validTo,
+                        );
                         if (!to) return;
                         startTransition(async () => {
                           await updatePeriodMetaAction({
@@ -415,7 +472,7 @@ export function TarifasBoard({
                       type="button"
                       className="btn btn-ghost text-[var(--danger)]"
                       onClick={() => {
-                        if (!window.confirm(`¿Eliminar período «${selected.name}»?`)) return;
+                        if (!window.confirm(`¿Eliminar temporada «${selected.name}»?`)) return;
                         const fd = new FormData();
                         fd.set("id", selected.id);
                         startTransition(async () => {
@@ -433,7 +490,7 @@ export function TarifasBoard({
               {canEdit ? (
                 <div className="flex flex-wrap items-end gap-2 rounded-lg border border-[var(--line)] bg-[#fffdf8] p-3">
                   <div>
-                    <FieldLabel>Rellenar selección / fila</FieldLabel>
+                    <FieldLabel>Monto ARS / noche</FieldLabel>
                     <input
                       className="input w-36"
                       type="number"
@@ -446,13 +503,46 @@ export function TarifasBoard({
                   <button type="button" className="btn btn-ghost" onClick={applyBulkFill}>
                     Aplicar a selección
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => fillServiceRow(mobileService)}
-                  >
-                    Rellenar fila «{SERVICE_TYPE_LABEL[mobileService]}»
-                  </button>
+                  <div className="flex flex-wrap items-end gap-1">
+                    <select
+                      className="select w-auto"
+                      value={bulkService}
+                      onChange={(e) => setBulkService(e.target.value as ServiceType)}
+                    >
+                      {serviceTypes.map((st) => (
+                        <option key={st} value={st}>
+                          {SERVICE_TYPE_LABEL[st]}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => fillServiceColumn(bulkService)}
+                    >
+                      Rellenar columna
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap items-end gap-1">
+                    <select
+                      className="select w-auto"
+                      value={bulkCategoryId}
+                      onChange={(e) => setBulkCategoryId(e.target.value)}
+                    >
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => fillCategoryRow(bulkCategoryId)}
+                    >
+                      Rellenar fila
+                    </button>
+                  </div>
                   <button
                     type="button"
                     className="btn btn-ghost"
@@ -466,38 +556,7 @@ export function TarifasBoard({
                 </div>
               ) : null}
 
-              {/* Mobile: tabs by service (layout A) */}
-              <div className="lg:hidden space-y-3">
-                <div className="flex flex-wrap gap-1">
-                  {serviceTypes.map((st) => (
-                    <button
-                      key={st}
-                      type="button"
-                      className={`rounded-md px-2.5 py-1.5 text-sm ${
-                        mobileService === st
-                          ? "bg-[var(--brand)]/15 font-semibold text-[var(--brand-deep)]"
-                          : "text-[var(--muted)]"
-                      }`}
-                      onClick={() => setMobileService(st)}
-                    >
-                      {SERVICE_TYPE_LABEL[st]}
-                    </button>
-                  ))}
-                </div>
-                <MatrixTable
-                  periodId={selected.id}
-                  categories={categories}
-                  services={[mobileService]}
-                  draft={draft}
-                  canEdit={canEdit}
-                  selectedCells={selectedCells}
-                  onToggleSelect={toggleCellSelect}
-                  onChange={markDirty}
-                />
-              </div>
-
-              {/* Desktop: wide matrix grouped by service (layout B) */}
-              <div className="hidden lg:block overflow-auto">
+              <div className="overflow-auto">
                 <MatrixTable
                   periodId={selected.id}
                   categories={categories}
@@ -507,7 +566,6 @@ export function TarifasBoard({
                   selectedCells={selectedCells}
                   onToggleSelect={toggleCellSelect}
                   onChange={markDirty}
-                  grouped
                 />
               </div>
             </>
@@ -529,6 +587,7 @@ function buildDraft(periods: PeriodWithMatrix[]): DraftCells {
   return draft;
 }
 
+/** Filas = categorías; columnas = servicios. */
 function MatrixTable({
   periodId,
   categories,
@@ -538,7 +597,6 @@ function MatrixTable({
   selectedCells,
   onToggleSelect,
   onChange,
-  grouped,
 }: {
   periodId: string;
   categories: Category[];
@@ -548,80 +606,44 @@ function MatrixTable({
   selectedCells: Set<string>;
   onToggleSelect: (key: string) => void;
   onChange: (periodId: string, key: string, value: string) => void;
-  grouped?: boolean;
 }) {
   return (
     <table className="w-full min-w-[520px] border-collapse text-sm">
       <thead>
-        {grouped ? (
-          <tr className="border-b border-[var(--line)] text-xs text-[var(--muted)]">
-            <th className="px-2 py-2 text-left" rowSpan={2}>
-              ARS / noche
-            </th>
-            {services.map((st) => (
-              <th
-                key={st}
-                className="px-2 py-1 text-center font-semibold"
-                colSpan={categories.length}
-              >
-                {SERVICE_TYPE_LABEL[st]}
-              </th>
-            ))}
-          </tr>
-        ) : null}
         <tr className="border-b border-[var(--line)] text-xs uppercase text-[var(--muted)]">
-          {!grouped ? <th className="px-2 py-2 text-left">Categoría</th> : null}
-          {services.map((st) =>
-            categories.map((c) => (
-              <th key={`${st}-${c.id}`} className="px-2 py-2 text-center font-semibold">
-                {grouped ? c.code : c.name}
-              </th>
-            )),
-          )}
+          <th className="px-2 py-2 text-left">Tipo / categoría</th>
+          {services.map((st) => (
+            <th key={st} className="px-2 py-2 text-center font-semibold">
+              {SERVICE_TYPE_LABEL[st]}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {grouped ? (
-          <tr>
-            <td className="px-2 py-2 text-[var(--muted)]">Monto</td>
-            {services.map((st) =>
-              categories.map((c) => {
-                const key = cellKey(periodId, c.id, st);
-                return (
-                  <td key={key} className="px-1 py-1">
-                    <CellInput
-                      value={draft[key] ?? ""}
-                      selected={selectedCells.has(key)}
-                      canEdit={canEdit}
-                      onSelect={() => onToggleSelect(key)}
-                      onChange={(v) => onChange(periodId, key, v)}
-                    />
-                  </td>
-                );
-              }),
-            )}
+        {categories.map((c) => (
+          <tr key={c.id} className="border-b border-[var(--line)]">
+            <td className="px-2 py-2 font-medium">
+              {c.name}
+              <div className="text-[10px] font-normal uppercase text-[var(--muted)]">
+                {c.code}
+              </div>
+            </td>
+            {services.map((st) => {
+              const key = cellKey(periodId, c.id, st);
+              return (
+                <td key={key} className="px-1 py-1">
+                  <CellInput
+                    value={draft[key] ?? ""}
+                    selected={selectedCells.has(key)}
+                    canEdit={canEdit}
+                    onSelect={() => onToggleSelect(key)}
+                    onChange={(v) => onChange(periodId, key, v)}
+                  />
+                </td>
+              );
+            })}
           </tr>
-        ) : (
-          categories.map((c) => (
-            <tr key={c.id} className="border-b border-[var(--line)]">
-              <td className="px-2 py-2 font-medium">{c.name}</td>
-              {services.map((st) => {
-                const key = cellKey(periodId, c.id, st);
-                return (
-                  <td key={key} className="px-1 py-1">
-                    <CellInput
-                      value={draft[key] ?? ""}
-                      selected={selectedCells.has(key)}
-                      canEdit={canEdit}
-                      onSelect={() => onToggleSelect(key)}
-                      onChange={(v) => onChange(periodId, key, v)}
-                    />
-                  </td>
-                );
-              })}
-            </tr>
-          ))
-        )}
+        ))}
       </tbody>
     </table>
   );
@@ -651,7 +673,7 @@ function CellInput({
     <div className="flex items-center gap-1">
       <button
         type="button"
-        title="Seleccionar para bulk fill"
+        title="Seleccionar para relleno masivo"
         onClick={onSelect}
         className={`h-7 w-2 shrink-0 rounded-sm ${
           selected ? "bg-[var(--brand)]" : "bg-[var(--line)]"
