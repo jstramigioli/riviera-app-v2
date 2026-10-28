@@ -47,4 +47,9 @@ describe("formatDateUi (DD/MM/AAAA)", () => {
       "28/10/2026 15:30",
     );
   });
+
+  it("renders sample excel-era dates", () => {
+    expect(formatDateUi("2027-01-09")).toBe("09/01/2027");
+    expect(formatDateShortUi("2027-01-09")).toBe("09/01");
+  });
 });

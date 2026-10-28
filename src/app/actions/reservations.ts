@@ -11,8 +11,10 @@ import {
 } from "@/lib/reservations";
 import { prisma } from "@/lib/db";
 import { assertAvailable } from "@/lib/availability";
-import { toDateOnly } from "@/lib/dates";
+import { isoDate, toDateOnly } from "@/lib/dates";
 import { writeAudit } from "@/lib/audit";
+import { suggestPriceArs } from "@/lib/rates";
+import { formatArs } from "@/lib/money";
 
 export async function createReservationAction(formData: FormData) {
   const user = await requireUser();
@@ -143,6 +145,56 @@ export async function setPriceAction(formData: FormData) {
   const note = String(formData.get("priceOverrideNote") || "") || undefined;
   await setAgreedPrice(id, amount, note, user.id);
   revalidatePath(`/reservas/${id}`);
+  redirect(`/reservas/${id}`);
+}
+
+/** Asigna el precio acordado desde tarifas cargadas (categoría × servicio × noches). */
+export async function assignSuggestedTariffAction(formData: FormData) {
+  const user = await requireUser();
+  const id = String(formData.get("id"));
+  const reservation = await prisma.reservation.findUniqueOrThrow({
+    where: { id },
+    include: {
+      segments: {
+        include: { physicalUnit: true },
+        orderBy: { sortOrder: "asc" },
+      },
+    },
+  });
+
+  const categoryId =
+    reservation.segments[0]?.physicalUnit.commercialCategoryId ?? null;
+  if (!categoryId) {
+    redirect(
+      `/reservas/${id}?error=${encodeURIComponent(
+        "Esta habitación no tiene categoría comercial. Asignala en Inventario para calcular la tarifa.",
+      )}`,
+    );
+  }
+
+  const total = await suggestPriceArs(prisma, {
+    commercialCategoryId: categoryId,
+    serviceType: reservation.serviceType,
+    checkInDate: isoDate(reservation.checkInDate),
+    checkOutDate: isoDate(reservation.checkOutDate),
+  });
+
+  if (total == null) {
+    redirect(
+      `/reservas/${id}?error=${encodeURIComponent(
+        "No hay tarifas cargadas para todas las noches de esta estadía (categoría y servicio). Revisá Temporadas / Tarifas.",
+      )}`,
+    );
+  }
+
+  await setAgreedPrice(
+    id,
+    total,
+    `Tarifa calculada automáticamente (${formatArs(total)}) según precios cargados`,
+    user.id,
+  );
+  revalidatePath(`/reservas/${id}`);
+  revalidatePath("/calendario");
   redirect(`/reservas/${id}`);
 }
 

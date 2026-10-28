@@ -95,7 +95,7 @@ function List({
   items: {
     id: string;
     code: string;
-    guests: { guest: { firstName: string; lastName: string } }[];
+    guests: { guest: { id: string; firstName: string; lastName: string } }[];
     segments: { physicalUnit: { code: string } }[];
   }[];
   action?: (formData: FormData) => Promise<void>;
