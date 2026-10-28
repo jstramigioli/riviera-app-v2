@@ -294,18 +294,19 @@ export function CalendarBoard({ focusIso, attributes, initial }: Props) {
                 <div
                   key={unit.id}
                   className="relative flex border-b border-[var(--line)]"
-                  style={{ height: 40 }}
+                  style={{ height: 28 }}
                 >
                   <div
-                    className="sticky left-0 z-10 flex shrink-0 flex-col justify-center border-r border-[var(--line)] bg-[#fffdf8] px-3"
+                    className="sticky left-0 z-10 flex shrink-0 items-center border-r border-[var(--line)] bg-[#fffdf8] px-3"
                     style={{ width: LABEL_W }}
+                    title={
+                      unit.composites.length
+                        ? `${unit.code} · comunicada ${unit.composites.join(",")}`
+                        : unit.code
+                    }
                   >
-                    <div className="text-sm font-semibold leading-tight">{unit.code}</div>
-                    <div className="truncate text-[10px] text-[var(--muted)]">
-                      {unit.category}
-                      {unit.composites.length
-                        ? ` · comunicada ${unit.composites.join(",")}`
-                        : ""}
+                    <div className="truncate text-sm font-semibold leading-none">
+                      {unit.code}
                     </div>
                   </div>
                   <div className="relative flex-1">
