@@ -147,21 +147,86 @@ def extract_merges(ws) -> list[dict]:
         issues: list[str] = []
         notes: list[str] = []
         unit = None
-        if not room_raw:
-            issues.append("no_room_row")
-        elif room_raw in NAMED_CALENDAR:
+        if room_raw in NAMED_CALENDAR:
             unit = NAMED_CALENDAR[room_raw]
-        elif room_raw.isdigit():
+        elif room_raw and room_raw.isdigit():
             unit = str(int(room_raw))
             if unit in ("4", "20"):
                 issues.append("invalid_room_code")
-        else:
+        elif room_raw:
             issues.append(f"unknown_room:{room_raw}")
+        else:
+            issues.append("no_room_row")
 
-        if (not guest) and not comment:
-            issues.append("empty_or_label_only")
-        if is_label and not comment:
-            issues.append("row_label_not_booking")
+        # Department row headers in cols A–B (Via I / Tilo / Romerito / Esquinita):
+        # physical-unit labels for the calendar sheet — NOT reservations.
+        is_unit_header = (
+            m.max_col <= 2
+            and room_raw in NAMED_CALENDAR
+            and not comment
+            and (is_label or not guest)
+        )
+        # Empty accidental merges (e.g. J31:K31) — not a booking; drop from import/ambiguous.
+        is_spurious_empty = (
+            not is_unit_header
+            and not guest
+            and not comment
+            and not is_label
+        )
+
+        if is_unit_header:
+            rows.append(
+                {
+                    "source": "Libro de reservas",
+                    "sourceRef": str(m),
+                    "unit": unit or "",
+                    "roomRaw": room_raw,
+                    "checkIn": "",
+                    "checkOut": "",
+                    "guest": "",
+                    "status": "",
+                    "price": "",
+                    "notes": f"Unit header row for department {unit or room_raw}",
+                    "channel": "",
+                    "doNotMove": False,
+                    "adults": None,
+                    "confidence": "n/a",
+                    "classification": "unit_header",
+                    "issues": [],
+                    "parseNotes": [
+                        "julian: department row header (calendar label), not a reservation",
+                    ],
+                    "raw": {"cellValue": val, "comment": comment},
+                }
+            )
+            continue
+
+        if is_spurious_empty:
+            rows.append(
+                {
+                    "source": "Libro de reservas",
+                    "sourceRef": str(m),
+                    "unit": unit or "",
+                    "roomRaw": room_raw,
+                    "checkIn": "",
+                    "checkOut": "",
+                    "guest": "",
+                    "status": "",
+                    "price": "",
+                    "notes": "Spurious empty merge — not a reservation",
+                    "channel": "",
+                    "doNotMove": False,
+                    "adults": None,
+                    "confidence": "n/a",
+                    "classification": "ignore",
+                    "issues": ["spurious_empty_merge"],
+                    "parseNotes": [
+                        "julian: wrongly merged empty cells; drop from ambiguous/import",
+                    ],
+                    "raw": {"cellValue": val, "comment": comment},
+                }
+            )
+            continue
 
         if cin and d_start and abs((cin - d_start).days) > 1:
             notes.append(f"merge_in_differs_from_comment:{d_start}vs{cin}")
@@ -210,6 +275,41 @@ def extract_merges(ws) -> list[dict]:
                 "issues": issues,
                 "parseNotes": notes,
                 "raw": {"cellValue": val, "comment": comment},
+            }
+        )
+
+    # Emit unit_header for named dept rows whose label isn't an A:B merge (e.g. A42 Romerito).
+    header_units = {
+        r.get("unit") for r in rows if r.get("classification") == "unit_header"
+    }
+    for row_idx, room_raw in rooms.items():
+        if room_raw not in NAMED_CALENDAR:
+            continue
+        unit = NAMED_CALENDAR[room_raw]
+        if unit in header_units:
+            continue
+        rows.append(
+            {
+                "source": "Libro de reservas",
+                "sourceRef": f"A{row_idx}",
+                "unit": unit,
+                "roomRaw": room_raw,
+                "checkIn": "",
+                "checkOut": "",
+                "guest": "",
+                "status": "",
+                "price": "",
+                "notes": f"Unit header cell for department {unit}",
+                "channel": "",
+                "doNotMove": False,
+                "adults": None,
+                "confidence": "n/a",
+                "classification": "unit_header",
+                "issues": [],
+                "parseNotes": [
+                    "julian: department row header cell (not merged A:B), not a reservation",
+                ],
+                "raw": {"cellValue": room_raw, "comment": None},
             }
         )
     return rows
@@ -361,7 +461,7 @@ def reclassify(row: dict) -> dict:
         issues = [i for i in issues if i not in ("out_before_in", "no_dates", "missing_dates")]
     row["issues"] = issues
 
-    if row.get("classification") in ("waitlist", "noise"):
+    if row.get("classification") in ("waitlist", "noise", "unit_header", "ignore"):
         return row
     if issues:
         row["classification"] = "ambiguous"
@@ -444,8 +544,19 @@ def apply_julian_corrections(rows: list[dict]) -> list[dict]:
 
 def write_report(payload: dict, path: Path) -> None:
     rows = payload["rows"]
-    amb = [r for r in rows if r.get("classification") in ("ambiguous", "waitlist") or r.get("confidence") != "high"]
+    skip_cls = {"noise", "unit_header", "ignore"}
+    amb = [
+        r
+        for r in rows
+        if r.get("classification") in ("ambiguous", "waitlist")
+        or (
+            r.get("confidence") not in ("high", "n/a")
+            and r.get("classification") not in skip_cls
+        )
+    ]
     noise = [r for r in rows if r.get("classification") == "noise"]
+    headers = [r for r in rows if r.get("classification") == "unit_header"]
+    ignored = [r for r in rows if r.get("classification") == "ignore"]
     lines = [
         "# Informe de datos ambiguos (no importar en silencio)",
         "",
@@ -456,6 +567,8 @@ def write_report(payload: dict, path: Path) -> None:
         f"Total filas extractadas: **{len(rows)}**",
         f"- Recoverable (`confidence=high`): **{payload['counts']['recoverable']}**",
         f"- Ambiguous / waitlist: **{payload['counts']['ambiguous'] + payload['counts']['waitlist']}**",
+        f"- Unit headers (dept rows): **{payload['counts'].get('unitHeaders', len(headers))}**",
+        f"- Ignored (spurious merges): **{payload['counts'].get('ignored', len(ignored))}**",
         f"- Noise (placeholders): **{payload['counts']['noise']}**",
         "",
         "## Por hoja",
@@ -470,7 +583,7 @@ def write_report(payload: dict, path: Path) -> None:
         "|---|---|---|---|---|---|---|",
     ]
     for r in amb:
-        if r.get("classification") == "noise":
+        if r.get("classification") in skip_cls:
             continue
         notes = "; ".join(r.get("issues") or [])
         lines.append(
@@ -478,12 +591,48 @@ def write_report(payload: dict, path: Path) -> None:
             f"{r.get('checkIn') or r.get('stayHint') or '∅'} | {r.get('checkOut') or '∅'} | "
             f"{(r.get('guest') or '∅').replace('|','/')} | {notes.replace('|','/')} |"
         )
+    if not any(r.get("classification") == "ambiguous" for r in amb):
+        lines.append("| — | — | — | — | — | — | *(ninguna fila ambiguous)* |")
+
     wait = [r for r in rows if r.get("classification") == "waitlist"]
     via_bookings = [
         r
         for r in rows
         if r.get("unit") == "VIA_I" and r.get("classification") == "recoverable"
     ]
+    lines += [
+        "",
+        "## Unit headers (filas de depto en el Libro)",
+        "",
+        "A40:B40 / A41 / A42 / A43 son **rótulos de unidad física** del calendario "
+        "(Via I, Tilo, Romerito, La Esquinita) — no reservas ni waitlist.",
+        "",
+        "| Ref | roomRaw | unit seed |",
+        "|---|---|---|",
+    ]
+    for r in headers:
+        lines.append(
+            f"| {r.get('sourceRef')} | {r.get('roomRaw')} | {r.get('unit')} |"
+        )
+    lines.append("")
+    lines.append(
+        "Nota: `A42` (Romerito) no está mergeado A:B; es celda de encabezado de fila. "
+        "Las reservas de esa fila son merges de fechas (p. ej. `D42:J42`)."
+    )
+    lines += [
+        "",
+        "## Ignored (merges vacíos espurios)",
+        "",
+        "Merges vacíos sin huésped/comentario (p. ej. `J31:K31`) — **no** son reservas; "
+        "excluidos de ambiguous e import.",
+        "",
+        "| Ref | roomRaw | Nota |",
+        "|---|---|---|",
+    ]
+    for r in ignored:
+        lines.append(
+            f"| {r.get('sourceRef')} | {r.get('roomRaw') or '∅'} | {'; '.join(r.get('parseNotes') or r.get('issues') or [])} |"
+        )
     lines += [
         "",
         "## Noise (ID-only placeholders)",
@@ -499,19 +648,25 @@ def write_report(payload: dict, path: Path) -> None:
         f"Las reservas reales del depto (`unit=VIA_I`) ya están como recoverable: **{len(via_bookings)}** "
         "(Libro fila `via I` + hoja Reservas `Habitación=Vía I`).",
         "",
-        "## Correcciones Julián (2026-10-28)",
+        "## Correcciones Julián",
         "",
-        "- Libro `CC12:CI13` Silvia Paiges: out **2027-02-08** (año mal en comentario).",
+        "### 2026-10-28 (fechas)",
+        "",
+        "- Libro `CC12:CI13` Silvia Paiges: out **2027-02-08**.",
         "- Reservas row 39 Ernesto Catani: out **2027-03-02**.",
-        "- Marchese (estadía dic): **in 2026-12-23 / out 2026-12-26** (incluye filas same-day).",
+        "- Marchese (estadía dic): **in 2026-12-23 / out 2026-12-26**.",
         "  La estadía febrero 2027 en hab. 25 se mantiene aparte.",
+        "",
+        "### 2026-10-28 (estructura Libro)",
+        "",
+        "- `J31:K31`: merge vacío espurio → `ignore` (no reserva).",
+        "- `A40:B40`, `A41`, `A42`, `A43`: headers de depto → `unit_header`.",
         "",
         "## Acción requerida",
         "",
-        "- Revisar ambiguous restantes con recepción antes de `ALLOW_EXCEL_SEED=1`.",
-        "- Fechas del calendario: preferir **comentarios** (`In:`/`Out:`) + correcciones Julián.",
+        "- Revisar ambiguous restantes (si hay) antes de `ALLOW_EXCEL_SEED=1`.",
+        "- `unit_header` / `ignore` / waitlist / noise **nunca** entran al seed.",
         "- Deptos: `D1` (Tilo), `D2` (Romerito), `D3` (Esquinita), `VIA_I`.",
-        "- Waitlist → Consultas / carga manual (no son bookings de `VIA_I`).",
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
@@ -540,6 +695,8 @@ def main() -> None:
         "ambiguous": sum(1 for r in all_rows if r.get("classification") == "ambiguous"),
         "noise": sum(1 for r in all_rows if r.get("classification") == "noise"),
         "waitlist": sum(1 for r in all_rows if r.get("classification") == "waitlist"),
+        "unitHeaders": sum(1 for r in all_rows if r.get("classification") == "unit_header"),
+        "ignored": sum(1 for r in all_rows if r.get("classification") == "ignore"),
         "mergesRecoverable": sum(1 for r in merges if r["classification"] == "recoverable"),
         "mergesAmbiguous": sum(1 for r in merges if r["classification"] == "ambiguous"),
         "mergeComments": sum(1 for r in merges if r.get("raw", {}).get("comment")),

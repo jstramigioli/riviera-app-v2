@@ -90,6 +90,10 @@ async function main() {
   const high = data.rows.filter(
     (r) =>
       (r.confidence === "high" || r.classification === "recoverable") &&
+      r.classification !== "unit_header" &&
+      r.classification !== "ignore" &&
+      r.classification !== "waitlist" &&
+      r.classification !== "noise" &&
       r.unit &&
       r.checkIn &&
       r.checkOut,

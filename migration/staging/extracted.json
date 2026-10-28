@@ -1,18 +1,20 @@
 {
-  "extractedAt": "2026-10-28T17:04:35.412503Z",
+  "extractedAt": "2026-10-28T17:40:07.730070Z",
   "sourceFile": "Reservas_2026_2027.xlsx",
   "sourceSha256": "5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b",
   "counts": {
     "recoverable": 141,
-    "ambiguous": 4,
+    "ambiguous": 0,
     "noise": 30,
     "waitlist": 4,
+    "unitHeaders": 4,
+    "ignored": 1,
     "mergesRecoverable": 72,
-    "mergesAmbiguous": 4,
+    "mergesAmbiguous": 0,
     "mergeComments": 69,
     "reservasRecoverable": 69,
     "reservasAmbiguous": 0,
-    "bodyMerges": 76,
+    "bodyMerges": 77,
     "viaIBookingsRecoverable": 5
   },
   "julianCorrections": "2026-10-28",
@@ -74,23 +76,19 @@
       "roomRaw": "Tilo",
       "checkIn": "",
       "checkOut": "",
-      "dateSource": null,
       "guest": "",
-      "status": "CONFIRMADA",
+      "status": "",
       "price": "",
-      "nightlyRateArs": null,
-      "notes": "",
-      "channel": "Excel",
+      "notes": "Unit header row for department D1",
+      "channel": "",
       "doNotMove": false,
       "adults": null,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "empty_or_label_only",
-        "row_label_not_booking",
-        "no_dates"
+      "confidence": "n/a",
+      "classification": "unit_header",
+      "issues": [],
+      "parseNotes": [
+        "julian: department row header (calendar label), not a reservation"
       ],
-      "parseNotes": [],
       "raw": {
         "cellValue": "Tilo",
         "comment": null
@@ -328,23 +326,23 @@
       "sourceRef": "J31:K31",
       "unit": "28",
       "roomRaw": "28",
-      "checkIn": "2026-11-22",
-      "checkOut": "2026-11-24",
-      "dateSource": "merge_seq",
+      "checkIn": "",
+      "checkOut": "",
       "guest": "",
-      "status": "CONFIRMADA",
+      "status": "",
       "price": "",
-      "nightlyRateArs": null,
-      "notes": "",
-      "channel": "Excel",
+      "notes": "Spurious empty merge — not a reservation",
+      "channel": "",
       "doNotMove": false,
       "adults": null,
-      "confidence": "low",
-      "classification": "ambiguous",
+      "confidence": "n/a",
+      "classification": "ignore",
       "issues": [
-        "empty_or_label_only"
+        "spurious_empty_merge"
       ],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: wrongly merged empty cells; drop from ambiguous/import"
+      ],
       "raw": {
         "cellValue": null,
         "comment": null
@@ -1342,23 +1340,19 @@
       "roomRaw": "La Esquinita",
       "checkIn": "",
       "checkOut": "",
-      "dateSource": null,
       "guest": "",
-      "status": "CONFIRMADA",
+      "status": "",
       "price": "",
-      "nightlyRateArs": null,
-      "notes": "",
-      "channel": "Excel",
+      "notes": "Unit header row for department D3",
+      "channel": "",
       "doNotMove": false,
       "adults": null,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "empty_or_label_only",
-        "row_label_not_booking",
-        "no_dates"
+      "confidence": "n/a",
+      "classification": "unit_header",
+      "issues": [],
+      "parseNotes": [
+        "julian: department row header (calendar label), not a reservation"
       ],
-      "parseNotes": [],
       "raw": {
         "cellValue": "La Esquinita",
         "comment": null
@@ -1371,23 +1365,19 @@
       "roomRaw": "via I",
       "checkIn": "",
       "checkOut": "",
-      "dateSource": null,
       "guest": "",
-      "status": "CONFIRMADA",
+      "status": "",
       "price": "",
-      "nightlyRateArs": null,
-      "notes": "",
-      "channel": "Excel",
+      "notes": "Unit header row for department VIA_I",
+      "channel": "",
       "doNotMove": false,
       "adults": null,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "empty_or_label_only",
-        "row_label_not_booking",
-        "no_dates"
+      "confidence": "n/a",
+      "classification": "unit_header",
+      "issues": [],
+      "parseNotes": [
+        "julian: department row header (calendar label), not a reservation"
       ],
-      "parseNotes": [],
       "raw": {
         "cellValue": "via I",
         "comment": null
@@ -1945,6 +1935,31 @@
       "parseNotes": [],
       "raw": {
         "cellValue": "Luli",
+        "comment": null
+      }
+    },
+    {
+      "source": "Libro de reservas",
+      "sourceRef": "A42",
+      "unit": "D2",
+      "roomRaw": "Romerito",
+      "checkIn": "",
+      "checkOut": "",
+      "guest": "",
+      "status": "",
+      "price": "",
+      "notes": "Unit header cell for department D2",
+      "channel": "",
+      "doNotMove": false,
+      "adults": null,
+      "confidence": "n/a",
+      "classification": "unit_header",
+      "issues": [],
+      "parseNotes": [
+        "julian: department row header cell (not merged A:B), not a reservation"
+      ],
+      "raw": {
+        "cellValue": "Romerito",
         "comment": null
       }
     },
