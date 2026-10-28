@@ -5,6 +5,7 @@ import { formatArs } from "@/lib/money";
 
 export default async function ReservasPage() {
   const reservations = await prisma.reservation.findMany({
+    where: { status: { not: "CONSULTA" } },
     orderBy: { checkInDate: "desc" },
     take: 100,
     include: {
@@ -23,11 +24,22 @@ export default async function ReservasPage() {
           >
             Reservas
           </h1>
-          <p className="text-sm text-[var(--muted)]">Estado operativo ≠ estado de pago.</p>
+          <p className="text-sm text-[var(--muted)]">
+            Estado operativo ≠ estado de pago. Las consultas van en{" "}
+            <Link className="text-[var(--brand)]" href="/consultas">
+              Consultas
+            </Link>
+            .
+          </p>
         </div>
-        <Link className="btn btn-primary" href="/reservas/nueva">
-          Nueva reserva
-        </Link>
+        <div className="flex gap-2">
+          <Link className="btn btn-ghost" href="/consultas/nueva">
+            Nueva consulta
+          </Link>
+          <Link className="btn btn-primary" href="/reservas/nueva">
+            Nueva reserva
+          </Link>
+        </div>
       </div>
       <div className="panel overflow-auto rounded-xl">
         <table className="w-full min-w-[800px] text-left text-sm">
@@ -36,7 +48,7 @@ export default async function ReservasPage() {
               <th className="px-3 py-2">Código</th>
               <th className="px-3 py-2">Huésped</th>
               <th className="px-3 py-2">In–Out</th>
-              <th className="px-3 py-2">Unidades</th>
+              <th className="px-3 py-2">Habitación</th>
               <th className="px-3 py-2">Estado</th>
               <th className="px-3 py-2">Pago</th>
               <th className="px-3 py-2">Precio</th>
@@ -52,8 +64,10 @@ export default async function ReservasPage() {
                       {r.code}
                     </Link>
                     {r.doNotMove ? (
-                      <span className="ml-2 text-xs text-[var(--accent)]">no mover</span>
-                    ) : null}
+                      <span className="ml-2 text-xs text-[var(--accent)]">fijada</span>
+                    ) : (
+                      <span className="ml-2 text-xs text-[var(--muted)]">flexible</span>
+                    )}
                   </td>
                   <td className="px-3 py-2">
                     {g ? `${g.lastName}, ${g.firstName}` : "—"}

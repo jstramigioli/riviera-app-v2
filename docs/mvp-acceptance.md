@@ -11,6 +11,10 @@
 | RES-04 | Agregar tramo mid-stay | |
 | RES-06 | Flag no mover visible | |
 | RES-08 | Estado operativo ≠ pago en ficha | |
+| HAB-08 | Alta: solo habitaciones libres en el rango (live) | |
+| RES-07b | Tags obligatorio/preferencia filtran/ordenan | |
+| RES-09 | Tooltips `?` en tramos / tags / seña / no mover | |
+| RES-11 | Disponibilidad + servicios en vivo; copy hotelero | |
 | TAR-03 | Confirmar congela precio | |
 | HUE-03 | Check-in/out en Operación | |
 | PAG-03 | Pago USD exige FX | |

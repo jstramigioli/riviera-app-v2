@@ -119,7 +119,8 @@ function List({
                   <Link href={`/reservas/${r.id}`} className="font-semibold text-[var(--brand)]">
                     {r.code}
                   </Link>{" "}
-                  · {g ? `${g.lastName}, ${g.firstName}` : "Sin titular"} · {units || "sin unidad"}
+                  · {g ? `${g.lastName}, ${g.firstName}` : "Sin titular"} ·{" "}
+                  {units || "sin habitación"}
                 </div>
                 {action && actionLabel ? (
                   <form action={action}>
