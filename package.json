@@ -16,8 +16,10 @@
     "db:reset": "prisma migrate reset --force",
     "postinstall": "prisma generate",
     "migration:extract": "tsx migration/scripts/extract.ts",
+    "migration:extract-excel": "python3 migration/scripts/extract-excel.py",
     "migration:report": "tsx migration/scripts/report-ambiguous.ts",
-    "migration:import-staging": "tsx migration/scripts/import-staging.ts"
+    "migration:import-staging": "tsx migration/scripts/import-staging.ts",
+    "db:seed-excel": "tsx prisma/seed-excel.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

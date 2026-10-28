@@ -1,3 +1,4 @@
+import "dotenv/config";
 import {
   PrismaClient,
   Role,
@@ -14,10 +15,15 @@ const ROOM_CODES = Array.from({ length: 36 }, (_, i) => String(i + 1)).filter(
   (c) => c !== "4" && c !== "20",
 );
 
+/**
+ * Named apartments from Excel calendar (D-05: seed/DB only).
+ * Codes D1–D3 match HAB-01; VIA_I is the 4th depto present in the workbook.
+ */
 const DEPTOS = [
-  { code: "D1", name: "Depto 1", capacity: 4 },
-  { code: "D2", name: "Depto 2", capacity: 4 },
-  { code: "D3", name: "Depto 3", capacity: 5 },
+  { code: "D1", name: "El Tilo", capacity: 4 },
+  { code: "D2", name: "Romerito", capacity: 2 },
+  { code: "D3", name: "La Esquinita", capacity: 4 },
+  { code: "VIA_I", name: "Vía I", capacity: 4 },
 ];
 
 async function main() {
