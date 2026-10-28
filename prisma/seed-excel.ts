@@ -3,13 +3,14 @@
  *
  * Prerequisites:
  *   1. `npm run db:seed` (inventory, users, tarifas, temporadas)
- *   2. `npm run migration:extract-excel`
+ *   2. `npm run migration:extract-excel` (includes Julián 2026-10-28 date fixes)
  *   3. Review migration/staging/ambiguous-report.md
  *
  * Guard: refuses unless ALLOW_EXCEL_SEED=1.
  * Only imports rows with confidence=high / classification=recoverable.
  * Prefers the structured "Reservas" sheet; falls back to Libro merges for
  * units/dates not already covered (guest+unit+checkIn key).
+ * Waitlist sheet rows are never imported (they are aspirantes, not VIA_I bookings).
  */
 import fs from "fs";
 import path from "path";

@@ -1,19 +1,21 @@
 {
-  "extractedAt": "2026-10-28T16:14:01.080046Z",
+  "extractedAt": "2026-10-28T17:04:35.412503Z",
   "sourceFile": "Reservas_2026_2027.xlsx",
   "sourceSha256": "5d98f7b3812d393657eb979330666d38f84a33082add80a2b40f29204111bf1b",
   "counts": {
-    "recoverable": 137,
-    "ambiguous": 8,
+    "recoverable": 141,
+    "ambiguous": 4,
     "noise": 30,
     "waitlist": 4,
-    "mergesRecoverable": 71,
-    "mergesAmbiguous": 5,
+    "mergesRecoverable": 72,
+    "mergesAmbiguous": 4,
     "mergeComments": 69,
-    "reservasRecoverable": 66,
-    "reservasAmbiguous": 3,
-    "bodyMerges": 76
+    "reservasRecoverable": 69,
+    "reservasAmbiguous": 0,
+    "bodyMerges": 76,
+    "viaIBookingsRecoverable": 5
   },
+  "julianCorrections": "2026-10-28",
   "rows": [
     {
       "source": "Libro de reservas",
@@ -213,7 +215,9 @@
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ],
       "raw": {
         "cellValue": "Marchese x3",
         "comment": "Viene con hab. 25"
@@ -667,7 +671,9 @@
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ],
       "raw": {
         "cellValue": "Marchese x4",
         "comment": "Viene con hab. 25"
@@ -969,7 +975,9 @@
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ],
       "raw": {
         "cellValue": "Marchese x2",
         "comment": "Viene con hab. 25"
@@ -1169,7 +1177,9 @@
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ],
       "raw": {
         "cellValue": "Marchese x4",
         "comment": "Viene con hab. 25"
@@ -1664,8 +1674,8 @@
       "unit": "8",
       "roomRaw": "8",
       "checkIn": "2027-02-01",
-      "checkOut": "2025-02-08",
-      "dateSource": "comment",
+      "checkOut": "2027-02-08",
+      "dateSource": "julian_correction",
       "guest": "BK Silvia Paiges - x 4 camas",
       "status": "CONFIRMADA",
       "price": "",
@@ -1674,13 +1684,12 @@
       "channel": "Booking",
       "doNotMove": false,
       "adults": 4,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "out_before_in"
-      ],
+      "confidence": "high",
+      "classification": "recoverable",
+      "issues": [],
       "parseNotes": [
-        "merge_out_differs_from_comment:2027-02-08vs2025-02-08"
+        "merge_out_differs_from_comment:2027-02-08vs2025-02-08",
+        "julian: out 2025→2027-02-08"
       ],
       "raw": {
         "cellValue": "BK Silvia Paiges - x 4 camas",
@@ -1881,7 +1890,9 @@
       "confidence": "high",
       "classification": "recoverable",
       "issues": [],
-      "parseNotes": [],
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ],
       "raw": {
         "cellValue": "Marchese x1",
         "comment": "28/9\nIn: 23/12/26 Out: 26/12/26\nReserva a cargo de pedro + diferencia de cena buffet. Resto de extras deben cargarse y cobrarse a cada habitación.\n1 hab. sgl x 3 d: $ 414.000.-\n1 hab. Dbl x 3 d: $ 654.000.-\n1 hab. tpl x 3 d: $ 819.000.-\n2 depto. x 4 x 3 d: $ 1.980.000.-\nTotal: $ 3.867.000.-\nSeña a Luli: $ 3.000.000.- 20/10/26\nTel: 011 15 44264925\nCorreo: pedro11pam@yahoo.com.ar"
@@ -1965,7 +1976,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -1995,7 +2007,8 @@
         "plan": "Media pensión",
         "estado": "Pago Total",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2025,7 +2038,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2055,7 +2069,8 @@
         "plan": "Con desayuno",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2085,7 +2100,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2115,7 +2131,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": "3 + bebe"
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2145,7 +2162,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2175,7 +2193,8 @@
         "plan": "Media pensión",
         "estado": "Sin seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2205,7 +2224,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2235,7 +2255,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2265,7 +2286,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 3.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2295,7 +2317,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2325,7 +2348,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2355,7 +2379,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2385,7 +2410,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2415,7 +2441,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2445,7 +2472,10 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ]
     },
     {
       "source": "Reservas",
@@ -2454,7 +2484,7 @@
       "excelId": "#00018",
       "unit": "21",
       "roomRaw": "21",
-      "checkIn": "2026-12-26",
+      "checkIn": "2026-12-23",
       "checkOut": "2026-12-26",
       "guest": "Pedro Marchese",
       "firstName": "Pedro",
@@ -2467,17 +2497,18 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 2,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "out_before_in"
-      ],
+      "confidence": "high",
+      "classification": "recoverable",
+      "issues": [],
       "raw": {
         "habitacion": "21",
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ]
     },
     {
       "source": "Reservas",
@@ -2486,7 +2517,7 @@
       "excelId": "#00019",
       "unit": "17",
       "roomRaw": "17",
-      "checkIn": "2026-12-26",
+      "checkIn": "2026-12-23",
       "checkOut": "2026-12-26",
       "guest": "Pedro Marchese",
       "firstName": "Pedro",
@@ -2499,17 +2530,18 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 3,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "out_before_in"
-      ],
+      "confidence": "high",
+      "classification": "recoverable",
+      "issues": [],
       "raw": {
         "habitacion": "17",
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 3.0
-      }
+      },
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ]
     },
     {
       "source": "Reservas",
@@ -2539,7 +2571,10 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ]
     },
     {
       "source": "Reservas",
@@ -2569,7 +2604,10 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": [
+        "julian: Marchese Dec stay → 2026-12-23..2026-12-26"
+      ]
     },
     {
       "source": "Reservas",
@@ -2599,7 +2637,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2629,7 +2668,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2659,7 +2699,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": "3 + bb"
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2689,7 +2730,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2719,7 +2761,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2749,7 +2792,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2779,7 +2823,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2809,7 +2854,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2839,7 +2885,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2869,7 +2916,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2899,7 +2947,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2929,7 +2978,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2959,7 +3009,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -2989,7 +3040,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3019,7 +3071,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3049,7 +3102,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3059,7 +3113,7 @@
       "unit": "31",
       "roomRaw": "31",
       "checkIn": "2027-02-25",
-      "checkOut": "2026-03-02",
+      "checkOut": "2027-03-02",
       "guest": "Ernesto Catani",
       "firstName": "Ernesto",
       "lastName": "Catani",
@@ -3071,17 +3125,18 @@
       "channel": "Excel",
       "doNotMove": false,
       "adults": 1,
-      "confidence": "low",
-      "classification": "ambiguous",
-      "issues": [
-        "out_before_in"
-      ],
+      "confidence": "high",
+      "classification": "recoverable",
+      "issues": [],
       "raw": {
         "habitacion": "31",
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": [
+        "julian: out 2026-03-02→2027-03-02"
+      ]
     },
     {
       "source": "Reservas",
@@ -3111,7 +3166,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3141,7 +3197,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3171,7 +3228,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3201,7 +3259,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3231,7 +3290,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3261,7 +3321,8 @@
         "plan": "Media pensión",
         "estado": "Pago Total",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3291,7 +3352,8 @@
         "plan": "Media pensión",
         "estado": "Pago Total",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3321,7 +3383,8 @@
         "plan": "Media pensión",
         "estado": "Pago Total",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3351,7 +3414,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 5.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3381,7 +3445,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3413,7 +3478,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3443,7 +3509,8 @@
         "plan": "Sin desayuno",
         "estado": null,
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3473,7 +3540,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3503,7 +3571,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3533,7 +3602,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3563,7 +3633,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3593,7 +3664,8 @@
         "plan": "Sin desayuno",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3623,7 +3695,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3653,7 +3726,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3683,7 +3757,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3713,7 +3788,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3743,7 +3819,8 @@
         "plan": "Con desayuno",
         "estado": "Con Seña",
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3773,7 +3850,8 @@
         "plan": "Media pensión",
         "estado": "Pago Total",
         "pax": 3.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3803,7 +3881,8 @@
         "plan": "Sin desayuno",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3833,7 +3912,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3863,7 +3943,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3893,7 +3974,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3923,7 +4005,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 2.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3953,7 +4036,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 1.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -3983,7 +4067,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4013,7 +4098,8 @@
         "plan": "Media pensión",
         "estado": null,
         "pax": 3.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4043,7 +4129,8 @@
         "plan": "Media pensión",
         "estado": "Con Seña",
         "pax": 4.0
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4075,7 +4162,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4107,7 +4195,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4139,7 +4228,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4171,7 +4261,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4203,7 +4294,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4235,7 +4327,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4267,7 +4360,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4299,7 +4393,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4331,7 +4426,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4363,7 +4459,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4395,7 +4492,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4427,7 +4525,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4459,7 +4558,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4491,7 +4591,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4523,7 +4624,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4555,7 +4657,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4587,7 +4690,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4619,7 +4723,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4651,7 +4756,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4683,7 +4789,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4715,7 +4822,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4747,7 +4855,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4779,7 +4888,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4811,7 +4921,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4843,7 +4954,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4875,7 +4987,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4907,7 +5020,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4939,7 +5053,8 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Reservas",
@@ -4971,11 +5086,13 @@
         "plan": null,
         "estado": null,
         "pax": null
-      }
+      },
+      "parseNotes": []
     },
     {
       "source": "Lista de espera Via I",
       "sourceRef": "row:2",
+      "unit": "",
       "guest": "Analia Grosso",
       "stayHint": "23/1/27 al 31/1/27 inc.",
       "requestedAt": "",
@@ -4985,12 +5102,17 @@
       "classification": "waitlist",
       "confidence": "low",
       "issues": [
+        "waitlist_not_via_i_booking",
         "waitlist_manual_review"
+      ],
+      "parseNotes": [
+        "Hoja = lista de espera (aspirantes). Reservas reales de Vía I están en Libro fila via I / Reservas Habitación=Vía I (unidad VIA_I)."
       ]
     },
     {
       "source": "Lista de espera Via I",
       "sourceRef": "row:3",
+      "unit": "",
       "guest": "Natalia Roth",
       "stayHint": "9/1/27 al 15/1/27 inc.",
       "requestedAt": "2026-09-29",
@@ -5000,12 +5122,17 @@
       "classification": "waitlist",
       "confidence": "low",
       "issues": [
+        "waitlist_not_via_i_booking",
         "waitlist_manual_review"
+      ],
+      "parseNotes": [
+        "Hoja = lista de espera (aspirantes). Reservas reales de Vía I están en Libro fila via I / Reservas Habitación=Vía I (unidad VIA_I)."
       ]
     },
     {
       "source": "Lista de espera Via I",
       "sourceRef": "row:4",
+      "unit": "",
       "guest": "Carolina Roth",
       "stayHint": "9/1/27 al 15/1/27 inc.",
       "requestedAt": "2026-09-29",
@@ -5015,12 +5142,17 @@
       "classification": "waitlist",
       "confidence": "low",
       "issues": [
+        "waitlist_not_via_i_booking",
         "waitlist_manual_review"
+      ],
+      "parseNotes": [
+        "Hoja = lista de espera (aspirantes). Reservas reales de Vía I están en Libro fila via I / Reservas Habitación=Vía I (unidad VIA_I)."
       ]
     },
     {
       "source": "Lista de espera Via I",
       "sourceRef": "row:5",
+      "unit": "",
       "guest": "Catalina Sivit",
       "stayHint": "2° quincena enero",
       "requestedAt": "2026-10-12",
@@ -5030,7 +5162,11 @@
       "classification": "waitlist",
       "confidence": "low",
       "issues": [
+        "waitlist_not_via_i_booking",
         "waitlist_manual_review"
+      ],
+      "parseNotes": [
+        "Hoja = lista de espera (aspirantes). Reservas reales de Vía I están en Libro fila via I / Reservas Habitación=Vía I (unidad VIA_I)."
       ]
     }
   ],

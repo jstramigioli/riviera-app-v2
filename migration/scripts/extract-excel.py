@@ -309,6 +309,15 @@ def extract_reservas(ws) -> list[dict]:
 
 
 def extract_waitlist(ws) -> list[dict]:
+    """
+    Sheet "Lista de espera Via I" is a *waitlist for* the Via I apartment
+    (and sometimes Esquinita), NOT the Via I department bookings themselves.
+
+    Real VIA_I reservations live on:
+      - Libro de reservas row "via I" → unit code VIA_I
+      - Reservas sheet Habitación = "Vía I"
+    Those are extracted as normal recoverable rows elsewhere.
+    """
     rows: list[dict] = []
     for r in range(2, ws.max_row + 1):
         vals = [ws.cell(r, c).value for c in range(1, 7)]
@@ -318,6 +327,7 @@ def extract_waitlist(ws) -> list[dict]:
             {
                 "source": "Lista de espera Via I",
                 "sourceRef": f"row:{r}",
+                "unit": "",
                 "guest": str(vals[0]).strip() if vals[0] else "",
                 "stayHint": str(vals[1]).strip() if vals[1] else "",
                 "requestedAt": vals[2].date().isoformat()
@@ -328,9 +338,107 @@ def extract_waitlist(ws) -> list[dict]:
                 "contact": str(vals[5]).strip() if vals[5] else "",
                 "classification": "waitlist",
                 "confidence": "low",
-                "issues": ["waitlist_manual_review"],
+                "issues": [
+                    "waitlist_not_via_i_booking",
+                    "waitlist_manual_review",
+                ],
+                "parseNotes": [
+                    "Hoja = lista de espera (aspirantes). Reservas reales de Vía I "
+                    "están en Libro fila via I / Reservas Habitación=Vía I (unidad VIA_I)."
+                ],
             }
         )
+    return rows
+
+
+def reclassify(row: dict) -> dict:
+    """Recompute confidence after manual date corrections."""
+    issues = list(row.get("issues") or [])
+    # Drop date issues if dates are now valid
+    cin = row.get("checkIn") or ""
+    cout = row.get("checkOut") or ""
+    if cin and cout and cin < cout:
+        issues = [i for i in issues if i not in ("out_before_in", "no_dates", "missing_dates")]
+    row["issues"] = issues
+
+    if row.get("classification") in ("waitlist", "noise"):
+        return row
+    if issues:
+        row["classification"] = "ambiguous"
+        row["confidence"] = "low"
+    else:
+        # Still need identity for merges/reservas
+        if row.get("source") == "Libro de reservas":
+            if not row.get("unit") or (not row.get("guest") and not (row.get("raw") or {}).get("comment")):
+                row["classification"] = "ambiguous"
+                row["confidence"] = "low"
+                return row
+        if row.get("source") == "Reservas":
+            if not row.get("unit") or not cin or not cout:
+                row["classification"] = "ambiguous"
+                row["confidence"] = "low"
+                return row
+        row["classification"] = "recoverable"
+        row["confidence"] = "high"
+    return row
+
+
+def apply_julian_corrections(rows: list[dict]) -> list[dict]:
+    """
+    Corrections from Julián review 2026-10-28.
+    Applied on extracted rows (source Excel left intact).
+    """
+    applied: list[str] = []
+    for row in rows:
+        src = row.get("source")
+        ref = row.get("sourceRef")
+        guest = (row.get("guest") or "").lower()
+        last = (row.get("lastName") or "").lower()
+        notes = list(row.get("parseNotes") or [])
+
+        # 1) Libro CC12:CI13 Silvia Paiges — out year typo 2025 → 2027
+        if src == "Libro de reservas" and ref == "CC12:CI13":
+            row["checkOut"] = "2027-02-08"
+            row["checkIn"] = row.get("checkIn") or "2027-02-01"
+            row["dateSource"] = "julian_correction"
+            notes.append("julian: out 2025→2027-02-08")
+            applied.append(f"Paiges Libro {ref} out→2027-02-08")
+
+        # 2) Reservas row 39 Ernesto Catani — out year typo 2026 → 2027
+        if src == "Reservas" and ref == "row:39":
+            row["checkOut"] = "2027-03-02"
+            row["checkIn"] = row.get("checkIn") or "2027-02-25"
+            notes.append("julian: out 2026-03-02→2027-03-02")
+            applied.append("Catani Reservas row:39 out→2027-03-02")
+
+        # 3) Marchese Dec cluster — all Dec-2026 / broken same-day → 23–26 Dec
+        #    Keep separate Feb-2027 stay on room 25 (#00053 / Libro CN28:DD28).
+        is_marchese = "marchese" in guest or last == "marchese"
+        if is_marchese:
+            cin = row.get("checkIn") or ""
+            cout = row.get("checkOut") or ""
+            is_feb_2027_stay = cin.startswith("2027-02") or cin.startswith("2027-03")
+            is_dec_cluster = (
+                cin.startswith("2026-12")
+                or cout.startswith("2026-12")
+                or "out_before_in" in (row.get("issues") or [])
+            )
+            if is_dec_cluster and not is_feb_2027_stay:
+                row["checkIn"] = "2026-12-23"
+                row["checkOut"] = "2026-12-26"
+                notes.append("julian: Marchese Dec stay → 2026-12-23..2026-12-26")
+                applied.append(f"Marchese {src} {ref} → 2026-12-23..26")
+
+        row["parseNotes"] = notes
+        reclassify(row)
+
+    # stash on a sentinel for logging (main reads applied list via return side)
+    for row in rows:
+        if row is rows[0]:
+            row.setdefault("raw", {})
+    print(f"Julián corrections applied: {len(applied)}")
+    for a in applied:
+        print(f"  - {a}")
     return rows
 
 
@@ -370,18 +478,40 @@ def write_report(payload: dict, path: Path) -> None:
             f"{r.get('checkIn') or r.get('stayHint') or '∅'} | {r.get('checkOut') or '∅'} | "
             f"{(r.get('guest') or '∅').replace('|','/')} | {notes.replace('|','/')} |"
         )
+    wait = [r for r in rows if r.get("classification") == "waitlist"]
+    via_bookings = [
+        r
+        for r in rows
+        if r.get("unit") == "VIA_I" and r.get("classification") == "recoverable"
+    ]
     lines += [
         "",
         "## Noise (ID-only placeholders)",
         "",
         f"{len(noise)} filas solo con ID de reserva y sin datos — no importar.",
         "",
+        "## Vía I: waitlist vs reservas del depto (Julián)",
+        "",
+        "La hoja **«Lista de espera Via I»** no son reservas del departamento Vía I.",
+        "Es una **lista de espera** (aspirantes que quieren Esq./Vía si se libera).",
+        f"Esas **{len(wait)}** filas siguen en `waitlist` → Consultas / carga manual.",
+        "",
+        f"Las reservas reales del depto (`unit=VIA_I`) ya están como recoverable: **{len(via_bookings)}** "
+        "(Libro fila `via I` + hoja Reservas `Habitación=Vía I`).",
+        "",
+        "## Correcciones Julián (2026-10-28)",
+        "",
+        "- Libro `CC12:CI13` Silvia Paiges: out **2027-02-08** (año mal en comentario).",
+        "- Reservas row 39 Ernesto Catani: out **2027-03-02**.",
+        "- Marchese (estadía dic): **in 2026-12-23 / out 2026-12-26** (incluye filas same-day).",
+        "  La estadía febrero 2027 en hab. 25 se mantiene aparte.",
+        "",
         "## Acción requerida",
         "",
-        "- Revisar ambiguous con recepción antes de `ALLOW_STAGING_IMPORT=1`.",
-        "- Fechas del calendario: preferir **comentarios** (`In:`/`Out:`) porque la fila de fechas del Excel tiene años corruptos.",
-        "- Deptos con nombre se mapean a `D1` (Tilo), `D2` (Romerito), `D3` (Esquinita), `VIA_I`.",
-        "- Waitlist → sección Consultas / carga manual.",
+        "- Revisar ambiguous restantes con recepción antes de `ALLOW_EXCEL_SEED=1`.",
+        "- Fechas del calendario: preferir **comentarios** (`In:`/`Out:`) + correcciones Julián.",
+        "- Deptos: `D1` (Tilo), `D2` (Romerito), `D3` (Esquinita), `VIA_I`.",
+        "- Waitlist → Consultas / carga manual (no son bookings de `VIA_I`).",
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
@@ -398,7 +528,12 @@ def main() -> None:
     merges = extract_merges(wb["Libro de reservas"])
     reservas = extract_reservas(wb[" Reservas"])
     waitlist = extract_waitlist(wb["Lista de espera Via I"])
-    all_rows = merges + reservas + waitlist
+    all_rows = apply_julian_corrections(merges + reservas + waitlist)
+
+    # refresh sheet-level counts after corrections
+    merges = [r for r in all_rows if r.get("source") == "Libro de reservas"]
+    reservas = [r for r in all_rows if r.get("source") == "Reservas"]
+    waitlist = [r for r in all_rows if r.get("source") == "Lista de espera Via I"]
 
     counts = {
         "recoverable": sum(1 for r in all_rows if r.get("classification") == "recoverable"),
@@ -411,6 +546,9 @@ def main() -> None:
         "reservasRecoverable": sum(1 for r in reservas if r["classification"] == "recoverable"),
         "reservasAmbiguous": sum(1 for r in reservas if r["classification"] == "ambiguous"),
         "bodyMerges": len(merges),
+        "viaIBookingsRecoverable": sum(
+            1 for r in all_rows if r.get("unit") == "VIA_I" and r.get("classification") == "recoverable"
+        ),
     }
 
     payload = {
@@ -418,6 +556,7 @@ def main() -> None:
         "sourceFile": str(xlsx.name),
         "sourceSha256": digest,
         "counts": counts,
+        "julianCorrections": "2026-10-28",
         "rows": all_rows,
         # Back-compat for older import-staging.ts (expects rows[].confidence)
         "compat": "migration-v2-excel-merges-comments",

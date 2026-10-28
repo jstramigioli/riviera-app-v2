@@ -20,15 +20,19 @@ Fuente operativa actual: `original/Reservas_2026_2027.xlsx` (Libro de reservas =
 8. **Fecha de corte** — congelar Excel; solo altas en PMS.
 9. **Go-live** — ver `docs/cutover-checklist.md`.
 
-## Conteos de referencia (Reservas_2026_2027.xlsx)
+## Conteos de referencia (post-correcciones Julián 2026-10-28)
 
 | Fuente | Recoverable | Ambiguous | Noise / waitlist |
 |--------|------------:|----------:|-----------------:|
-| Libro de reservas (76 merges, 69 comments) | 71 | 5 | — |
-| Hoja Reservas | 66 | 3 (fechas inválidas) | 30 (ID-only) |
-| Lista de espera Vía I | — | — | 4 |
+| Libro de reservas (76 merges, 69 comments) | 72 | 4 (labels) | — |
+| Hoja Reservas | 69 | 0 | 30 (ID-only) |
+| Lista de espera Vía I | — | — | 4 (aspirantes, no bookings) |
 
-Fechas del calendario: **preferir comentarios** (`In:` / `Out:`). La fila de fechas del Excel tiene años corruptos; el extractor reconstruye la secuencia 2026-11-16 → 2027-04-30 solo como fallback.
+**Total recoverable: 141.** Correcciones en `extract-excel.py` (`apply_julian_corrections`): Paiges out→2027-02-08, Catani out→2027-03-02, Marchese dic→23–26/12/2026.
+
+Fechas del calendario: **preferir comentarios** + correcciones Julián. La fila de fechas del Excel tiene años corruptos; el extractor reconstruye 2026-11-16 → 2027-04-30 solo como fallback.
+
+**Vía I:** la hoja «Lista de espera Via I» ≠ reservas del depto. Bookings reales usan unidad `VIA_I` desde Libro/Reservas.
 
 ## Carpetas
 
