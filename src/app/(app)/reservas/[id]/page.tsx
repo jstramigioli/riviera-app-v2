@@ -13,6 +13,7 @@ import { balanceArs, formatArs, netPaymentsArs } from "@/lib/money";
 import { getUsdBlueRate } from "@/lib/payments";
 import {
   addSegmentAction,
+  assignSuggestedTariffAction,
   setPriceAction,
   updateStatusAction,
 } from "@/app/actions/reservations";
@@ -21,6 +22,12 @@ import { createPaymentAction, voidPaymentAction } from "@/app/actions/payments";
 import { linkGuestAction } from "@/app/actions/guests";
 import { requireUser } from "@/lib/auth";
 import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
+import { formatDateUi, isoDate } from "@/lib/dates";
+import { suggestPriceArs } from "@/lib/rates";
+import {
+  guestHasMissingFields,
+  missingGuestFieldLabels,
+} from "@/lib/guest-completeness";
 
 export default async function ReservaDetailPage({
   params,
@@ -59,12 +66,29 @@ export default async function ReservaDetailPage({
   const net = netPaymentsArs(reservation.payments);
   const bal = balanceArs(reservation.agreedPriceArs, reservation.payments);
 
+  const priceMissing = reservation.agreedPriceArs == null;
+  const categoryId =
+    reservation.segments[0]?.physicalUnit.commercialCategoryId ?? null;
+  const suggestedTotal = priceMissing
+    ? await suggestPriceArs(prisma, {
+        commercialCategoryId: categoryId,
+        serviceType: reservation.serviceType,
+        checkInDate: isoDate(reservation.checkInDate),
+        checkOutDate: isoDate(reservation.checkOutDate),
+      })
+    : null;
+
+  const guestsWithGaps = reservation.guests.filter((rg) =>
+    guestHasMissingFields(rg.guest),
+  );
+  const paxCount = reservation.adults + reservation.children;
+
   return (
     <div className="space-y-5 fade-up">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/calendario" className="text-xs text-[var(--muted)]">
-            ← Calendario
+          <Link href="/calendario" className="text-xs text-link-back">
+            ← Volver al calendario
           </Link>
           <h1
             className="text-3xl text-[var(--brand-deep)]"
@@ -73,11 +97,10 @@ export default async function ReservaDetailPage({
             {reservation.code}
           </h1>
           <p className="text-sm text-[var(--muted)]">
-            {reservation.checkInDate.toISOString().slice(0, 10)} →{" "}
-            {reservation.checkOutDate.toISOString().slice(0, 10)}
+            {formatDateUi(reservation.checkInDate)} →{" "}
+            {formatDateUi(reservation.checkOutDate)}
             {" · "}
-            {reservation.adults + reservation.children} persona
-            {reservation.adults + reservation.children === 1 ? "" : "s"}
+            {paxCount} persona{paxCount === 1 ? "" : "s"}
             {reservation.children > 0
               ? ` (${reservation.adults} + ${reservation.children} niño${reservation.children === 1 ? "" : "s"})`
               : ""}
@@ -95,15 +118,18 @@ export default async function ReservaDetailPage({
           </div>
           <div>
             Precio:{" "}
-            <strong>
-              {reservation.agreedPriceArs != null
-                ? formatArs(reservation.agreedPriceArs)
-                : "—"}
-            </strong>
+            {reservation.agreedPriceArs == null ? (
+              <strong className="text-[var(--warn)]">Pendiente de asignar tarifa</strong>
+            ) : (
+              <strong>{formatArs(reservation.agreedPriceArs)}</strong>
+            )}
             {reservation.priceFrozen ? " (congelado)" : ""}
           </div>
           <div>
-            Saldo: <strong>{formatArs(bal)}</strong>
+            Saldo:{" "}
+            <strong>
+              {reservation.agreedPriceArs == null ? "—" : formatArs(bal)}
+            </strong>
           </div>
         </div>
       </div>
@@ -114,7 +140,73 @@ export default async function ReservaDetailPage({
         </div>
       ) : null}
 
-          <div
+      {priceMissing ? (
+        <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-sm text-amber-950 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="font-semibold">Pendiente de asignar tarifa</div>
+            <p className="mt-0.5 text-amber-900/80">
+              Esta reserva todavía no tiene precio acordado. Podés cargar el monto a
+              mano o asignar la tarifa calculada con los precios cargados para estas
+              fechas, la categoría de la habitación y el servicio (
+              {SERVICE_TYPE_LABEL[reservation.serviceType]}).
+            </p>
+            {suggestedTotal != null ? (
+              <p className="mt-1 text-amber-900/90">
+                Calculado: <strong>{formatArs(suggestedTotal)}</strong>
+              </p>
+            ) : (
+              <p className="mt-1 text-amber-900/80">
+                No se pudo calcular: faltan tarifas para alguna noche o la habitación
+                no tiene categoría.
+              </p>
+            )}
+          </div>
+          <form action={assignSuggestedTariffAction}>
+            <input type="hidden" name="id" value={reservation.id} />
+            <button
+              className="btn btn-primary whitespace-nowrap"
+              type="submit"
+              disabled={suggestedTotal == null}
+              title={
+                suggestedTotal == null
+                  ? "No hay tarifa completa para estas fechas"
+                  : undefined
+              }
+            >
+              {suggestedTotal != null
+                ? `Asignar tarifa (${formatArs(suggestedTotal)})`
+                : "Asignar tarifa calculada"}
+            </button>
+          </form>
+        </div>
+      ) : null}
+
+      {guestsWithGaps.length ? (
+        <div className="rounded-lg border border-orange-200 bg-orange-50 px-3 py-2.5 text-sm text-orange-950">
+          <div className="font-semibold inline-flex items-center gap-1.5">
+            <span
+              aria-hidden
+              className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white"
+            >
+              !
+            </span>
+            Faltan datos del pasajero
+          </div>
+          <ul className="mt-1.5 space-y-0.5 text-orange-900/90">
+            {guestsWithGaps.map((rg) => (
+              <li key={rg.id}>
+                <Link href={`/huespedes/${rg.guestId}`} className="text-link">
+                  {rg.guest.lastName}, {rg.guest.firstName}
+                </Link>
+                {rg.role === "TITULAR" ? " (titular)" : ""}: falta{" "}
+                {missingGuestFieldLabels(rg.guest).join(", ")}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      <div
         className={`rounded-lg border px-3 py-2 text-sm flex flex-wrap items-center justify-between gap-2 ${
           reservation.doNotMove
             ? "border-amber-200 bg-amber-50 text-amber-950"
@@ -192,7 +284,19 @@ export default async function ReservaDetailPage({
         </section>
 
         <section className="panel rounded-xl p-4 space-y-3">
-          <h2 className="font-semibold">Precio acordado</h2>
+          <h2 className="font-semibold inline-flex items-center gap-1.5">
+            Precio acordado
+            {priceMissing ? (
+              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">
+                Pendiente
+              </span>
+            ) : null}
+          </h2>
+          {priceMissing ? (
+            <p className="text-sm text-[var(--warn)] font-medium">
+              Pendiente de asignar tarifa
+            </p>
+          ) : null}
           <form action={setPriceAction} className="grid gap-2 sm:grid-cols-2">
             <input type="hidden" name="id" value={reservation.id} />
             <div>
@@ -204,7 +308,7 @@ export default async function ReservaDetailPage({
                 defaultValue={
                   reservation.agreedPriceArs != null
                     ? Number(reservation.agreedPriceArs)
-                    : undefined
+                    : suggestedTotal ?? undefined
                 }
                 required
               />
@@ -223,6 +327,14 @@ export default async function ReservaDetailPage({
               Guardar precio
             </button>
           </form>
+          {priceMissing && suggestedTotal != null ? (
+            <form action={assignSuggestedTariffAction}>
+              <input type="hidden" name="id" value={reservation.id} />
+              <button className="btn btn-ghost w-full" type="submit">
+                Usar tarifa calculada ({formatArs(suggestedTotal)})
+              </button>
+            </form>
+          ) : null}
         </section>
 
         <section className="panel rounded-xl p-4 space-y-3">
@@ -241,8 +353,7 @@ export default async function ReservaDetailPage({
                 {s.compositeUnit
                   ? ` · ${communicatingRoomsLabel(s.compositeUnit.code, s.compositeUnit.name)}`
                   : ""}{" "}
-                · {s.startDate.toISOString().slice(0, 10)} →{" "}
-                {s.endDate.toISOString().slice(0, 10)}
+                · {formatDateUi(s.startDate)} → {formatDateUi(s.endDate)}
               </li>
             ))}
           </ul>
@@ -270,26 +381,44 @@ export default async function ReservaDetailPage({
 
         <section className="panel rounded-xl p-4 space-y-3">
           <h2 className="font-semibold">
-            Huéspedes{" "}
+            Pasajeros{" "}
             <span className="font-normal text-[var(--muted)]">
-              ({reservation.guests.length}/{reservation.adults + reservation.children})
+              ({reservation.guests.length}/{paxCount})
             </span>
           </h2>
-          <ul className="space-y-1 text-sm">
-            {reservation.guests.map((rg) => (
-              <li key={rg.id}>
-                <Link href={`/huespedes/${rg.guestId}`} className="text-[var(--brand)]">
-                  {rg.guest.lastName}, {rg.guest.firstName}
-                </Link>{" "}
-                · {rg.role === "TITULAR" ? "Titular" : "Acompañante"}
-                {rg.role === "TITULAR" && (rg.guest.phone || rg.guest.email) ? (
+          <ul className="space-y-2 text-sm">
+            {reservation.guests.map((rg) => {
+              const missing = missingGuestFieldLabels(rg.guest);
+              return (
+                <li key={rg.id} className="flex flex-wrap items-baseline gap-x-1.5">
+                  {missing.length ? (
+                    <span
+                      title={`Faltan datos del pasajero: ${missing.join(", ")}`}
+                      className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-orange-500 text-[10px] font-bold text-white"
+                      aria-label="Faltan datos del pasajero"
+                    >
+                      !
+                    </span>
+                  ) : null}
+                  <Link href={`/huespedes/${rg.guestId}`} className="text-link">
+                    {rg.guest.lastName}, {rg.guest.firstName}
+                  </Link>
                   <span className="text-[var(--muted)]">
-                    {" "}
-                    · {[rg.guest.phone, rg.guest.email].filter(Boolean).join(" · ")}
+                    · {rg.role === "TITULAR" ? "Titular" : "Acompañante"}
                   </span>
-                ) : null}
-              </li>
-            ))}
+                  {rg.role === "TITULAR" && (rg.guest.phone || rg.guest.email) ? (
+                    <span className="text-[var(--muted)]">
+                      · {[rg.guest.phone, rg.guest.email].filter(Boolean).join(" · ")}
+                    </span>
+                  ) : null}
+                  {missing.length ? (
+                    <span className="w-full text-xs text-orange-800">
+                      Faltan datos del pasajero: {missing.join(", ")}
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
           <form action={linkGuestAction} className="flex flex-wrap gap-2">
             <input type="hidden" name="reservationId" value={reservation.id} />
@@ -335,7 +464,7 @@ export default async function ReservaDetailPage({
               {reservation.payments.map((p) => (
                 <tr key={p.id} className="border-t border-[var(--line)]">
                   <td className="py-1">
-                    <Link href={`/recibos/${p.id}`} className="text-[var(--brand)]">
+                    <Link href={`/recibos/${p.id}`} className="text-link">
                       {p.receiptNumber}
                     </Link>
                   </td>
