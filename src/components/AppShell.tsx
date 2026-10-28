@@ -11,7 +11,7 @@ const NAV = [
   { href: "/operacion", label: "Operación" },
   { href: "/tarifas", label: "Tarifas" },
   { href: "/inventario", label: "Inventario" },
-  { href: "/admin", label: "Admin" },
+  { href: "/admin", label: "Admin", adminOnly: true },
 ];
 
 export function AppShell({
@@ -21,6 +21,10 @@ export function AppShell({
   user: SessionUser;
   children: React.ReactNode;
 }) {
+  const navItems = NAV.filter(
+    (item) => !("adminOnly" in item && item.adminOnly) || user.role === "ADMIN",
+  );
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[rgba(243,239,230,0.9)] backdrop-blur-md">
@@ -37,7 +41,7 @@ export function AppShell({
             </div>
           </Link>
           <nav className="flex flex-1 flex-wrap gap-1">
-            {NAV.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

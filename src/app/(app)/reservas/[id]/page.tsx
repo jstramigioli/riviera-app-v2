@@ -21,6 +21,7 @@ import { createPaymentAction, voidPaymentAction } from "@/app/actions/payments";
 import { linkGuestAction } from "@/app/actions/guests";
 import { requireUser } from "@/lib/auth";
 import { FieldLabel, HelpTooltip } from "@/components/HelpTooltip";
+import { formatDateUi } from "@/lib/dates";
 
 export default async function ReservaDetailPage({
   params,
@@ -73,8 +74,8 @@ export default async function ReservaDetailPage({
             {reservation.code}
           </h1>
           <p className="text-sm text-[var(--muted)]">
-            {reservation.checkInDate.toISOString().slice(0, 10)} →{" "}
-            {reservation.checkOutDate.toISOString().slice(0, 10)}
+            {formatDateUi(reservation.checkInDate)} →{" "}
+            {formatDateUi(reservation.checkOutDate)}
             {reservation.doNotMove ? " · 🔒 habitación fijada" : " · asignación flexible"}
             {reservation.group ? ` · Grupo: ${reservation.group.name}` : ""}
           </p>
@@ -235,8 +236,7 @@ export default async function ReservaDetailPage({
                 {s.compositeUnit
                   ? ` · ${communicatingRoomsLabel(s.compositeUnit.code, s.compositeUnit.name)}`
                   : ""}{" "}
-                · {s.startDate.toISOString().slice(0, 10)} →{" "}
-                {s.endDate.toISOString().slice(0, 10)}
+                · {formatDateUi(s.startDate)} → {formatDateUi(s.endDate)}
               </li>
             ))}
           </ul>

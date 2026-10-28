@@ -99,7 +99,7 @@ export function assertStayDatesOpen(
   const sample = closed.slice(0, 3).map(isoDate).join(", ");
   const more = closed.length > 3 ? ` (+${closed.length - 3})` : "";
   throw new Error(
-    `El hotel está cerrado en fechas de la estadía (${sample}${more}). Elegí fechas dentro de una temporada abierta.`,
+    `El hotel está cerrado en fechas de la estadía (${sample}${more}). Elegí fechas dentro de una temporada con tarifas.`,
   );
 }
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { QUERY_STATUS_LABEL, SERVICE_TYPE_LABEL } from "@/lib/labels";
+import { formatDateUi } from "@/lib/dates";
 import { HelpTooltip } from "@/components/HelpTooltip";
 import { deleteQueryAction } from "@/app/actions/queries";
 
@@ -116,8 +117,7 @@ function QueryTable({
                     ) : null}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {q.checkInDate.toISOString().slice(0, 10)} →{" "}
-                    {q.checkOutDate.toISOString().slice(0, 10)}
+                    {formatDateUi(q.checkInDate)} → {formatDateUi(q.checkOutDate)}
                     <div className="text-xs text-[var(--muted)]">
                       {SERVICE_TYPE_LABEL[q.serviceType]}
                     </div>
